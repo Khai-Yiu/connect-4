@@ -6,9 +6,29 @@ describe('create-cells', () => {
         expect(createCells()).toEqual([]);
     });
     it('returns a row x column board given the number of rows and columns', () => {
-        expect(createCells(2, 3)).toEqual([
-            [undefined, undefined, undefined],
-            [undefined, undefined, undefined]
+        const board = createCells(2, 3);
+
+        expect(board.length).toEqual(2);
+        expect(board[0].length).toEqual(3);
+    });
+    it('returns a board filled with objects conforming to BoardCellProps type', () => {
+        expect(createCells(2, 2)).toEqual([
+            [
+                {
+                    player: undefined
+                },
+                {
+                    player: undefined
+                }
+            ],
+            [
+                {
+                    player: undefined
+                },
+                {
+                    player: undefined
+                }
+            ]
         ]);
     });
 });

@@ -9,7 +9,9 @@ const createCells = (
     for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
         cells[rowIndex] = [];
         for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
-            cells[rowIndex][columnIndex] = undefined;
+            cells[rowIndex][columnIndex] = {
+                player: undefined
+            };
         }
     }
 

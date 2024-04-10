@@ -6,7 +6,6 @@ export type StyledBoardDCellDiscCutOutProps = {
 
 export type BoardCellProps = {
     player?: 1 | 2;
-    className?: string;
 };
 
 export const BoardCell = ({ player, className }: BoardCellProps) => (
