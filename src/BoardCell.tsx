@@ -8,8 +8,8 @@ export type BoardCellProps = {
     player?: 1 | 2;
 };
 
-export const BoardCell = ({ player, className }: BoardCellProps) => (
-    <StyledBoardCell className={className}>
+export const BoardCell = ({ player }: BoardCellProps) => (
+    <StyledBoardCell>
         <StyledBoardCellDiscCutOut player={player} />
     </StyledBoardCell>
 );
