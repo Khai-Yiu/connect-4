@@ -10,7 +10,8 @@ const createCells = (
         cells[rowIndex] = [];
         for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
             cells[rowIndex][columnIndex] = {
-                player: undefined
+                player: undefined,
+                uuid: crypto.randomUUID()
             };
         }
     }

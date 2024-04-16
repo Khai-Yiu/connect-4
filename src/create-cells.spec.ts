@@ -14,20 +14,24 @@ describe('create-cells', () => {
     it('returns a board filled with objects conforming to BoardCellProps type', () => {
         expect(createCells(2, 2)).toEqual([
             [
-                {
-                    player: undefined
-                },
-                {
-                    player: undefined
-                }
+                expect.objectContaining({
+                    player: undefined,
+                    uuid: expect.toBeUuid()
+                }),
+                expect.objectContaining({
+                    player: undefined,
+                    uuid: expect.toBeUuid()
+                })
             ],
             [
-                {
-                    player: undefined
-                },
-                {
-                    player: undefined
-                }
+                expect.objectContaining({
+                    player: undefined,
+                    uuid: expect.toBeUuid()
+                }),
+                expect.objectContaining({
+                    player: undefined,
+                    uuid: expect.toBeUuid()
+                })
             ]
         ]);
     });

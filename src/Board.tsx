@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { BoardCell, BoardCellProps } from '@/BoardCell';
-import React from 'react';
 import createCells from './create-cells';
 
 export type BoardProps = {
@@ -8,16 +7,16 @@ export type BoardProps = {
 };
 
 export const Board = ({ cells }: BoardProps) => {
-    const mapOfBoardCells = cells.map((row) => (
+    const mapOfBoardCells = cells.map((row, rowIndex) => (
         <>
-            {row.map((currentCell) => (
-                <BoardCell {...currentCell} />
+            {row.map((currentCellProps, columnIndex) => (
+                <BoardCell {...currentCellProps} />
             ))}
         </>
     ));
 
     return (
-        <StyleBoard $columns={cells[0].length}>{mapOfBoardCells}</StyleBoard>
+        <StyledBoard $columns={cells[0].length}>{mapOfBoardCells}</StyledBoard>
     );
 };
 
@@ -25,7 +24,7 @@ Board.defaultProps = {
     cells: createCells(6, 7)
 };
 
-const StyleBoard = styled.div<{ $columns: number }>`
+const StyledBoard = styled.div<{ $columns: number }>`
     display: grid;
     grid-template-columns: repeat(${({ $columns }) => $columns}, 60px);
 `;
