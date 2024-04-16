@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { BoardCell } from '@/BoardCell';
-import React from 'react';
 
 const meta: Meta<typeof BoardCell> = {
     component: BoardCell

@@ -7,9 +7,9 @@ export type BoardProps = {
 };
 
 export const Board = ({ cells }: BoardProps) => {
-    const mapOfBoardCells = cells.map((row, rowIndex) => (
+    const mapOfBoardCells = cells.map((row) => (
         <>
-            {row.map((currentCellProps, columnIndex) => (
+            {row.map((currentCellProps) => (
                 <BoardCell {...currentCellProps} />
             ))}
         </>

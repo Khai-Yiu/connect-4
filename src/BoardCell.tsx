@@ -15,6 +15,11 @@ export const BoardCell = ({ player }: BoardCellProps) => (
     </StyledBoardCell>
 );
 
+BoardCell.defaultProps = {
+    player: undefined,
+    uuid: crypto.randomUUID()
+};
+
 const StyledBoardCell = styled.div`
     width: 60px;
     height: 60px;
