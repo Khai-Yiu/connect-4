@@ -2,7 +2,8 @@ import { BoardCellProps } from './BoardCell';
 
 const createCells = (
     rows: number = 0,
-    columns: number = 0
+    columns: number = 0,
+    selectionStrategy: () => 1 | 2 = () => undefined
 ): Array<Array<BoardCellProps>> => {
     const cells: Array<Array<BoardCellProps>> = [];
 
@@ -10,7 +11,7 @@ const createCells = (
         cells[rowIndex] = [];
         for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
             cells[rowIndex][columnIndex] = {
-                player: undefined,
+                player: selectionStrategy(),
                 uuid: crypto.randomUUID()
             };
         }

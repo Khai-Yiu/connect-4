@@ -14,6 +14,10 @@ export const TheOneWithDefaults: Story = {
     render: () => <Board />
 };
 
-export const TheOneWithDynamicSize: Story = {
-    render: () => <Board cells={createCells(10, 11)} />
+export const TheOneWithPlayer1: Story = {
+    render: () => <Board cells={createCells(6, 7, () => 1)} />
+};
+
+export const TheOneWithPlayer2: Story = {
+    render: () => <Board cells={createCells(6, 7, () => 2)} />
 };
