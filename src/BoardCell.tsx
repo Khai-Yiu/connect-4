@@ -5,7 +5,7 @@ export type StyledPlayerToken = {
 };
 
 export type BoardCellProps = {
-    className: string;
+    className?: string;
     player?: 1 | 2;
     uuid: string;
 };
