@@ -3,7 +3,7 @@ import { BoardCellProps } from './BoardCell';
 const createCells = (
     rows: number = 0,
     columns: number = 0,
-    selectionStrategy: () => 1 | 2 = () => undefined
+    selectionStrategy: () => 1 | 2 | undefined = () => undefined
 ): Array<Array<BoardCellProps>> => {
     const cells: Array<Array<BoardCellProps>> = [];
 
