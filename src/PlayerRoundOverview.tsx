@@ -23,12 +23,13 @@ const StyledRow = styled.div`
 `;
 
 const StyledToken = styled.div<{ isActiveTurn: boolean; tokenColour: string }>`
-    background-color: ${(props) =>
-        props.isActiveTurn ? props.tokenColour : 'initial'};
-    border: ${(props) => (props.isActiveTurn ? '3px white dotted' : 'none')};
+    background-color: ${({ isActiveTurn, tokenColour }) =>
+        isActiveTurn ? tokenColour : 'initial'};
+    border: ${({ isActiveTurn }) =>
+        isActiveTurn ? '3px white dotted' : 'none'};
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 40px;
     margin-left: 20px;
 `;
 
