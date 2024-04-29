@@ -10,6 +10,7 @@ const StyledRoundNumber = styled.div`
     background-color: blue;
     color: white;
     border-radius: 10px 10px 0 0;
+    max-width: 50%;
 `;
 
 export const Round = ({ roundNumber }: RoundProps) => (

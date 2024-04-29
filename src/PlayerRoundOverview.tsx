@@ -17,10 +17,13 @@ const StyledWrapper = styled.div`
     max-width: 50%;
 `;
 
-const StyledRow = styled.div`
+const StyledTopContainer = styled.div`
     display: flex;
+    justify-content: space-between;
     align-items: center;
 `;
+
+const StyledBottomContainer = styled.div``;
 
 const StyledToken = styled.div<{ isActiveTurn: boolean; tokenColour: string }>`
     background-color: ${({ isActiveTurn, tokenColour }) =>
@@ -29,8 +32,9 @@ const StyledToken = styled.div<{ isActiveTurn: boolean; tokenColour: string }>`
         isActiveTurn ? '3px white dotted' : 'none'};
     border-radius: 50%;
     height: 40px;
-    width: 40px;
+    min-width: 40px;
     margin-left: 20px;
+    box-sizing: border-box;
 `;
 
 export const PlayerRoundOverview = ({
@@ -40,13 +44,15 @@ export const PlayerRoundOverview = ({
     tokenColour
 }: PlayerRoundOverviewProps) => (
     <StyledWrapper>
-        <StyledRow>
+        <StyledTopContainer>
             <p>{`Player number: ${player}`}</p>
             <StyledToken
                 isActiveTurn={isActiveTurn}
                 tokenColour={tokenColour}
             />
-        </StyledRow>
-        <p>{`Remaining tokens: ${remainingTokens}`}</p>
+        </StyledTopContainer>
+        <StyledBottomContainer>
+            <p>{`Remaining tokens: ${remainingTokens}`}</p>
+        </StyledBottomContainer>
     </StyledWrapper>
 );
