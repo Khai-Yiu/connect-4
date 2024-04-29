@@ -30,6 +30,28 @@ const playerOverview: PlayerRoundOverviewsProps = {
     }
 };
 
-export const TheOneWithDefaults: Story = {
+export const TheOneWithPlayerOneActive: Story = {
     render: () => <GameOverview round={round} playerOverview={playerOverview} />
+};
+
+export const TheOneWithPlayerTwoActive: Story = {
+    render: () => (
+        <GameOverview
+            round={round}
+            playerOverview={{
+                playerOne: { ...playerOverview.playerOne, isActiveTurn: false },
+                playerTwo: { ...playerOverview.playerTwo, isActiveTurn: true }
+            }}
+        />
+    )
+};
+
+export const TheOneWithAWinner: Story = {
+    render: () => (
+        <GameOverview
+            round={round}
+            playerOverview={playerOverview}
+            winner={1}
+        />
+    )
 };

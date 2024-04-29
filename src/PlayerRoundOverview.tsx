@@ -14,7 +14,7 @@ const StyledWrapper = styled.div`
     color: white;
     font-size: 1.2rem;
     padding: 10px 10px;
-    max-width: 50%;
+    width: 100%;
 `;
 
 const StyledTopContainer = styled.div`
