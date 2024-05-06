@@ -1,18 +1,15 @@
 /// <reference types="vitest" />
+import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath, URL } from 'url';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
     plugins: [react(), tsconfigPaths()],
     resolve: {
-        alias: [
-            {
-                find: '@',
-                replacement: fileURLToPath(new URL('./src', import.meta.url))
-            }
-        ]
+        alias: {
+            '@': path.resolve(__dirname, './src')
+        }
     },
     test: {
         setupFiles: ['./vitest-custom-matchers.ts']
