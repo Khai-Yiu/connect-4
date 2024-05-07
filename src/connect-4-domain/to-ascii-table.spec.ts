@@ -9,6 +9,18 @@ describe('to-ascii-table', () => {
     });
     describe('given a one row grid', () => {
         describe('with one column', () => {
+            describe('and a custom cell resolver', () => {
+                it("uses the custom cell resolver to resolve the cell's value", () => {
+                    const customResolver = (value: any) =>
+                        value === null ? '💩' : '';
+
+                    const asciiTable = toAsciiTable([[null]], customResolver);
+                    expect(asciiTable).toEqual(`
+|----|
+| 💩 |
+|----|`);
+                });
+            });
             describe('containing a string', () => {
                 describe('and the string is empty', () => {
                     it('returns a 1x1 ascii table', () => {
