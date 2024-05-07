@@ -1,19 +1,24 @@
-function toAsciiTable<T>(grid: Array<Array<T>>): string {
+function createBorder(cellWidth: number): string {
+    return `|${'-'.repeat(cellWidth + 2)}|`;
+}
+
+function toAsciiTable(grid: Array<Array<string>>): string {
     if (grid.length === 0) {
         return '';
     }
 
-    const columns = grid[0].length;
-    const border = new Array(columns).fill('|---|').join();
-    const table = grid.reduce((table, row) => {
-        const rowContent = row.reduce((rowContent, element) => {
-            return rowContent.concat(`| ${element} |`);
-        }, '');
+    const tableRows = grid.reduce((tableRows, row) => {
+        tableRows.push(
+            row.reduce((rowContent, element) => {
+                return rowContent.concat(`| ${element} |`);
+            }, '')
+        );
 
-        return table.concat('\n', rowContent, '\n', border);
-    }, '\n' + border);
+        return tableRows;
+    }, []);
 
-    return table + '\n';
+    const border = createBorder(grid[0][0].length);
+    return ['', border, tableRows[0], border].join('\n');
 }
 
 export default toAsciiTable;

@@ -10,21 +10,19 @@ describe('to-ascii-table', () => {
     describe('given a one row grid', () => {
         describe('with one column', () => {
             it('returns a 1x1 ascii table', () => {
-                const asciiTable = toAsciiTable<string>([['1']]);
+                const asciiTable = toAsciiTable([['1']]);
                 expect(asciiTable).toEqual(`
 |---|
 | 1 |
-|---|
-`);
+|---|`);
             });
             describe('with content greater than 1 character in length', () => {
                 it('returns a 1x1 ascii table', () => {
-                    const asciiTable = toAsciiTable<string>([['10']]);
+                    const asciiTable = toAsciiTable([['10']]);
                     expect(asciiTable).toEqual(`
 |----|
 | 10 |
-|----|                    
-                    `);
+|----|`);
                 });
             });
         });
