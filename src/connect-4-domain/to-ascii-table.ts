@@ -38,14 +38,17 @@ function toAsciiTable<T>(
                 return rowContent.concat(` ${cellResolver(currentElement)} |`);
             }, '|')
         );
-        console.log(tableRows);
+
         return tableRows;
     }, [] as Array<String>);
 
     const border = createBorder(
         getLargestCharacterWidthPerColumn(grid, cellResolver)
     );
-    return ['', border, tableRows[0], border].join('\n');
+
+    return ['', border, tableRows.join('\n' + border + '\n'), border].join(
+        '\n'
+    );
 }
 
 export default toAsciiTable;
