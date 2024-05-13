@@ -24,6 +24,13 @@ function getLargestCharacterWidthPerColumn<T>(
     }, Array(grid[0].length).fill(0));
 }
 
+function getPaddedContent(
+    value: string,
+    widthOfLargestCellContentInColumn: number
+): string {
+    return ` ${value.padEnd(widthOfLargestCellContentInColumn, ' ')} `;
+}
+
 function toAsciiTable<T>(
     grid: Array<Array<T>>,
     cellResolver: (value: any) => string = defaultResolver
@@ -32,19 +39,25 @@ function toAsciiTable<T>(
         return '';
     }
 
+    const largestCharacterWidthPerColumn = getLargestCharacterWidthPerColumn(
+        grid,
+        cellResolver
+    );
     const tableRows = grid.reduce((tableRows, currentRow) => {
         tableRows.push(
-            currentRow.reduce((rowContent, currentElement) => {
-                return rowContent.concat(` ${cellResolver(currentElement)} |`);
+            currentRow.reduce((rowContent, currentElement, currentIndex) => {
+                const paddedContent = getPaddedContent(
+                    cellResolver(currentElement),
+                    largestCharacterWidthPerColumn[currentIndex]
+                );
+                return rowContent.concat(`${paddedContent}|`);
             }, '|')
         );
 
         return tableRows;
     }, [] as Array<String>);
 
-    const border = createBorder(
-        getLargestCharacterWidthPerColumn(grid, cellResolver)
-    );
+    const border = createBorder(largestCharacterWidthPerColumn);
 
     return ['', border, tableRows.join('\n' + border + '\n'), border].join(
         '\n'
