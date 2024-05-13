@@ -145,5 +145,19 @@ describe('to-ascii-table', () => {
 |-----|----|`);
             });
         });
+        describe('where the content of each cell are different data types', () => {
+            it('returns an ascii table with multiple rows and columns', () => {
+                const asciiTable = toAsciiTable([
+                    [undefined, 1],
+                    ['Hi', null]
+                ]);
+                expect(asciiTable).toEqual(`
+|----|---|
+|    | 1 |
+|----|---|
+| Hi |   |
+|----|---|`);
+            });
+        });
     });
 });
