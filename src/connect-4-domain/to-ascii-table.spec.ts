@@ -69,5 +69,16 @@ describe('to-ascii-table', () => {
                 });
             });
         });
+        describe('and multiple columns', () => {
+            describe('of the same length', () => {
+                it('returns an ascii table with 1 row and multiple columns', () => {
+                    const asciiTable = toAsciiTable([[], []]);
+                    expect(asciiTable).toEqual(`
+|--|--|
+|  |  |
+|--|--|`);
+                });
+            });
+        });
     });
 });
