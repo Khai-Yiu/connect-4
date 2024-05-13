@@ -90,4 +90,19 @@ describe('to-ascii-table', () => {
             });
         });
     });
+    describe('given a grid with multiple rows', () => {
+        describe('and 1 column', () => {
+            describe('where the content of each elements is of equal lengths', () => {
+                it('returns an ascii table with multiple rows and 1 column', () => {
+                    const asciiTable = toAsciiTable([[1], [2]]);
+                    expect(asciiTable).toEqual(`
+|---|
+| 1 |
+|---|
+| 2 |
+|---|`);
+                });
+            });
+        });
+    });
 });
