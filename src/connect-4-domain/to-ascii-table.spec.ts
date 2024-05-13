@@ -117,6 +117,13 @@ describe('to-ascii-table', () => {
         });
     });
     describe('given a grid with multiple rows and columns', () => {
+        describe('where the number of columns in each row are not equal', () => {
+            it('throws an error', () => {
+                expect(() => toAsciiTable([[1], [1, 1]])).toThrow(
+                    Error('Dimensions of the board are not equal')
+                );
+            });
+        });
         describe('where the content of each cell is of equal lengths', () => {
             it('returns an ascii table with multiple rows and columns', () => {
                 const asciiTable = toAsciiTable([
