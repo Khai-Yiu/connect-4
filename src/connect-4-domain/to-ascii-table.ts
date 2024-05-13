@@ -31,6 +31,18 @@ function getPaddedContent(
     return ` ${value.padEnd(widthOfLargestCellContentInColumn, ' ')} `;
 }
 
+function validateGridDimensions(grid: Array<Array<T>>) {
+    const knownRowLength = grid[0].length;
+
+    grid.forEach((row) => {
+        if (row.length !== knownRowLength) {
+            throw new Error(
+                'The number of columns within each row is not equal'
+            );
+        }
+    });
+}
+
 function toAsciiTable<T>(
     grid: Array<Array<T>>,
     cellResolver: (value: any) => string = defaultResolver
@@ -38,6 +50,7 @@ function toAsciiTable<T>(
     if (grid.length === 0) {
         return '';
     }
+    validateGridDimensions(grid);
 
     const largestCharacterWidthPerColumn = getLargestCharacterWidthPerColumn(
         grid,

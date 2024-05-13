@@ -120,7 +120,7 @@ describe('to-ascii-table', () => {
         describe('where the number of columns in each row are not equal', () => {
             it('throws an error', () => {
                 expect(() => toAsciiTable([[1], [1, 1]])).toThrow(
-                    Error('Dimensions of the board are not equal')
+                    Error('The number of columns within each row is not equal')
                 );
             });
         });
