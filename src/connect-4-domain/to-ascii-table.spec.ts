@@ -131,5 +131,19 @@ describe('to-ascii-table', () => {
 |---|---|`);
             });
         });
+        describe('where the content of each cell is of different lengths', () => {
+            it('returns an ascii table with multiple rows and columns', () => {
+                const asciiTable = toAsciiTable([
+                    [1, 11],
+                    [111, 1]
+                ]);
+                expect(asciiTable).toEqual(`
+|-----|----|
+| 1   | 11 |
+|-----|----|
+| 111 | 1  |
+|-----|----|`);
+            });
+        });
     });
 });
