@@ -72,11 +72,11 @@ describe('to-ascii-table', () => {
         describe('and multiple columns', () => {
             describe('of the same length', () => {
                 it('returns an ascii table with 1 row and multiple columns', () => {
-                    const asciiTable = toAsciiTable([[], []]);
+                    const asciiTable = toAsciiTable([[1, 1]]);
                     expect(asciiTable).toEqual(`
-|--|--|
-|  |  |
-|--|--|`);
+|---|---|
+| 1 | 1 |
+|---|---|`);
                 });
             });
         });
