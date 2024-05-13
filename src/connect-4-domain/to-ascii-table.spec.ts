@@ -79,6 +79,15 @@ describe('to-ascii-table', () => {
 |---|---|`);
                 });
             });
+            describe('of different lengths', () => {
+                it('returns an ascii table with 1 row and multiple columns', () => {
+                    const asciiTable = toAsciiTable([[1, 11]]);
+                    expect(asciiTable).toEqual(`
+|---|----|
+| 1 | 11 |
+|---|----|`);
+                });
+            });
         });
     });
 });
