@@ -11,4 +11,9 @@ describe('toBeDeeplyUnequal', () => {
         const obj2 = {};
         expect(obj1).toBeDeeplyUnequal(obj2);
     });
+    it('should pass given an object and an array', () => {
+        const arr = [];
+        const obj = {};
+        expect(arr).toBeDeeplyUnequal(obj);
+    });
 });
