@@ -34,4 +34,9 @@ describe('toBeDeeplyUnequal', () => {
         const arr2 = [];
         expect(arr1).toBeDeeplyUnequal(arr2);
     });
+    it('should pass given two arrays that are unequal at a shallow level', () => {
+        const arr1 = [1, 2];
+        const arr2 = [2, 3];
+        expect(arr1).toBeDeeplyUnequal(arr2);
+    });
 });
