@@ -5,6 +5,7 @@ function toBeDeeplyUnequal(
     received: object,
     expected: object
 ): MatcherResult {
+    const isNot = this ?? {};
     return {
         pass: received !== expected,
         message: () => `Objects are deeply ${isNot ? 'un' : ''}equal`

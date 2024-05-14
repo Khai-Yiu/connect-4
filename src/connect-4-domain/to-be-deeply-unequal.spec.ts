@@ -6,4 +6,9 @@ describe('toBeDeeplyUnequal', () => {
         const obj2 = obj1;
         expect(obj1).not.toBeDeeplyUnequal(obj2);
     });
+    it('should pass when given objects are different objects', () => {
+        const obj1 = {};
+        const obj2 = {};
+        expect(obj1).toBeDeeplyUnequal(obj2);
+    });
 });
