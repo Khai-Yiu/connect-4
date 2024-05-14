@@ -20,4 +20,8 @@ describe('toBeDeeplyUnequal', () => {
         const obj = {};
         expect(obj).toBeDeeplyUnequal(null);
     });
+    it('should pass given undefined and an object', () => {
+        const obj = {};
+        expect(obj).toBeDeeplyUnequal(undefined);
+    });
 });
