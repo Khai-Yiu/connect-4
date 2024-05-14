@@ -1,5 +1,17 @@
-type BoardCell = {
+export type BoardCell = {
     player: 1 | 2 | undefined;
+};
+
+type BoardDimensions = {
+    rows: number;
+    columns: number;
+};
+
+type PlayerNumber = 1 | 2;
+
+type PlayerStats = {
+    playerNumber: 1 | 2;
+    remainingDiscs: number;
 };
 
 type GameParameters = {
@@ -12,6 +24,7 @@ interface Game {
 
 class GameFactory implements Game {
     private board: Array<Array<BoardCell>>;
+    private players: Record<PlayerNumber, PlayerStats>;
 
     constructor(
         { boardDimensions }: GameParameters = {
@@ -19,21 +32,42 @@ class GameFactory implements Game {
         }
     ) {
         this.board = this.createBoard(boardDimensions);
+        this.players = this.createPlayers(boardDimensions);
     }
 
     getBoard = () => {
-        return this.board.map((row) => row.map((cell) => ({ ...cell })));
+        return this.board;
     };
 
-    private createBoard(boardDimensions: {
-        rows: number;
-        columns: number;
-    }): Array<Array<BoardCell>> {
-        return new Array(boardDimensions.rows).fill(undefined).map(() =>
-            new Array(boardDimensions.columns).fill(undefined).map(() => ({
+    getPlayerStats = (playerNumber: 1 | 2): PlayerStats => {
+        return this.players[playerNumber];
+    };
+
+    private createBoard({
+        rows,
+        columns
+    }: BoardDimensions): Array<Array<BoardCell>> {
+        return new Array(rows).fill(undefined).map(() =>
+            new Array(columns).fill(undefined).map(() => ({
                 player: undefined
             }))
         );
+    }
+
+    private createPlayers({
+        rows,
+        columns
+    }: BoardDimensions): Record<PlayerNumber, PlayerStats> {
+        return {
+            1: {
+                playerNumber: 1,
+                remainingDiscs: (rows * columns) / 2
+            },
+            2: {
+                playerNumber: 2,
+                remainingDiscs: (rows * columns) / 2
+            }
+        };
     }
 }
 
