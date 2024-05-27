@@ -9,14 +9,14 @@ function checkIsPlainObjectOrArray(value: any): boolean {
     );
 }
 
-function getValuesOfObject(value: any): Array<any> {
+function getObjectOrArrayValues(value: [] | {}): Array<any> {
     return Object.values(value).reduce(
         (accValues: Array<any>, currentValue): Array<any> => {
             if (checkIsPlainObjectOrArray(currentValue)) {
                 return [
                     ...accValues,
                     currentValue,
-                    ...getValuesOfObject(currentValue)
+                    ...getObjectOrArrayValues(currentValue)
                 ];
             }
 
@@ -40,8 +40,8 @@ function isDeeplyUnequal(valueOne: any, valueTwo: any): boolean {
         return false;
     }
 
-    const objectOneValues = getValuesOfObject(valueOne);
-    const objectTwoValues = getValuesOfObject(valueTwo);
+    const objectOneValues = getObjectOrArrayValues(valueOne);
+    const objectTwoValues = getObjectOrArrayValues(valueTwo);
 
     return objectOneValues.reduce(
         (isUnequal, currValue) =>
