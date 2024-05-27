@@ -1,20 +1,18 @@
 import { MatcherResult } from '@/vitest';
 
-function checkIsPlainObject(value: any): boolean {
+function checkIsPlainObjectOrArray(value: any): boolean {
     return (
-        value !== null &&
-        typeof value === 'object' &&
-        Object.getPrototypeOf(value) === Object.prototype
+        Array.isArray(value) ||
+        (value !== null &&
+            typeof value === 'object' &&
+            Object.getPrototypeOf(value) === Object.prototype)
     );
 }
 
 function getValuesOfObject(value: any): Array<any> {
     return Object.values(value).reduce(
         (accValues: Array<any>, currentValue): Array<any> => {
-            if (
-                checkIsPlainObject(currentValue) ||
-                Array.isArray(currentValue)
-            ) {
+            if (checkIsPlainObjectOrArray(currentValue)) {
                 return [
                     ...accValues,
                     currentValue,
@@ -22,7 +20,7 @@ function getValuesOfObject(value: any): Array<any> {
                 ];
             }
 
-            return [...accValues];
+            return accValues;
         },
         [] as Array<any>
     );
@@ -30,23 +28,25 @@ function getValuesOfObject(value: any): Array<any> {
 
 function isDeeplyUnequal(valueOne: any, valueTwo: any): boolean {
     if (
-        !(Array.isArray(valueOne) && Array.isArray(valueTwo)) &&
-        !(checkIsPlainObject(valueOne) && checkIsPlainObject(valueTwo))
+        !(
+            checkIsPlainObjectOrArray(valueOne) &&
+            checkIsPlainObjectOrArray(valueTwo)
+        )
     ) {
-        return valueOne !== valueTwo;
+        return true;
+    }
+
+    if (valueOne === valueTwo) {
+        return false;
     }
 
     const objectOneValues = getValuesOfObject(valueOne);
     const objectTwoValues = getValuesOfObject(valueTwo);
 
-    return (
-        valueOne !== valueTwo &&
-        objectOneValues.reduce(
-            (isUnequal, currValue) =>
-                isUnequal &&
-                !objectTwoValues.find((value) => value === currValue),
-            true
-        )
+    return objectOneValues.reduce(
+        (isUnequal, currValue) =>
+            isUnequal && !objectTwoValues.find((value) => value === currValue),
+        true
     );
 }
 

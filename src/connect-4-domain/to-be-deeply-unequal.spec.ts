@@ -16,13 +16,19 @@ describe('toBeDeeplyUnequal', () => {
         const obj2 = { a: 1, b: 2, c: 3 };
         expect(obj1).toBeDeeplyUnequal(obj2);
     });
+    it('should fail when one object has an additional key and share an array as a value', () => {
+        const innerArray: any[] = [];
+        const obj1 = { a: 1, b: innerArray };
+        const obj2 = { a: 1, b: innerArray, c: 3 };
+        expect(obj1).not.toBeDeeplyUnequal(obj2);
+    });
     it('should pass when given objects are different objects', () => {
         const obj1 = {};
         const obj2 = {};
         expect(obj1).toBeDeeplyUnequal(obj2);
     });
     it('should pass given an object and an array', () => {
-        const arr = [];
+        const arr: any[] = [];
         const obj = {};
         expect(arr).toBeDeeplyUnequal(obj);
     });
@@ -35,13 +41,13 @@ describe('toBeDeeplyUnequal', () => {
         expect(obj).toBeDeeplyUnequal(undefined);
     });
     it('should fail when given the same arrays', () => {
-        const arr1 = [];
+        const arr1: any[] = [];
         const arr2 = arr1;
         expect(arr1).not.toBeDeeplyUnequal(arr2);
     });
     it('should pass when given different arrays', () => {
-        const arr1 = [];
-        const arr2 = [];
+        const arr1: any[] = [];
+        const arr2: any[] = [];
         expect(arr1).toBeDeeplyUnequal(arr2);
     });
     it('should pass given two arrays that are unequal at a shallow level', () => {
@@ -50,7 +56,7 @@ describe('toBeDeeplyUnequal', () => {
         expect(arr1).toBeDeeplyUnequal(arr2);
     });
     it('should pass given two arrays that are equal at a shallow level', () => {
-        const innerArr = [];
+        const innerArr: any[] = [];
         const arr1 = [innerArr];
         const arr2 = [innerArr];
         expect(arr1).not.toBeDeeplyUnequal(arr2);

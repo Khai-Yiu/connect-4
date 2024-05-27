@@ -2,6 +2,7 @@ import type { Assertion, AsymmetricMatchersContaining } from 'vitest';
 
 interface CustomMatchers<R = unknown> {
     toBeUuid: () => R;
+    toBeDeeplyUnequal: (value: object) => R;
 }
 
 declare module 'vitest' {
