@@ -11,14 +11,15 @@ function checkIsPlainObject(value: any): boolean {
 function getValuesOfObject(value: any): Array<any> {
     return Object.values(value).reduce(
         (accValues: Array<any>, currentValue): Array<any> => {
-            if (checkIsPlainObject(currentValue)) {
+            if (
+                checkIsPlainObject(currentValue) ||
+                Array.isArray(currentValue)
+            ) {
                 return [
                     ...accValues,
                     currentValue,
                     ...getValuesOfObject(currentValue)
                 ];
-            } else if (Array.isArray(currentValue)) {
-                return [...accValues, currentValue];
             }
 
             return [...accValues];
