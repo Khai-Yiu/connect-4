@@ -16,7 +16,13 @@ describe('toBeDeeplyUnequal', () => {
         const obj2 = { a: 1, b: 2, c: 3 };
         expect(obj1).toBeDeeplyUnequal(obj2);
     });
-    it('should fail when one object has an additional key and share an array as a value', () => {
+    it('should fail when the first object has an additional key and share an array as a value', () => {
+        const innerArray: any[] = [];
+        const obj1 = { a: 1, b: innerArray, c: 3 };
+        const obj2 = { a: 1, b: innerArray };
+        expect(obj1).not.toBeDeeplyUnequal(obj2);
+    });
+    it('should fail when the second object has an additional key and share an array as a value', () => {
         const innerArray: any[] = [];
         const obj1 = { a: 1, b: innerArray };
         const obj2 = { a: 1, b: innerArray, c: 3 };
