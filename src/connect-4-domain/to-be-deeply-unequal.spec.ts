@@ -72,4 +72,9 @@ describe('toBeDeeplyUnequal', () => {
         const arr2 = [1, 2];
         expect(arr1).toBeDeeplyUnequal(arr2);
     });
+    it('should pass when the second array has an extra value and are unequal', () => {
+        const arr1 = [1, 2];
+        const arr2 = [1, 2, 3];
+        expect(arr1).toBeDeeplyUnequal(arr2);
+    });
 });
