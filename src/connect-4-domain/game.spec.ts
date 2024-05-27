@@ -56,11 +56,11 @@ describe('game', () => {
                     })
                 );
             });
-            it.skip('creates a deep copy of the board', () => {
+            it('creates a deep copy of the board', () => {
                 const game = new GameFactory();
                 const boardOne = game.getBoard();
                 const boardTwo = game.getBoard();
-                expect(boardTwo).not.toBeBoard(boardOne);
+                expect(boardTwo).toBeDeeplyUnequal(boardOne);
             });
         });
     });
