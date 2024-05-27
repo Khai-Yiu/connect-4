@@ -40,7 +40,7 @@ class GameFactory implements Game {
     }
 
     getBoard = () => {
-        return this.createDeepClone();
+        return this.board;
     };
 
     getPlayerStats = (playerNumber: 1 | 2): PlayerStats => {
@@ -73,10 +73,6 @@ class GameFactory implements Game {
                 remainingDiscs: remainingDiscs
             }
         };
-    }
-
-    private createDeepClone(): Board {
-        return this.board;
     }
 }
 
