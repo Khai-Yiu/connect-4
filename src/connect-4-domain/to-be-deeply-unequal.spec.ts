@@ -46,6 +46,11 @@ describe('toBeDeeplyUnequal', () => {
         const obj = {};
         expect(obj).toBeDeeplyUnequal(undefined);
     });
+    it('should pass when the objects are deeply unequal at a nested level', () => {
+        const obj1 = { a: {} };
+        const obj2 = { a: {} };
+        expect(obj1).toBeDeeplyUnequal(obj2);
+    });
     it('should fail when given the same arrays', () => {
         const arr1: any[] = [];
         const arr2 = arr1;
