@@ -1,6 +1,10 @@
+import { B } from 'vitest/dist/reporters-P7C2ytIv.js';
+
 export type BoardCell = {
     player: 1 | 2 | undefined;
 };
+
+type Board = Array<Array<BoardCell>>;
 
 type BoardDimensions = {
     rows: number;
@@ -19,11 +23,11 @@ type GameParameters = {
 };
 
 interface Game {
-    getBoard: () => Array<Array<BoardCell>>;
+    getBoard: () => Board;
 }
 
 class GameFactory implements Game {
-    private board: Array<Array<BoardCell>>;
+    private board: Board;
     private players: Record<PlayerNumber, PlayerStats>;
 
     constructor(
@@ -36,7 +40,7 @@ class GameFactory implements Game {
     }
 
     getBoard = () => {
-        return this.board;
+        return this.createDeepClone();
     };
 
     getPlayerStats = (playerNumber: 1 | 2): PlayerStats => {
@@ -69,6 +73,10 @@ class GameFactory implements Game {
                 remainingDiscs: remainingDiscs
             }
         };
+    }
+
+    private createDeepClone(): Board {
+        return this.board;
     }
 }
 
