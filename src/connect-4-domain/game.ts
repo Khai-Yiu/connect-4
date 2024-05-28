@@ -37,7 +37,7 @@ class GameFactory implements Game {
             boardDimensions: { rows: 6, columns: 7 }
         }
     ) {
-        if (boardDimensions.rows < 1) {
+        if (boardDimensions.rows < 1 || boardDimensions.columns < 1) {
             throw new InvalidBoardDimensionsError(
                 'Number of rows must be greater than or equal to 1'
             );
