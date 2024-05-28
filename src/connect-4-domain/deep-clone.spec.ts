@@ -50,4 +50,11 @@ describe('deepClone', () => {
         const cloned = deepClone(original);
         expect(cloned).toBe(original);
     });
+    it('should deeply clone objects with circular references', () => {
+        const original: { a: number; b?: object } = { a: 1 };
+        original.b = original;
+        const cloned = deepClone(original);
+        expect(cloned).not.toBe(original);
+        expect(cloned.b).toBe(cloned);
+    });
 });
