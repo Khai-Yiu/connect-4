@@ -166,5 +166,10 @@ describe('game', () => {
                 });
             });
         });
+        it('returns the currently active player', () => {
+            const game = new GameFactory();
+            const player = game.getActivePlayer();
+            expect(player).toBe(1);
+        });
     });
 });
