@@ -63,6 +63,26 @@ describe('game', () => {
                 const boardTwo = game.getBoard();
                 expect(boardTwo).toBeDeeplyUnequal(boardOne);
             });
+            it.todo(
+                "changes made to the game after a getBoard call don't affect copies of the board",
+                () => {}
+            );
+        });
+        describe('given custom board dimensions', () => {
+            describe('with 0 rows', () => {
+                it('throws an error', () => {
+                    expect(
+                        () =>
+                            new GameFactory({
+                                boardDimensions: { rows: 0, columns: 7 }
+                            })
+                    ).toThrowError(
+                        new InvalidBoardDimensionsError(
+                            'Number of rows must be greater than or equal to 1'
+                        )
+                    );
+                });
+            });
         });
     });
 });
