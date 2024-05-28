@@ -19,10 +19,14 @@ function deepClone<T>(
     }
 
     const clone: T = Array.isArray(value) ? ([] as T) : ({} as T);
+    const objOrArrayValue = value as { [key: string | symbol]: any };
+    const stringAndSymbolKeys = [
+        ...Object.keys(objOrArrayValue),
+        ...Object.getOwnPropertySymbols(objOrArrayValue)
+    ];
     visited.set(value, clone);
 
-    const objOrArrayValue = value as { [key: string]: any };
-    for (const key of Object.keys(objOrArrayValue)) {
+    for (const key of stringAndSymbolKeys) {
         (clone as any)[key] = deepClone(objOrArrayValue[key], visited);
     }
 
