@@ -112,6 +112,20 @@ describe('game', () => {
                     );
                 });
             });
+            describe('with negative number of columnss', () => {
+                it('throws an error', () => {
+                    expect(
+                        () =>
+                            new GameFactory({
+                                boardDimensions: { rows: -1, columns: 7 }
+                            })
+                    ).toThrowError(
+                        new InvalidBoardDimensionsError(
+                            'Number of rows must be greater than or equal to 1'
+                        )
+                    );
+                });
+            });
             describe('which result in an odd number of cells', () => {
                 it('throws an error', () => {
                     expect(
