@@ -98,6 +98,20 @@ describe('game', () => {
                     );
                 });
             });
+            describe('which result in an odd number of cells', () => {
+                it('throws an error', () => {
+                    expect(
+                        () =>
+                            new GameFactory({
+                                boardDimensions: { rows: 3, columns: 3 }
+                            })
+                    ).toThrowError(
+                        new InvalidBoardDimensionsError(
+                            `The total number of cells on a board must be even. The supplied board dimensions 3 x 3 result in an odd number of cells`
+                        )
+                    );
+                });
+            });
         });
     });
 });
