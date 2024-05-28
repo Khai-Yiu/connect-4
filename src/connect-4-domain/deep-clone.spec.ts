@@ -42,7 +42,12 @@ describe('deepClone', () => {
     it('should copy functions by reference', () => {
         const original = (x: number): number => 2 * x;
         const cloned = deepClone(original);
-        expect(original(3)).toStrictEqual(cloned(3));
-        expect(original).not.toBe(cloned);
+        expect(cloned(3)).toStrictEqual(original(3));
+        expect(cloned).not.toBe(original);
+    });
+    it('should return the same symbol', () => {
+        const original = Symbol('Hi');
+        const cloned = deepClone(original);
+        expect(cloned).toBe(original);
     });
 });
