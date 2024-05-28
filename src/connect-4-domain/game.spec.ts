@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import GameFactory from '@/connect-4-domain/game';
+import GameFactory, {
+    BoardCell,
+    InvalidBoardDimensionsError
+} from '@/connect-4-domain/game';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
-import { BoardCell } from '@/connect-4-domain/game';
-import deepClone from './deep-clone';
 
 function toAsciiTable(board: Array<Array<BoardCell>>): string {
     const cellResolver = (cell: BoardCell) =>

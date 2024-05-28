@@ -26,6 +26,8 @@ interface Game {
     getBoard: () => Board;
 }
 
+export class InvalidBoardDimensionsError extends RangeError {}
+
 class GameFactory implements Game {
     private board: Board;
     private players: Record<PlayerNumber, PlayerStats>;
@@ -35,6 +37,12 @@ class GameFactory implements Game {
             boardDimensions: { rows: 6, columns: 7 }
         }
     ) {
+        if (boardDimensions.rows < 1) {
+            throw new InvalidBoardDimensionsError(
+                'Number of rows must be greater than or equal to 1'
+            );
+        }
+
         this.board = this.createBoard(boardDimensions);
         this.players = this.createPlayers(boardDimensions);
     }
