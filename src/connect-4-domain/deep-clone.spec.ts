@@ -43,7 +43,7 @@ describe('deepClone', () => {
         const original = (x: number): number => 2 * x;
         const cloned = deepClone(original);
         expect(cloned(3)).toStrictEqual(original(3));
-        expect(cloned).not.toBe(original);
+        expect(cloned).toBe(original);
     });
     it('should return the same symbol', () => {
         const original = Symbol('Hi');

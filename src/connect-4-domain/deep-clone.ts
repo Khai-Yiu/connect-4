@@ -6,19 +6,27 @@ function checkIsObject(value: any): boolean {
     );
 }
 
-function deepClone<T>(value: T): T {
-    if (typeof value === 'function') {
-        return ((...args: any[]) => (value as Function)(args)) as T;
-    } else if (Array.isArray(value)) {
-        return value.map(deepClone) as T;
-    } else if (checkIsObject(value)) {
-        const obj = value as { [key: string]: any };
-        return Object.keys(obj).reduce((clonedObj, key) => {
-            return { ...clonedObj, [key]: deepClone(obj[key]) };
-        }, {} as T);
+function deepClone<T>(
+    value: T,
+    visited: WeakMap<any, any> = new WeakMap<any, any>()
+): T {
+    if (!(value instanceof Object) || typeof value === 'function') {
+        return value;
     }
 
-    return value;
+    if (visited.has(value)) {
+        return visited.get(value);
+    }
+
+    const clone: T = Array.isArray(value) ? ([] as T) : ({} as T);
+    visited.set(value, clone);
+
+    const objOrArrayValue = value as { [key: string]: any };
+    for (const key of Object.keys(objOrArrayValue)) {
+        (clone as any)[key] = deepClone(objOrArrayValue[key], visited);
+    }
+
+    return clone;
 }
 
 export default deepClone;
