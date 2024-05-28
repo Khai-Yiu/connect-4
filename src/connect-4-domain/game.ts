@@ -41,6 +41,10 @@ class GameFactory implements Game {
             throw new InvalidBoardDimensionsError(
                 'Number of rows must be greater than or equal to 1'
             );
+        } else if ((boardDimensions.rows * boardDimensions.columns) % 2 === 1) {
+            throw new InvalidBoardDimensionsError(
+                `The total number of cells on a board must be even. The supplied board dimensions ${boardDimensions.rows} x ${boardDimensions.columns} result in an odd number of cells`
+            );
         }
 
         this.board = this.createBoard(boardDimensions);
