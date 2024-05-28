@@ -7,11 +7,11 @@ function checkIsObject(value: any): boolean {
 }
 
 function deepClone<T>(value: T): T {
-    if (Array.isArray(value)) {
+    if (typeof value === 'function') {
+        return ((...args: any[]) => (value as Function)(args)) as T;
+    } else if (Array.isArray(value)) {
         return value.map(deepClone) as T;
-    }
-
-    if (checkIsObject(value)) {
+    } else if (checkIsObject(value)) {
         const obj = value as { [key: string]: any };
         return Object.keys(obj).reduce((clonedObj, key) => {
             return { ...clonedObj, [key]: deepClone(obj[key]) };
