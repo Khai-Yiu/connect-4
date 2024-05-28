@@ -112,6 +112,31 @@ describe('game', () => {
                     );
                 });
             });
+            describe('which result in an even number of cells', () => {
+                it('returns an instance of Game', () => {
+                    const game = new GameFactory({
+                        boardDimensions: { rows: 6, columns: 6 }
+                    });
+                    const board = game.getBoard();
+                    const asciiBoard = toAsciiTable(board);
+                    expect(asciiBoard).toMatchInlineSnapshot(`
+                      "
+                      |--|--|--|--|--|--|
+                      |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|
+                      |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|
+                      |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|
+                      |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|
+                      |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|
+                      |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|"
+                    `);
+                });
+            });
         });
     });
 });
