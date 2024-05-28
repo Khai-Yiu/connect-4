@@ -112,7 +112,7 @@ describe('game', () => {
                     );
                 });
             });
-            describe('with negative number of columnss', () => {
+            describe('with negative number of columns', () => {
                 it('throws an error', () => {
                     expect(
                         () =>
