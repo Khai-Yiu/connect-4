@@ -172,4 +172,36 @@ describe('game', () => {
             expect(player).toBe(1);
         });
     });
+    describe('making a move', () => {
+        describe('given a player is currently active', () => {
+            describe("and a cell location that's not on the board", () => {
+                it('player should not be able to move', () => {
+                    const game = new GameFactory({
+                        boardDimensions: { rows: 2, columns: 2 }
+                    });
+                    expect(toAsciiTable(game.getBoard()))
+                        .toMatchInlineSnapshot(`
+                      "
+                      |--|--|
+                      |  |  |
+                      |--|--|
+                      |  |  |
+                      |--|--|"
+                    `);
+                    const movePlayerCommand = createMovePlayerCommand({
+                        player: 1,
+                        targetCell: { row: -1, column: 0 }
+                    });
+                    const event = game.move(movePlayerCommand);
+                    expect(event).toEqual({
+                        type: 'PLAYER_MOVE_FAILED',
+                        payload: {
+                            message:
+                                "Cell at row -1 and column 0 doesn't exist on the board. The row number must be >= 1 and <= 1"
+                        }
+                    });
+                });
+            });
+        });
+    });
 });
