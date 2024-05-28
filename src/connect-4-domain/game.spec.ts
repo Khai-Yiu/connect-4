@@ -84,6 +84,20 @@ describe('game', () => {
                     );
                 });
             });
+            describe('with 0 columns', () => {
+                it('throws an error', () => {
+                    expect(
+                        () =>
+                            new GameFactory({
+                                boardDimensions: { rows: 6, columns: 0 }
+                            })
+                    ).toThrowError(
+                        new InvalidBoardDimensionsError(
+                            'Number of rows must be greater than or equal to 1'
+                        )
+                    );
+                });
+            });
         });
     });
 });
