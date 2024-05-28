@@ -1,4 +1,4 @@
-import { B } from 'vitest/dist/reporters-P7C2ytIv.js';
+import deepClone from '@/connect-4-domain/deep-clone';
 
 export type BoardCell = {
     player: 1 | 2 | undefined;
@@ -40,7 +40,7 @@ class GameFactory implements Game {
     }
 
     getBoard = () => {
-        return this.board;
+        return deepClone(this.board);
     };
 
     getPlayerStats = (playerNumber: 1 | 2): PlayerStats => {
