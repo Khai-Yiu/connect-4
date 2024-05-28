@@ -37,16 +37,7 @@ class GameFactory implements Game {
             boardDimensions: { rows: 6, columns: 7 }
         }
     ) {
-        if (boardDimensions.rows < 1 || boardDimensions.columns < 1) {
-            throw new InvalidBoardDimensionsError(
-                'Number of rows must be greater than or equal to 1'
-            );
-        } else if ((boardDimensions.rows * boardDimensions.columns) % 2 === 1) {
-            throw new InvalidBoardDimensionsError(
-                `The total number of cells on a board must be even. The supplied board dimensions ${boardDimensions.rows} x ${boardDimensions.columns} result in an odd number of cells`
-            );
-        }
-
+        this.validateBoardDimensions(boardDimensions);
         this.board = this.createBoard(boardDimensions);
         this.players = this.createPlayers(boardDimensions);
     }
@@ -85,6 +76,18 @@ class GameFactory implements Game {
                 remainingDiscs: remainingDiscs
             }
         };
+    }
+
+    private validateBoardDimensions({ rows, columns }: BoardDimensions) {
+        if (rows < 1 || columns < 1) {
+            throw new InvalidBoardDimensionsError(
+                'Number of rows must be greater than or equal to 1'
+            );
+        } else if ((rows * columns) % 2 === 1) {
+            throw new InvalidBoardDimensionsError(
+                `The total number of cells on a board must be even. The supplied board dimensions ${rows} x ${columns} result in an odd number of cells`
+            );
+        }
     }
 }
 
