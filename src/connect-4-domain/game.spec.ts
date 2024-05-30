@@ -320,13 +320,13 @@ describe('game', () => {
                     const event = game.move(movePlayerCommand);
                     expect(toAsciiTable(game.getBoard()))
                         .toMatchInlineSnapshot(`
-                      "
-                      |--|--|
-                      |  |  |
-                      |--|--|
-                      |  |  |
-                      |--|--|"
-                    `);
+                          "
+                          |--|--|--|
+                          |  |  |  |
+                          |--|--|--|
+                          |  |  |  |
+                          |--|--|--|"
+                        `);
                     expect(game.getActivePlayer()).toBe(1);
                     expect(event).toEqual({
                         type: 'PLAYER_MOVE_FAILED',
