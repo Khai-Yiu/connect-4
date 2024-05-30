@@ -3,6 +3,7 @@ import GameFactory, {
     BoardCell,
     InvalidBoardDimensionsError
 } from '@/connect-4-domain/game';
+import { createMovePlayerCommand } from '@/connect-4-domain/commands';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 
 function toAsciiTable(board: Array<Array<BoardCell>>): string {
@@ -175,7 +176,7 @@ describe('game', () => {
     describe('making a move', () => {
         describe('given a player is currently active', () => {
             describe("and a cell location that's not on the board", () => {
-                it('player should not be able to move', () => {
+                it('player should not be able to move to a cell with a row number below the first row', () => {
                     const game = new GameFactory({
                         boardDimensions: { rows: 2, columns: 2 }
                     });
@@ -197,9 +198,20 @@ describe('game', () => {
                         type: 'PLAYER_MOVE_FAILED',
                         payload: {
                             message:
-                                "Cell at row -1 and column 0 doesn't exist on the board. The row number must be >= 1 and <= 1"
+                                "Cell at row -1 and column 0 doesn't exist on the board. The row number must be >= 0 and <= 1"
                         }
                     });
+                    expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(
+                        `
+                      "
+                      |--|--|
+                      |  |  |
+                      |--|--|
+                      |  |  |
+                      |--|--|"
+                    `
+                    );
+                    expect(game.getActivePlayer()).toBe(1);
                 });
             });
         });
