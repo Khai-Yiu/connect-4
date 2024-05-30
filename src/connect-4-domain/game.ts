@@ -2,7 +2,9 @@ import deepClone from '@/connect-4-domain/deep-clone';
 import { MovePlayerCommand } from '@/connect-4-domain/commands';
 import {
     createPlayerMoveFailedEvent,
-    PlayerMoveFailedEvent
+    PlayerMoveFailedEvent,
+    createPlayerMovedEvent,
+    PlayerMovedEvent
 } from '@/connect-4-domain/events';
 
 export type BoardCell = {
@@ -65,6 +67,7 @@ class GameFactory implements Game {
 
     move({
         payload: {
+            player,
             targetCell: { row, column }
         }
     }: MovePlayerCommand): PlayerMoveFailedEvent {
@@ -84,6 +87,13 @@ class GameFactory implements Game {
                 message: `Cell at row ${row} and column ${column} doesn't exist on the board. The column number must be >= 0 and <= ${this.board[0].length - 1}`
             });
         }
+
+        this.board[row][column] = { player: player };
+        this.activePlayer = this.activePlayer === 2 ? 1 : 2;
+        return createPlayerMovedEvent({
+            player,
+            targetCell: { row, column }
+        });
     }
 
     private createBoard({
