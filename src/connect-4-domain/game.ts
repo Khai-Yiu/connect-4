@@ -25,6 +25,11 @@ type PlayerStats = {
     remainingDiscs: number;
 };
 
+type validationResult = {
+    isValid: boolean;
+    message: string;
+};
+
 type GameParameters = {
     boardDimensions: { rows: number; columns: number };
 };
@@ -65,35 +70,71 @@ class GameFactory implements Game {
 
     getActivePlayer = (): PlayerNumber => this.activePlayer;
 
-    move({
+    move = this.createValidatedMove(this._move.bind(this));
+
+    private _move({
         payload: {
             player,
             targetCell: { row, column }
         }
-    }: MovePlayerCommand): PlayerMoveFailedEvent {
-        if (
-            (row < 0 || row > this.board.length) &&
-            (column < 0 || column > this.board[0].length)
-        ) {
-            return createPlayerMoveFailedEvent({
-                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1} and the column number must be >= 0 and <= ${this.board[0].length - 1}`
-            });
-        } else if (row < 0 || row > this.board.length - 1) {
-            return createPlayerMoveFailedEvent({
-                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1}`
-            });
-        } else if (column < 0 || column > this.board[0].length - 1) {
-            return createPlayerMoveFailedEvent({
-                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The column number must be >= 0 and <= ${this.board[0].length - 1}`
-            });
-        }
-
+    }: MovePlayerCommand): PlayerMovedEvent {
         this.board[row][column] = { player: player };
         this.activePlayer = this.activePlayer === 2 ? 1 : 2;
         return createPlayerMovedEvent({
             player,
             targetCell: { row, column }
         });
+    }
+
+    private createValidatedMove(
+        moveFunction: (movePlayerCommand: MovePlayerCommand) => PlayerMovedEvent
+    ): (
+        movePlayerCommand: MovePlayerCommand
+    ) => PlayerMoveFailedEvent | PlayerMovedEvent {
+        return (
+            movePlayerCommand: MovePlayerCommand
+        ): PlayerMoveFailedEvent | PlayerMovedEvent => {
+            const { isValid, message } = this.validateMove(movePlayerCommand);
+
+            return isValid
+                ? moveFunction(movePlayerCommand)
+                : createPlayerMoveFailedEvent({ message: message });
+        };
+    }
+
+    private validateMove(
+        movePlayerCommand: MovePlayerCommand
+    ): validationResult {
+        const {
+            payload: {
+                targetCell: { row, column }
+            }
+        } = movePlayerCommand;
+
+        if (
+            (row < 0 || row > this.board.length - 1) &&
+            (column < 0 || column > this.board[0].length - 1)
+        ) {
+            return {
+                isValid: false,
+                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1} and the column number must be >= 0 and <= ${this.board[0].length - 1}`
+            };
+        } else if (row < 0 || row > this.board.length - 1) {
+            return {
+                isValid: false,
+                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1}`
+            };
+        } else if (column < 0 || column > this.board[0].length - 1) {
+            return {
+                isValid: false,
+                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The column number must be >= 0 and <= ${this.board[0].length - 1}`
+            };
+        }
+
+        return {
+            isValid: true,
+            message: ''
+        };
     }
 
     private createBoard({
