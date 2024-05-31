@@ -40,10 +40,6 @@ type GameParameters = {
     boardDimensions: { rows: number; columns: number };
 };
 
-type PlayerMoveFailedEvent = {
-    type: string;
-};
-
 interface Game {
     getBoard: () => Board;
 }
@@ -113,39 +109,54 @@ class GameFactory implements Game {
     ): ValidationResult {
         const {
             payload: {
+                player,
                 targetCell: { row, column }
             }
         } = movePlayerCommand;
+
+        if (this.getActivePlayer() !== player) {
+            return {
+                isValid: false,
+                message: `Player ${player} cannot move as player ${this.getActivePlayer()} is currently active`
+            };
+        }
+
         const { isValidRow, isValidColumn } = this.getIsCellOnBoard(
             row,
             column
         );
-        let message = '';
 
-        if (
-            isValidRow &&
-            isValidColumn &&
-            !this.getIsCellOccupied(row, column)
-        ) {
+        if (!isValidRow && !isValidColumn) {
             return {
-                isValid: true,
-                message: message
+                isValid: false,
+                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1} and the column number must be >= 0 and <= ${this.board[0].length - 1}`
             };
         }
 
-        if (!isValidRow && !isValidColumn) {
-            message = `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1} and the column number must be >= 0 and <= ${this.board[0].length - 1}`;
-        } else if (!isValidRow) {
-            message = `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1}`;
-        } else if (!isValidColumn) {
-            message = `Cell at row ${row} and column ${column} doesn't exist on the board. The column number must be >= 0 and <= ${this.board[0].length - 1}`;
-        } else if (this.getIsCellOccupied(row, column)) {
-            message = `The cell of row ${row} and column ${column} is already occupied`;
+        if (!isValidRow || !isValidColumn) {
+            return {
+                isValid: false,
+                message: `Cell at row ${row} and column ${column} doesn't exist on the board. ${!isValidRow ? `The row number must be >= 0 and <= ${this.board.length - 1}` : ''}${!isValidColumn ? `The column number must be >= 0 and <= ${this.board[0].length - 1}` : ''}`
+            };
+        }
+
+        if (this.getIsCellOccupied(row, column)) {
+            return {
+                isValid: false,
+                message: `The cell of row ${row} and column ${column} is already occupied`
+            };
+        }
+
+        if (!this.getIsCellOccupied(row - 1, column)) {
+            return {
+                isValid: false,
+                message: `The cell of row ${row} and column ${column} cannot be placed as there is no disc below it`
+            };
         }
 
         return {
-            isValid: false,
-            message: message
+            isValid: true,
+            message: ''
         };
     }
 
@@ -157,10 +168,8 @@ class GameFactory implements Game {
     }
 
     private getIsCellOccupied(row: number, column: number): boolean {
-        return (
-            this.board[row][column] !== undefined &&
-            this.board[row][column].player !== undefined
-        );
+        if (row < 0) return true; // Assume row < 0 means it's occupied by boundary logic.
+        return this.board[row][column].player !== undefined;
     }
 
     private createBoard({
