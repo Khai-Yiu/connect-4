@@ -380,6 +380,43 @@ describe('game', () => {
                         expect(game.getActivePlayer()).toBe(2);
                     });
                 });
+                describe('and the cell is occupied', () => {
+                    it('the move fails', () => {
+                        const game = new GameFactory({
+                            boardDimensions: { rows: 1, columns: 2 }
+                        });
+                        const movePlayerCommand = createMovePlayerCommand({
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 0
+                            }
+                        });
+                        game.move(movePlayerCommand);
+                        expect(toAsciiTable(game.getBoard()))
+                            .toMatchInlineSnapshot(`
+                              "
+                              |---|--|
+                              | 1 |  |
+                              |---|--|"
+                            `);
+                        const movePlayerCommand2 = createMovePlayerCommand({
+                            player: 2,
+                            targetCell: {
+                                row: 0,
+                                column: 0
+                            }
+                        });
+                        const playerMovedEvent = game.move(movePlayerCommand2);
+                        expect(playerMovedEvent).toEqual({
+                            type: 'PLAYER_MOVE_FAILED',
+                            payload: {
+                                message:
+                                    'The cell of row 0 and column 0 is already occupied'
+                            }
+                        });
+                    });
+                });
             });
         });
     });
