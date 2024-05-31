@@ -419,6 +419,49 @@ describe('game', () => {
                     });
                 });
             });
+            describe('and the cell is on the second row', () => {
+                describe('and the cell below is occupied', () => {
+                    it('player should be able to move a disc into the cell', () => {
+                        const game = new GameFactory({
+                            boardDimensions: { rows: 2, columns: 2 }
+                        });
+                        const movePlayerCommand = createMovePlayerCommand({
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 0
+                            }
+                        });
+                        game.move(movePlayerCommand);
+                        expect(toAsciiTable(game.getBoard()))
+                            .toMatchInlineSnapshot(`
+                              "
+                              |---|--|
+                              | 1 |  |
+                              |---|--|
+                              |   |  |
+                              |---|--|"
+                            `);
+                        const movePlayerCommand2 = createMovePlayerCommand({
+                            player: 2,
+                            targetCell: {
+                                row: 1,
+                                column: 0
+                            }
+                        });
+                        game.move(movePlayerCommand2);
+                        expect(toAsciiTable(game.getBoard()))
+                            .toMatchInlineSnapshot(`
+                          "
+                          |---|--|
+                          | 1 |  |
+                          |---|--|
+                          | 2 |  |
+                          |---|--|"
+                        `);
+                    });
+                });
+            });
         });
     });
 });
