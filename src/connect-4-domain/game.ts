@@ -117,7 +117,7 @@ class GameFactory implements Game {
         if (this.getActivePlayer() !== player) {
             return {
                 isValid: false,
-                message: `Player ${player} cannot move as player ${this.getActivePlayer()} is currently active`
+                message: `Plaer ${player} cannot move as player ${this.getActivePlayer()} is currently active`
             };
         }
 

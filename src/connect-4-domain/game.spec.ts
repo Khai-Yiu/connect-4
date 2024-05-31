@@ -453,13 +453,13 @@ describe('game', () => {
                         game.move(movePlayerCommand2);
                         expect(toAsciiTable(game.getBoard()))
                             .toMatchInlineSnapshot(`
-                          "
-                          |---|--|
-                          | 1 |  |
-                          |---|--|
-                          | 2 |  |
-                          |---|--|"
-                        `);
+                              "
+                              |---|--|
+                              | 1 |  |
+                              |---|--|
+                              | 2 |  |
+                              |---|--|"
+                            `);
                     });
                 });
                 describe('and the cell below is unoccupied', () => {
@@ -479,7 +479,7 @@ describe('game', () => {
                             type: 'PLAYER_MOVE_FAILED',
                             payload: {
                                 message:
-                                    'The cell of row 1 and column 0 can not be placed as there is no disc below it'
+                                    'The cell of row 1 and column 0 cannot be placed as there is no disc below it'
                             }
                         });
                         expect(toAsciiTable(game.getBoard()))
@@ -492,6 +492,29 @@ describe('game', () => {
                               |--|--|"
                             `);
                     });
+                });
+            });
+        });
+        describe('given a player is currently inactive', () => {
+            it('the player is unable to make a move', () => {
+                const game = new GameFactory({
+                    boardDimensions: { rows: 2, columns: 2 }
+                });
+                const movePlayerCommand = createMovePlayerCommand({
+                    player: 2,
+                    targetCell: {
+                        row: 0,
+                        column: 0
+                    }
+                });
+                expect(game.getActivePlayer()).toBe(1);
+                const playerMovedEvent = game.move(movePlayerCommand);
+                expect(playerMovedEvent).toEqual({
+                    type: 'PLAYER_MOVE_FAILED',
+                    payload: {
+                        message:
+                            'Player 2 cannot move as player 1 is currently active'
+                    }
                 });
             });
         });
