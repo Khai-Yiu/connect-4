@@ -8,6 +8,7 @@ import {
     createMovePlayerCommand
 } from '@/connect-4-domain/commands';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
+import { PlayerMoveFailedEvent } from './events';
 
 function toAsciiTable(board: Array<Array<BoardCell>>): string {
     const cellResolver = (cell: BoardCell) =>
@@ -459,6 +460,37 @@ describe('game', () => {
                           | 2 |  |
                           |---|--|"
                         `);
+                    });
+                });
+                describe('and the cell below is unoccupied', () => {
+                    it('player should not be able to move a disc into the cell', () => {
+                        const game = new GameFactory({
+                            boardDimensions: { rows: 2, columns: 2 }
+                        });
+                        const movePlayerCommand = createMovePlayerCommand({
+                            player: 1,
+                            targetCell: {
+                                row: 1,
+                                column: 0
+                            }
+                        });
+                        const playerMovedEvent = game.move(movePlayerCommand);
+                        expect(playerMovedEvent).toEqual({
+                            type: 'PLAYER_MOVE_FAILED',
+                            payload: {
+                                message:
+                                    'The cell of row 1 and column 0 can not be placed as there is no disc below it'
+                            }
+                        });
+                        expect(toAsciiTable(game.getBoard()))
+                            .toMatchInlineSnapshot(`
+                              "
+                              |--|--|
+                              |  |  |
+                              |--|--|
+                              |  |  |
+                              |--|--|"
+                            `);
                     });
                 });
             });
