@@ -6,6 +6,7 @@ import {
     createPlayerMovedEvent,
     PlayerMovedEvent
 } from '@/connect-4-domain/events';
+import { BoardCell } from '@/connect-4-ui/BoardCell';
 
 export type BoardCell = {
     player: 1 | 2 | undefined;
@@ -128,6 +129,13 @@ class GameFactory implements Game {
             return {
                 isValid: false,
                 message: `Cell at row ${row} and column ${column} doesn't exist on the board. The column number must be >= 0 and <= ${this.board[0].length - 1}`
+            };
+        }
+
+        if (this.board[row][column].player !== undefined) {
+            return {
+                isValid: false,
+                message: `The cell of row ${row} and column ${column} is already occupied`
             };
         }
 

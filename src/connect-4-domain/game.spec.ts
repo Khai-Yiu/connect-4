@@ -415,6 +415,7 @@ describe('game', () => {
                                     'The cell of row 0 and column 0 is already occupied'
                             }
                         });
+                        expect(game.getActivePlayer()).toBe(2);
                     });
                 });
             });
