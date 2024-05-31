@@ -26,9 +26,14 @@ type PlayerStats = {
     remainingDiscs: number;
 };
 
-type validationResult = {
+type ValidationResult = {
     isValid: boolean;
     message: string;
+};
+
+type ValidCellOnBoard = {
+    isValidRow: boolean;
+    isValidColumn: boolean;
 };
 
 type GameParameters = {
@@ -105,44 +110,57 @@ class GameFactory implements Game {
 
     private validateMove(
         movePlayerCommand: MovePlayerCommand
-    ): validationResult {
+    ): ValidationResult {
         const {
             payload: {
                 targetCell: { row, column }
             }
         } = movePlayerCommand;
+        const { isValidRow, isValidColumn } = this.getIsCellOnBoard(
+            row,
+            column
+        );
+        let message = '';
 
         if (
-            (row < 0 || row > this.board.length - 1) &&
-            (column < 0 || column > this.board[0].length - 1)
+            isValidRow &&
+            isValidColumn &&
+            !this.getIsCellOccupied(row, column)
         ) {
             return {
-                isValid: false,
-                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1} and the column number must be >= 0 and <= ${this.board[0].length - 1}`
-            };
-        } else if (row < 0 || row > this.board.length - 1) {
-            return {
-                isValid: false,
-                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1}`
-            };
-        } else if (column < 0 || column > this.board[0].length - 1) {
-            return {
-                isValid: false,
-                message: `Cell at row ${row} and column ${column} doesn't exist on the board. The column number must be >= 0 and <= ${this.board[0].length - 1}`
+                isValid: true,
+                message: message
             };
         }
 
-        if (this.board[row][column].player !== undefined) {
-            return {
-                isValid: false,
-                message: `The cell of row ${row} and column ${column} is already occupied`
-            };
+        if (!isValidRow && !isValidColumn) {
+            message = `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1} and the column number must be >= 0 and <= ${this.board[0].length - 1}`;
+        } else if (!isValidRow) {
+            message = `Cell at row ${row} and column ${column} doesn't exist on the board. The row number must be >= 0 and <= ${this.board.length - 1}`;
+        } else if (!isValidColumn) {
+            message = `Cell at row ${row} and column ${column} doesn't exist on the board. The column number must be >= 0 and <= ${this.board[0].length - 1}`;
+        } else if (this.getIsCellOccupied(row, column)) {
+            message = `The cell of row ${row} and column ${column} is already occupied`;
         }
 
         return {
-            isValid: true,
-            message: ''
+            isValid: false,
+            message: message
         };
+    }
+
+    private getIsCellOnBoard(row: number, column: number): ValidCellOnBoard {
+        return {
+            isValidRow: row >= 0 && row <= this.board.length - 1,
+            isValidColumn: column >= 0 && column <= this.board[0].length - 1
+        };
+    }
+
+    private getIsCellOccupied(row: number, column: number): boolean {
+        return (
+            this.board[row][column] !== undefined &&
+            this.board[row][column].player !== undefined
+        );
     }
 
     private createBoard({
