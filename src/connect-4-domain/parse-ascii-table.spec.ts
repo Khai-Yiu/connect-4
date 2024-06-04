@@ -93,5 +93,14 @@ describe('parse-ascii-table', () => {
                 expect(parseAsciiTable(table)).toEqual([['1', '2']]);
             });
         });
+        describe('where all cells hold content of different length', () => {
+            it('returns a 1x2 grid', () => {
+                const table = `
+|---|----|
+| 1 | 10 |
+|---|----|`;
+                expect(parseAsciiTable(table)).toEqual([['1', '10']]);
+            });
+        });
     });
 });
