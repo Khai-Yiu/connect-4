@@ -8,7 +8,6 @@ import {
     createMovePlayerCommand
 } from '@/connect-4-domain/commands';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
-import { PlayerMoveFailedEvent } from './events';
 
 function toAsciiTable(board: Array<Array<BoardCell>>): string {
     const cellResolver = (cell: BoardCell) =>
