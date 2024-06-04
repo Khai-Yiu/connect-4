@@ -54,5 +54,16 @@ describe('parse-ascii-table', () => {
                 expect(parseAsciiTable(table)).toEqual([['1'], ['2']]);
             });
         });
+        describe('where all cells hold content of different length', () => {
+            it('returns a 2x1 grid', () => {
+                const table = `
+|----|
+| 1  |
+|----|
+| 10 |
+|----|`;
+                expect(parseAsciiTable(table)).toEqual([['1'], ['10']]);
+            });
+        });
     });
 });
