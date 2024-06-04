@@ -24,8 +24,21 @@ function parseAsciiTable<T>(
             }
 
             const rowCells = row.split('|');
+            const rowCellsWithoutStartAndEnd = rowCells.slice(
+                1,
+                rowCells.length - 1
+            );
+            const gridRow = rowCellsWithoutStartAndEnd.reduce(
+                (row: Array<T>, currentCell: string): Array<T> => {
+                    const trimmedValue = currentCell.slice(1).trimEnd();
+                    row.push(customResolver(trimmedValue) as T);
 
-            grid.push([customResolver(rowCells[1].slice(1).trimEnd()) as T]);
+                    return [...row];
+                },
+                []
+            );
+
+            grid.push(gridRow);
 
             return [...grid];
         },
