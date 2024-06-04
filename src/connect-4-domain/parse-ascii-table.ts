@@ -25,7 +25,7 @@ function parseAsciiTable<T>(
 
             const rowCells = row.split('|');
 
-            grid.push([customResolver(rowCells[1].trim()) as T]);
+            grid.push([customResolver(rowCells[1].slice(1).trimEnd()) as T]);
 
             return [...grid];
         },
