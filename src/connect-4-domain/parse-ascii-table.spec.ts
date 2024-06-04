@@ -83,4 +83,15 @@ describe('parse-ascii-table', () => {
             });
         });
     });
+    describe('given a 1x2 ascii table', () => {
+        describe('where all cells hold content of the same length', () => {
+            it('returns a 1x2 grid', () => {
+                const table = `
+|---|---|
+| 1 | 2 |
+|---|---|`;
+                expect(parseAsciiTable(table)).toEqual([['1', '2']]);
+            });
+        });
+    });
 });
