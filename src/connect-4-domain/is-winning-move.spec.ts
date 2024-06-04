@@ -1,15 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import isWinningMove from '@/connect-4-domain/is-winning-move';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
-import { BoardCell } from '@/connect-4-domain/game';
-
-type PlayerMove = {
-    player: 1 | 2;
-    targetCell: {
-        row: number;
-        column: number;
-    };
-};
+import { BoardCell, PlayerMove } from '@/connect-4-domain/game';
 
 describe('is-winning-move', () => {
     describe("given a board and the next player's move", () => {
@@ -45,7 +37,7 @@ describe('is-winning-move', () => {
                         row: 3,
                         column: 0
                     }
-                };
+                } as PlayerMove;
                 expect(isWinningMove(board, playerMove)).toEqual(
                     expect.objectContaining({
                         isWin: true

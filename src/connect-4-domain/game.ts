@@ -12,7 +12,15 @@ export type BoardCell = {
     player: 1 | 2 | undefined;
 };
 
-type Board = Array<Array<BoardCell>>;
+export type Board = Array<Array<BoardCell>>;
+
+export type PlayerMove = {
+    player: 1 | 2;
+    targetCell: {
+        row: number;
+        column: number;
+    };
+};
 
 type BoardDimensions = {
     rows: number;
