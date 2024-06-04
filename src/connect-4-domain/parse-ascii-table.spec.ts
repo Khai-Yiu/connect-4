@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
-import { parse } from '@storybook/blocks';
 
 describe('parse-ascii-table', () => {
     describe('given a table with no rows and columns', () => {
@@ -38,6 +37,15 @@ describe('parse-ascii-table', () => {
                     expect(parseAsciiTable(table, customResolver)).toEqual([
                         [1]
                     ]);
+                });
+            });
+            describe('with trailing whitespace', () => {
+                it('returns a 1x1 grid trimming the trailing whitespace', () => {
+                    const table = `
+|----|
+| 1  |
+|----|`;
+                    expect(parseAsciiTable(table)).toEqual([['1']]);
                 });
             });
         });
