@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
+import { parse } from '@storybook/blocks';
 
 describe('parse-ascii-table', () => {
     describe('given a table with no rows and columns', () => {
@@ -38,6 +39,19 @@ describe('parse-ascii-table', () => {
                         [1]
                     ]);
                 });
+            });
+        });
+    });
+    describe('given a 2x1 ascii table', () => {
+        describe('where all cells hold content of the same length', () => {
+            it('returns a 2x1 grid', () => {
+                const table = `
+|---|
+| 1 |
+|---|
+| 2 |
+|---|`;
+                expect(parseAsciiTable(table)).toEqual([['1'], ['2']]);
             });
         });
     });
