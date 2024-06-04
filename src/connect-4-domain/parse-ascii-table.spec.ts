@@ -103,4 +103,18 @@ describe('parse-ascii-table', () => {
             });
         });
     });
+    describe('given a 2x2 ascii table', () => {
+        it('returns a 2x2 grid', () => {
+            const table = `
+|----|----|
+|  1 |    |
+|----|----|
+| 12 | 10 |
+|----|----|`;
+            expect(parseAsciiTable(table)).toEqual([
+                [' 1', undefined],
+                ['12', '10']
+            ]);
+        });
+    });
 });
