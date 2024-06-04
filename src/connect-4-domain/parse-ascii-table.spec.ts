@@ -48,6 +48,15 @@ describe('parse-ascii-table', () => {
                     expect(parseAsciiTable(table)).toEqual([['1']]);
                 });
             });
+            describe('with leading whitespace', () => {
+                it('returns a 1x1 grid without trimming the leading whitespace', () => {
+                    const table = `
+|----|
+|  1 |
+|----|`;
+                    expect(parseAsciiTable(table)).toEqual([[' 1']]);
+                });
+            });
         });
     });
     describe('given a 2x1 ascii table', () => {
