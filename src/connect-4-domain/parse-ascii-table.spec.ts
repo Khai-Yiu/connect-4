@@ -26,6 +26,19 @@ describe('parse-ascii-table', () => {
 |---|`;
                 expect(parseAsciiTable(table)).toEqual([['1']]);
             });
+            describe('and a customer cell resolver', () => {
+                it('returns a 1x1 grid with a resolved value', () => {
+                    const table = `
+|---|
+| 1 |
+|---|`;
+                    const customResolver = (value: string): number =>
+                        Number(value);
+                    expect(parseAsciiTable(table, customResolver)).toEqual([
+                        [1]
+                    ]);
+                });
+            });
         });
     });
 });
