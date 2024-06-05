@@ -6,6 +6,10 @@ type WinState = {
 };
 
 function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
+    if (board.length < 4) {
+        return false;
+    }
+
     const {
         player,
         targetCell: { row, column }

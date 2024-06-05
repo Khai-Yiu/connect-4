@@ -46,6 +46,31 @@ describe('is-winning-move', () => {
                 );
             });
         });
+        describe('and there are less than 4 rows on the board', () => {
+            it('does not result in a vertical win', () => {
+                const table = `
+|---|---|
+| 1 | 2 |
+|---|---|
+| 1 | 2 |
+|---|---|
+|   |   |
+|---|---|`;
+                const playerMove = {
+                    player: 1,
+                    targetCell: {
+                        row: 2,
+                        column: 0
+                    }
+                } as PlayerMove;
+                const board = parseAsciiTable(table, customResolver);
+                expect(isWinningMove(board, playerMove)).toEqual(
+                    expect.objectContaining({
+                        isWin: false
+                    })
+                );
+            });
+        });
         describe('and the winning column does not touch the board', () => {
             describe('and the player move results in a vertical win', () => {
                 it('detects the win', () => {
