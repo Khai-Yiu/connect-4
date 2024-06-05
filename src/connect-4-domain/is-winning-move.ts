@@ -8,15 +8,20 @@ type WinState = {
 function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
     const {
         player,
-        targetCell: { column }
+        targetCell: { row, column }
     } = playerMove;
-    const { isWinning } = board.reduce(
-        (state: WinState, currentRow: Array<BoardCell>): WinState => {
+    const columnToCheck = board.map(
+        (row: Array<BoardCell>): BoardCell => row[column]
+    );
+    columnToCheck[row] = { player: 1 };
+
+    const { isWinning } = columnToCheck.reduce(
+        (state: WinState, currentCell: BoardCell): WinState => {
             if (state.isWinning) {
                 return state;
             }
 
-            if (currentRow[column].player === player) {
+            if (currentCell.player === player) {
                 if (state.consecutiveDiscs === 3) {
                     return {
                         consecutiveDiscs: state.consecutiveDiscs + 1,
@@ -50,11 +55,6 @@ function isWinningMove(
 ): {
     isWin: boolean;
 } {
-    const {
-        player,
-        targetCell: { row, column }
-    } = playerMove;
-    board[row][column].player = player;
     const isWin = isVerticalWin(board, playerMove);
     return {
         isWin: isWin
