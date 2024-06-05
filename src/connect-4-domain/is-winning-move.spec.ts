@@ -126,6 +126,31 @@ describe('is-winning-move', () => {
                     );
                 });
             });
+            describe('and there are less than 4 columns on the board', () => {
+                describe('does not result in a horizontal win', () => {
+                    it('detects the win', () => {
+                        const table = `
+    |---|---|---|
+    | 1 | 1 |   |
+    |---|---|---|
+    | 2 | 2 |   |
+    |---|---|---|`;
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 2
+                            }
+                        } as PlayerMove;
+                        const board = parseAsciiTable(table, customResolver);
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: false
+                            })
+                        );
+                    });
+                });
+            });
         });
     });
 });
