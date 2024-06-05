@@ -5,6 +5,27 @@ type WinState = {
     isWinning: boolean;
 };
 
+function isRowOrColumnAWin(
+    cellArray: Array<BoardCell>,
+    player: 1 | 2 | undefined
+): boolean {
+    const { isWinning } = cellArray.reduce(
+        (state: WinState, currentCell: BoardCell): WinState => {
+            const { consecutiveDiscs, isWinning } = state;
+
+            return currentCell.player === player
+                ? {
+                      consecutiveDiscs: consecutiveDiscs + 1,
+                      isWinning: consecutiveDiscs + 1 >= 4
+                  }
+                : { consecutiveDiscs: 0, isWinning };
+        },
+        { consecutiveDiscs: 0, isWinning: false }
+    );
+
+    return isWinning;
+}
+
 function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
     if (board.length < 4) {
         return false;
@@ -17,40 +38,24 @@ function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
     const columnToCheck = board.map(
         (row: Array<BoardCell>): BoardCell => row[column]
     );
-    columnToCheck[row] = { player: 1 };
+    columnToCheck[row] = { player: player };
 
-    const { isWinning } = columnToCheck.reduce(
-        (state: WinState, currentCell: BoardCell): WinState => {
-            if (state.isWinning) {
-                return state;
-            }
+    return isRowOrColumnAWin(columnToCheck, player);
+}
 
-            if (currentCell.player === player) {
-                if (state.consecutiveDiscs === 3) {
-                    return {
-                        consecutiveDiscs: state.consecutiveDiscs + 1,
-                        isWinning: true
-                    };
-                }
+function isHorizontalWin(board: Board, playerMove: PlayerMove): boolean {
+    if (board[0].length < 4) {
+        return false;
+    }
 
-                return {
-                    ...state,
-                    consecutiveDiscs: state.consecutiveDiscs + 1
-                };
-            }
+    const {
+        player,
+        targetCell: { row, column }
+    } = playerMove;
+    const rowToCheck = [...board[row]];
+    rowToCheck[column] = { player: player };
 
-            return {
-                ...state,
-                consecutiveDiscs: 0
-            };
-        },
-        {
-            consecutiveDiscs: 0,
-            isWinning: false
-        }
-    );
-
-    return isWinning;
+    return isRowOrColumnAWin(rowToCheck, player);
 }
 
 function isWinningMove(
@@ -59,7 +64,9 @@ function isWinningMove(
 ): {
     isWin: boolean;
 } {
-    const isWin = isVerticalWin(board, playerMove);
+    const isWin =
+        isVerticalWin(board, playerMove) || isHorizontalWin(board, playerMove);
+
     return {
         isWin: isWin
     };
