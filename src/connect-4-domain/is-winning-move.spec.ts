@@ -330,6 +330,31 @@ describe('is-winning-move', () => {
                         );
                     });
                 });
+                describe('and there are less than 3 rows to the left of the target cell', () => {
+                    it('does not result in a diagonal win', () => {
+                        const table = `
+|---|---|---|---|
+| 1 |   |   |   |
+|---|---|---|---|
+|   | 1 |   |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 2,
+                                column: 2
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: false
+                            })
+                        );
+                    });
+                });
             });
         });
         describe.todo('that is top-left to bottom-right', () => {});
