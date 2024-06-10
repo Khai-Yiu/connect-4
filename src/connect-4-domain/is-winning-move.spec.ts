@@ -276,6 +276,33 @@ describe('is-winning-move', () => {
                         );
                     });
                 });
+                describe("and there are 2 of the moving player's tokens to the left and 1 to the right of the target cell", () => {
+                    it('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+| 1 |   |   |   |
+|---|---|---|---|
+|   | 1 |   |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   | 1 |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 2,
+                                column: 2
+                            }
+                        };
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
             });
         });
         describe.todo('that is top-left to bottom-right', () => {});
