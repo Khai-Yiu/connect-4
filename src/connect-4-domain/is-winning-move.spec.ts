@@ -246,4 +246,38 @@ describe('is-winning-move', () => {
             });
         });
     });
+    describe('checking for a diagonal win', () => {
+        describe('that is bottom-left to top-right', () => {
+            describe("given a board and the next player's move", () => {
+                describe("with 3 of the moving player's discs to the left of the target cell", () => {
+                    it('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+| 1 | 2 | 2 | 1 |
+|---|---|---|---|
+| 2 | 1 | 2 | 1 |
+|---|---|---|---|
+|   |   | 1 | 2 |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 3,
+                                column: 3
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+            });
+        });
+        describe.todo('that is top-left to bottom-right', () => {});
+    });
 });
