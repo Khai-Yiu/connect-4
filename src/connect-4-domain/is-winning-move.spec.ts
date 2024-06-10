@@ -249,15 +249,15 @@ describe('is-winning-move', () => {
     describe('checking for a diagonal win', () => {
         describe('that is bottom-left to top-right', () => {
             describe("given a board and the next player's move", () => {
-                describe("with 3 of the moving player's discs to the left of the target cell", () => {
+                describe("and there are 3 of the moving player's discs to the left of the target cell", () => {
                     it('detects the win', () => {
                         const table = `
 |---|---|---|---|
-| 1 | 2 | 2 | 1 |
+| 1 |   |   |   |
 |---|---|---|---|
-| 2 | 1 | 2 | 1 |
+|   | 1 |   |   |
 |---|---|---|---|
-|   |   | 1 | 2 |
+|   |   | 1 |   |
 |---|---|---|---|
 |   |   |   |   |
 |---|---|---|---|`;
@@ -272,6 +272,33 @@ describe('is-winning-move', () => {
                         expect(isWinningMove(board, playerMove)).toEqual(
                             expect.objectContaining({
                                 isWin: true
+                            })
+                        );
+                    });
+                });
+                describe("and there are 3 of the moving player's discs to the right of the target cell", () => {
+                    it('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   | 1 |   |   |
+|---|---|---|---|
+|   |   | 1 |   |
+|---|---|---|---|
+|   |   |   | 1 |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 0
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: false
                             })
                         );
                     });
