@@ -295,7 +295,34 @@ describe('is-winning-move', () => {
                                 row: 2,
                                 column: 2
                             }
-                        };
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe("and there are 2 of the moving player's tokens to the right and 1 to the left of the target cell", () => {
+                    it('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+| 1 |   |   |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   |   | 1 |   |
+|---|---|---|---|
+|   |   |   | 1 |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 1,
+                                column: 1
+                            }
+                        } as PlayerMove;
                         expect(isWinningMove(board, playerMove)).toEqual(
                             expect.objectContaining({
                                 isWin: true
