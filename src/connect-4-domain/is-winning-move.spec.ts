@@ -415,6 +415,42 @@ describe('is-winning-move', () => {
                         );
                     });
                 });
+                describe('and the winning diagonal does not touch the board', () => {
+                    describe('and the player move results in a diagonal win', () => {
+                        it('detects the win', () => {
+                            const table = `
+|---|---|---|---|---|---|
+|   |   |   |   |   |   |
+|---|---|---|---|---|---|
+|   | 1 |   |   |   |   |
+|---|---|---|---|---|---|
+|   |   | 1 |   |   |   |
+|---|---|---|---|---|---|
+|   |   |   | 1 |   |   |
+|---|---|---|---|---|---|
+|   |   |   |   |   |   |
+|---|---|---|---|---|---|
+|   |   |   |   |   |   |
+|---|---|---|---|---|---|`;
+                            const board = parseAsciiTable(
+                                table,
+                                customResolver
+                            );
+                            const playerMove = {
+                                player: 1,
+                                targetCell: {
+                                    row: 4,
+                                    column: 4
+                                }
+                            } as PlayerMove;
+                            expect(isWinningMove(board, playerMove)).toEqual(
+                                expect.objectContaining({
+                                    isWin: true
+                                })
+                            );
+                        });
+                    });
+                });
                 describe('and there are less than 3 rows and columns to the left of the target cell', () => {
                     it('does not result in a diagonal win', () => {
                         const table = `
