@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { BoardCell, PlayerMove } from '@/connect-4-domain/game';
 import isWinningMove from '@/connect-4-domain/is-winning-move';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
-import { BoardCell, PlayerMove } from '@/connect-4-domain/game';
+import { describe, expect, it } from 'vitest';
 
 describe('is-winning-move', () => {
     const customResolver = (value: string): BoardCell => {
@@ -17,9 +17,8 @@ describe('is-winning-move', () => {
             player: undefined
         };
     };
-
-    describe("given a board and the next player's move", () => {
-        describe('results in a vertical win', () => {
+    describe('checking for a vertical win', () => {
+        describe("given a board and the next player's move", () => {
             describe('and the player move results in a win', () => {
                 it('detects the win', () => {
                     const table = `
@@ -104,7 +103,9 @@ describe('is-winning-move', () => {
                 });
             });
         });
-        describe('results in a horizontal win', () => {
+    });
+    describe('checking for a horizontal win', () => {
+        describe("given a board and the next player's move", () => {
             describe("and there are 3 of the active player's tokens to the left of the target cell", () => {
                 it('detects the win', () => {
                     const table = `
@@ -157,13 +158,36 @@ describe('is-winning-move', () => {
 |---|---|---|---|
 | 1 |   | 1 | 1 |
 |---|---|---|---|
-|   | 2 | 2 | 2 |
+| 2 |   | 2 | 2 |
 |---|---|---|---|`;
                     const playerMove = {
                         player: 1,
                         targetCell: {
                             row: 0,
                             column: 1
+                        }
+                    } as PlayerMove;
+                    const board = parseAsciiTable(table, customResolver);
+                    expect(isWinningMove(board, playerMove)).toEqual(
+                        expect.objectContaining({
+                            isWin: true
+                        })
+                    );
+                });
+            });
+            describe("and there are 2 of the active player's tokens to the right and 1 to the left of the target cell", () => {
+                it('detects the win', () => {
+                    const table = `
+|---|---|---|---|
+| 1 | 1 |   | 1 |
+|---|---|---|---|
+| 2 | 2 |   | 2 |
+|---|---|---|---|`;
+                    const playerMove = {
+                        player: 1,
+                        targetCell: {
+                            row: 0,
+                            column: 2
                         }
                     } as PlayerMove;
                     const board = parseAsciiTable(table, customResolver);
