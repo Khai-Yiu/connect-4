@@ -244,6 +244,31 @@ describe('is-winning-move', () => {
                     );
                 });
             });
+            describe('and the winning row does not touch the board', () => {
+                describe('and the player move results in a horizontal win', () => {
+                    it('detects the win', () => {
+                        const table = `
+|---|---|---|---|---|---|
+|   | 1 | 1 | 1 |   |   |
+|---|---|---|---|---|---|
+|   | 2 | 2 | 2 |   |   |
+|---|---|---|---|---|---|`;
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 4
+                            }
+                        } as PlayerMove;
+                        const board = parseAsciiTable(table, customResolver);
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+            });
         });
     });
     describe('checking for a diagonal win', () => {
