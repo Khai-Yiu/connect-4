@@ -5,6 +5,15 @@ type WinState = {
     isWinning: boolean;
 };
 
+type DiagonalMovement = {
+    startRow: number;
+    startColumn: number;
+    direction: {
+        rowIncrement: number;
+        columnIncrement: number;
+    };
+};
+
 function isConsecutiveWin(
     cellArray: Array<BoardCell>,
     player: 1 | 2 | undefined
@@ -26,21 +35,20 @@ function isConsecutiveWin(
     return isWinning;
 }
 
-function isTopLeftBottomRightDiagonalWin(
+function isDirectionalDiagonalWin(
     board: Board,
-    playerMove: PlayerMove
+    playerMove: PlayerMove,
+    diagonalMovement: DiagonalMovement
 ): boolean {
-    if (board.length < 4 || board[0].length < 4) {
-        return false;
-    }
-
     const {
         player,
         targetCell: { row, column }
     } = playerMove;
-    const offset = Math.min(row, column);
-    let startRow = row - offset;
-    let startColumn = column - offset;
+    let {
+        startRow,
+        startColumn,
+        direction: { rowIncrement, columnIncrement }
+    } = diagonalMovement;
 
     const diagonalToCheck = [];
     while (startRow < board.length && startColumn < board[0].length) {
@@ -50,11 +58,32 @@ function isTopLeftBottomRightDiagonalWin(
             diagonalToCheck.push(board[startRow][startColumn]);
         }
 
-        startRow++;
-        startColumn++;
+        startRow += rowIncrement;
+        startColumn += columnIncrement;
     }
 
     return isConsecutiveWin(diagonalToCheck, player);
+}
+
+function isDiagonalWin(board: Board, playerMove: PlayerMove): boolean {
+    if (board.length < 4 || board[0].length < 4) {
+        return false;
+    }
+
+    const {
+        targetCell: { row, column }
+    } = playerMove;
+    const offset = Math.min(row, column);
+
+    const topLeftToBottomRight = {
+        startRow: row - offset,
+        startColumn: column - offset,
+        direction: {
+            rowIncrement: 1,
+            columnIncrement: 1
+        }
+    };
+    return isDirectionalDiagonalWin(board, playerMove, topLeftToBottomRight);
 }
 
 function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
@@ -98,7 +127,7 @@ function isWinningMove(
     const isWin =
         isVerticalWin(board, playerMove) ||
         isHorizontalWin(board, playerMove) ||
-        isTopLeftBottomRightDiagonalWin(board, playerMove);
+        isDiagonalWin(board, playerMove);
 
     return {
         isWin: isWin
