@@ -51,7 +51,12 @@ function isDirectionalDiagonalWin(
     } = diagonalMovement;
 
     const diagonalToCheck = [];
-    while (startRow < board.length && startColumn < board[0].length) {
+    while (
+        startRow < board.length &&
+        startColumn < board[0].length &&
+        startRow >= 0 &&
+        startColumn >= 0
+    ) {
         if (startRow === row && startColumn === column) {
             diagonalToCheck.push({ player: player });
         } else {
@@ -73,17 +78,17 @@ function isDiagonalWin(board: Board, playerMove: PlayerMove): boolean {
     const {
         targetCell: { row, column }
     } = playerMove;
-    const offset = Math.min(row, column);
 
-    const topLeftToBottomRight = {
-        startRow: row - offset,
-        startColumn: column - offset,
+    const bottomLeftToTopRight = {
+        startRow: row - Math.min(row, column),
+        startColumn: column - Math.min(row, column),
         direction: {
             rowIncrement: 1,
             columnIncrement: 1
         }
     };
-    return isDirectionalDiagonalWin(board, playerMove, topLeftToBottomRight);
+
+    return isDirectionalDiagonalWin(board, playerMove, bottomLeftToTopRight);
 }
 
 function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
