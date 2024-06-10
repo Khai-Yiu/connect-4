@@ -298,7 +298,7 @@ describe('is-winning-move', () => {
                         } as PlayerMove;
                         expect(isWinningMove(board, playerMove)).toEqual(
                             expect.objectContaining({
-                                isWin: false
+                                isWin: true
                             })
                         );
                     });
@@ -353,6 +353,35 @@ describe('is-winning-move', () => {
                         expect(isWinningMove(board, playerMove)).toEqual(
                             expect.objectContaining({
                                 isWin: true
+                            })
+                        );
+                    });
+                });
+                describe('and the player move results in a diagonal win under the main diagonal', () => {
+                    it('detects the win', () => {
+                        const table = `
+|---|---|---|---|---|
+|   |   |   |   |   |
+|---|---|---|---|---|
+| 1 |   |   |   |   |
+|---|---|---|---|---|
+|   | 1 |   |   |   |
+|---|---|---|---|---|
+|   |   | 1 |   |   |
+|---|---|---|---|---|
+|   |   |   |   |   |
+|---|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 4,
+                                column: 3
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: false
                             })
                         );
                     });
