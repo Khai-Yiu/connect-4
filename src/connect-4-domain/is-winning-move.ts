@@ -5,7 +5,7 @@ type WinState = {
     isWinning: boolean;
 };
 
-function isRowOrColumnAWin(
+function isConsecutiveWin(
     cellArray: Array<BoardCell>,
     player: 1 | 2 | undefined
 ): boolean {
@@ -26,6 +26,37 @@ function isRowOrColumnAWin(
     return isWinning;
 }
 
+function isTopLeftBottomRightDiagonalWin(
+    board: Board,
+    playerMove: PlayerMove
+): boolean {
+    if (board.length < 4 || board[0].length < 4) {
+        return false;
+    }
+
+    const {
+        player,
+        targetCell: { row, column }
+    } = playerMove;
+    const offset = Math.min(row, column);
+    let startRow = row - offset;
+    let startColumn = column - offset;
+
+    const diagonalToCheck = [];
+    while (startRow < board.length && startColumn < board[0].length) {
+        if (startRow === row && startColumn === column) {
+            diagonalToCheck.push({ player: player });
+        } else {
+            diagonalToCheck.push(board[startRow][startColumn]);
+        }
+
+        startRow++;
+        startColumn++;
+    }
+
+    return isConsecutiveWin(diagonalToCheck, player);
+}
+
 function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
     if (board.length < 4) {
         return false;
@@ -40,7 +71,7 @@ function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
     );
     columnToCheck[row] = { player: player };
 
-    return isRowOrColumnAWin(columnToCheck, player);
+    return isConsecutiveWin(columnToCheck, player);
 }
 
 function isHorizontalWin(board: Board, playerMove: PlayerMove): boolean {
@@ -55,7 +86,7 @@ function isHorizontalWin(board: Board, playerMove: PlayerMove): boolean {
     const rowToCheck = [...board[row]];
     rowToCheck[column] = { player: player };
 
-    return isRowOrColumnAWin(rowToCheck, player);
+    return isConsecutiveWin(rowToCheck, player);
 }
 
 function isWinningMove(
@@ -65,7 +96,9 @@ function isWinningMove(
     isWin: boolean;
 } {
     const isWin =
-        isVerticalWin(board, playerMove) || isHorizontalWin(board, playerMove);
+        isVerticalWin(board, playerMove) ||
+        isHorizontalWin(board, playerMove) ||
+        isTopLeftBottomRightDiagonalWin(board, playerMove);
 
     return {
         isWin: isWin
