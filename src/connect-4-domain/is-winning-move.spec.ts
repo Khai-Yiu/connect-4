@@ -697,7 +697,7 @@ describe('is-winning-move', () => {
                     });
                 });
                 describe('and the winning diagonal does not touch the board', () => {
-                    it.skip('detects the win', () => {
+                    it('detects the win', () => {
                         const table = `
 |---|---|---|---|---|---|
 |   |   |   |   |   |   |
@@ -716,7 +716,7 @@ describe('is-winning-move', () => {
                         const playerMove = {
                             player: 1,
                             targetCell: {
-                                row: 0,
+                                row: 1,
                                 column: 4
                             }
                         } as PlayerMove;
