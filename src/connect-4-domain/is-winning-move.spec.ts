@@ -728,7 +728,7 @@ describe('is-winning-move', () => {
                     });
                 });
                 describe('and there are less than 3 rows and columns to the left of the target cell', () => {
-                    it.skip('does not result in a diagonal win', () => {
+                    it('does not result in a diagonal win', () => {
                         const table = `
 |---|---|---|
 |   |   |   |
