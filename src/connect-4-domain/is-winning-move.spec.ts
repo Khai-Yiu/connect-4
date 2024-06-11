@@ -585,7 +585,7 @@ describe('is-winning-move', () => {
                     });
                 });
                 describe("and there are 2 of the moving player's tokens to the left and 1 to the right of the target cell", () => {
-                    it.skip('detects the win', () => {
+                    it('detects the win', () => {
                         const table = `
 |---|---|---|---|
 |   |   |   | 1 |
