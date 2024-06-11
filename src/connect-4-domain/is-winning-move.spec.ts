@@ -528,6 +528,256 @@ describe('is-winning-move', () => {
                 });
             });
         });
-        describe.todo('that is top-left to bottom-right', () => {});
+        describe('that is top-left to bottom-right', () => {
+            describe("given a board and the next player's move", () => {
+                describe("and there are 3 of the moving player's discs to the left of the target cell", () => {
+                    it('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   |   | 1 |   |
+|---|---|---|---|
+|   | 1 |   |   |
+|---|---|---|---|
+| 1 |   |   |   |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 3
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe("and there are 3 of the moving player's discs to the right of the target cell", () => {
+                    it.skip('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+|   |   |   | 1 |
+|---|---|---|---|
+|   |   | 1 |   |
+|---|---|---|---|
+|   | 1 |   |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 3,
+                                column: 0
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe("and there are 2 of the moving player's tokens to the left and 1 to the right of the target cell", () => {
+                    it.skip('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+|   |   |   | 1 |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   | 1 |   |   |
+|---|---|---|---|
+| 1 |   |   |   |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 1,
+                                column: 2
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe("and there are 2 of the moving player's tokens to the right and 1 to the left of the target cell", () => {
+                    it.skip('detects the win', () => {
+                        const table = `
+|---|---|---|---|
+|   |   |   | 1 |
+|---|---|---|---|
+|   |   | 1 |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+| 1 |   |   |   |
+|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 2,
+                                column: 1
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe('and the player move results in a diagonal win under the main diagonal', () => {
+                    it.skip('detects the win', () => {
+                        const table = `
+|---|---|---|---|---|
+|   |   |   |   |   |
+|---|---|---|---|---|
+|   |   |   |   |   |
+|---|---|---|---|---|
+|   |   |   | 1 |   |
+|---|---|---|---|---|
+|   |   | 1 |   |   |
+|---|---|---|---|---|
+|   | 1 |   |   |   |
+|---|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 1,
+                                column: 4
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe('and the player move results in a diagonal win above the main diagonal', () => {
+                    it.skip('detects the win', () => {
+                        const table = `
+|---|---|---|---|---|
+|   |   |   |   |   |
+|---|---|---|---|---|
+|   |   | 1 |   |   |
+|---|---|---|---|---|
+|   | 1 |   |   |   |
+|---|---|---|---|---|
+| 1 |   |   |   |   |
+|---|---|---|---|---|
+|   |   |   |   |   |
+|---|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 3
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe('and the winning diagonal does not touch the board', () => {
+                    it.skip('detects the win', () => {
+                        const table = `
+|---|---|---|---|---|---|
+|   |   |   |   |   |   |
+|---|---|---|---|---|---|
+|   |   |   |   |   |   |
+|---|---|---|---|---|---|
+|   |   |   | 1 |   |   |
+|---|---|---|---|---|---|
+|   |   | 1 |   |   |   |
+|---|---|---|---|---|---|
+|   | 1 |   |   |   |   |
+|---|---|---|---|---|---|
+|   |   |   |   |   |   |
+|---|---|---|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 4
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: true
+                            })
+                        );
+                    });
+                });
+                describe('and there are less than 3 rows and columns to the left of the target cell', () => {
+                    it.skip('does not result in a diagonal win', () => {
+                        const table = `
+|---|---|---|
+|   |   |   |
+|---|---|---|
+|   | 1 |   |
+|---|---|---|
+| 1 |   |   |
+|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 2
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: false
+                            })
+                        );
+                    });
+                });
+                describe('and there are less than 3 rows and columns to the right of the target cell', () => {
+                    it.skip('does not result in a diagonal win', () => {
+                        const table = `
+|---|---|---|
+|   |   | 1 |
+|---|---|---|
+|   | 1 |   |
+|---|---|---|
+|   |   |   |
+|---|---|---|`;
+                        const board = parseAsciiTable(table, customResolver);
+                        const playerMove = {
+                            player: 1,
+                            targetCell: {
+                                row: 2,
+                                column: 0
+                            }
+                        } as PlayerMove;
+                        expect(isWinningMove(board, playerMove)).toEqual(
+                            expect.objectContaining({
+                                isWin: false
+                            })
+                        );
+                    });
+                });
+            });
+        });
     });
 });
