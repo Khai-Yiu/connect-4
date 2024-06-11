@@ -88,7 +88,19 @@ function isDiagonalWin(board: Board, playerMove: PlayerMove): boolean {
         }
     };
 
-    return isDirectionalDiagonalWin(board, playerMove, bottomLeftToTopRight);
+    const topLeftToBottomRight = {
+        startRow: row + Math.min(board.length - 1 - row, column),
+        startColumn: row - Math.min(row, column),
+        direction: {
+            rowIncrement: -1,
+            columnIncrement: 1
+        }
+    };
+
+    return (
+        isDirectionalDiagonalWin(board, playerMove, bottomLeftToTopRight) ||
+        isDirectionalDiagonalWin(board, playerMove, topLeftToBottomRight)
+    );
 }
 
 function isVerticalWin(board: Board, playerMove: PlayerMove): boolean {
