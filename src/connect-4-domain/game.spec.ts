@@ -1,13 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { createMovePlayerCommand } from '@/connect-4-domain/commands';
 import GameFactory, {
     BoardCell,
     InvalidBoardDimensionsError
 } from '@/connect-4-domain/game';
-import {
-    MovePlayerCommand,
-    createMovePlayerCommand
-} from '@/connect-4-domain/commands';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
+import { describe, expect, it } from 'vitest';
 
 function toAsciiTable(board: Array<Array<BoardCell>>): string {
     const cellResolver = (cell: BoardCell) =>

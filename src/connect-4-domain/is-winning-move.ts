@@ -147,7 +147,7 @@ function isWinningMove(
         isDiagonalWin(board, playerMove);
 
     return {
-        isWin: isWin
+        isWin
     };
 }
 
