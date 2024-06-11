@@ -90,7 +90,7 @@ function isDiagonalWin(board: Board, playerMove: PlayerMove): boolean {
 
     const topLeftToBottomRight = {
         startRow: row + Math.min(board.length - 1 - row, column),
-        startColumn: row - Math.min(row, column),
+        startColumn: column - Math.min(board.length - 1 - row, column),
         direction: {
             rowIncrement: -1,
             columnIncrement: 1
