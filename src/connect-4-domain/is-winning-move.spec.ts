@@ -639,7 +639,7 @@ describe('is-winning-move', () => {
                     });
                 });
                 describe('and the player move results in a diagonal win under the main diagonal', () => {
-                    it.skip('detects the win', () => {
+                    it('detects the win', () => {
                         const table = `
 |---|---|---|---|---|
 |   |   |   |   |   |
