@@ -558,7 +558,7 @@ describe('is-winning-move', () => {
                     });
                 });
                 describe("and there are 3 of the moving player's discs to the right of the target cell", () => {
-                    it.skip('detects the win', () => {
+                    it('detects the win', () => {
                         const table = `
 |---|---|---|---|
 |   |   |   | 1 |
