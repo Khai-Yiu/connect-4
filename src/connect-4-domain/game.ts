@@ -109,8 +109,7 @@ class GameFactory implements Game {
     }: MovePlayerCommand): PlayerMovedEvent | PlayerMoveFailedEvent {
         if (
             this.status === 'PLAYER_ONE_WIN' ||
-            this.status === 'PLAYER_TWO_WIN' ||
-            this.status === 'DRAW'
+            this.status === 'PLAYER_TWO_WIN'
         ) {
             return createPlayerMoveFailedEvent({
                 message: 'You cannot make a move, the game has already finished'
