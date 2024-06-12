@@ -115,7 +115,7 @@ class GameFactory implements Game {
 
         if (isWinningMove) {
             this.status =
-                this.activePlayer === 1
+                this.activePlayer === 2
                     ? Status.PLAYER_ONE_WIN
                     : Status.PLAYER_TWO_WIN;
         }
