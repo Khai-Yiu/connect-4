@@ -573,4 +573,13 @@ describe('game', () => {
             });
         });
     });
+    describe('getting the status of the game', () => {
+        describe('given a new game', () => {
+            it('reports the status as in progress', () => {
+                const game = new GameFactory();
+                const gameStatus = game.getStatus();
+                expect(gameStatus).toBe('IN_PROGRESS');
+            });
+        });
+    });
 });
