@@ -2,6 +2,10 @@ import {
     MovePlayerCommand,
     createMovePlayerCommand
 } from '@/connect-4-domain/commands';
+import {
+    PlayerMoveFailedEvent,
+    PlayerMovedEvent
+} from '@/connect-4-domain/events';
 import GameFactory, {
     BoardCell,
     InvalidBoardDimensionsError
@@ -9,7 +13,6 @@ import GameFactory, {
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import R from 'ramda';
 import { describe, expect, it } from 'vitest';
-import { PlayerMoveFailedEvent, PlayerMovedEvent } from './events';
 
 type MovePlayerCommandPayload = {
     player: 1 | 2;
@@ -675,6 +678,43 @@ describe('game', () => {
                   |---|---|---|---|--|---|---|---|"
                 `);
                 expect(game.getStatus()).toBe('PLAYER_TWO_WIN');
+            });
+        });
+        describe('given the game has come to a draw', () => {
+            it('reports the status as a draw', () => {
+                const game = new GameFactory({
+                    boardDimensions: {
+                        rows: 2,
+                        columns: 2
+                    }
+                });
+
+                const payloads = [
+                    { player: 1, targetCell: { row: 0, column: 0 } },
+                    { player: 2, targetCell: { row: 1, column: 0 } },
+                    { player: 1, targetCell: { row: 0, column: 1 } },
+                    { player: 2, targetCell: { row: 1, column: 1 } }
+                ] satisfies MovePlayerCommandPayload[];
+
+                payloads.forEach(
+                    R.pipe<
+                        [MovePlayerCommandPayload],
+                        MovePlayerCommand,
+                        PlayerMovedEvent | PlayerMoveFailedEvent
+                    >(
+                        createMovePlayerCommand,
+                        (playerMoveCommand: MovePlayerCommand) =>
+                            game.move(playerMoveCommand)
+                    )
+                );
+
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |---|---|---|---|--|---|---|---|
+                  | 1 | 1 | 1 | 1 |  | 2 | 2 | 2 |
+                  |---|---|---|---|--|---|---|---|"
+                `);
+                expect(game.getStatus()).toBe('DRAW');
             });
         });
     });
