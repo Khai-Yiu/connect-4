@@ -65,10 +65,68 @@ describe('game', () => {
                 const boardTwo = game.getBoard();
                 expect(boardTwo).toBeDeeplyUnequal(boardOne);
             });
-            it.todo(
-                "changes made to the game after a getBoard call don't affect copies of the board",
-                () => {}
-            );
+            it("changes made to the game after a getBoard call don't affect copies of the board", () => {
+                const game = new GameFactory();
+                const originalBoard = game.getBoard();
+                expect(toAsciiTable(originalBoard)).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
+                const movePlayerCommand = createMovePlayerCommand({
+                    player: 1,
+                    targetCell: {
+                        row: 0,
+                        column: 0
+                    }
+                });
+                game.move(movePlayerCommand);
+                expect(toAsciiTable(originalBoard)).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
+                const boardAfterMove = game.getBoard();
+                expect(toAsciiTable(boardAfterMove)).toMatchInlineSnapshot(`
+                  "
+                  |---|--|--|--|--|--|--|
+                  | 1 |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|"
+                `);
+                expect(boardAfterMove).toBeDeeplyUnequal(originalBoard);
+            });
         });
         describe('given custom board dimensions', () => {
             describe('with 0 rows', () => {
