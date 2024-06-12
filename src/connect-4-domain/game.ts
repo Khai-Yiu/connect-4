@@ -106,14 +106,26 @@ class GameFactory implements Game {
             player,
             targetCell: { row, column }
         }
-    }: MovePlayerCommand): PlayerMovedEvent {
+    }: MovePlayerCommand): PlayerMovedEvent | PlayerMoveFailedEvent {
+        if (
+            this.status === 'PLAYER_ONE_WIN' ||
+            this.status === 'PLAYER_TWO_WIN' ||
+            this.status === 'DRAW'
+        ) {
+            return createPlayerMoveFailedEvent({
+                message: 'You cannot make a move, the game has already finished'
+            });
+        }
+
         const { isWin } = getIsWinningMove(this.getBoard(), {
             player,
             targetCell: { row, column }
         });
+
         this.board[row][column] = { player: player };
         this.players[this.activePlayer].remainingDiscs--;
         this.activePlayer = this.activePlayer === 2 ? 1 : 2;
+
         if (isWin) {
             this.status =
                 this.activePlayer === 2
