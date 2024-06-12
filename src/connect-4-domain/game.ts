@@ -51,7 +51,8 @@ type GameParameters = {
 enum Status {
     IN_PROGRESS = 'IN_PROGRESS',
     PLAYER_ONE_WIN = 'PLAYER_ONE_WIN',
-    PLAYER_TWO_WIN = 'PLAYER_TWO_WIN'
+    PLAYER_TWO_WIN = 'PLAYER_TWO_WIN',
+    DRAW = 'DRAW'
 }
 
 interface Game {
@@ -106,18 +107,23 @@ class GameFactory implements Game {
             targetCell: { row, column }
         }
     }: MovePlayerCommand): PlayerMovedEvent {
-        const isWinningMove = getIsWinningMove(this.getBoard(), {
+        const { isWin } = getIsWinningMove(this.getBoard(), {
             player,
             targetCell: { row, column }
         });
         this.board[row][column] = { player: player };
         this.players[this.activePlayer].remainingDiscs--;
         this.activePlayer = this.activePlayer === 2 ? 1 : 2;
-        if (isWinningMove) {
+        if (isWin) {
             this.status =
                 this.activePlayer === 2
                     ? Status.PLAYER_ONE_WIN
                     : Status.PLAYER_TWO_WIN;
+        } else if (
+            this.players[1].remainingDiscs === 0 &&
+            this.players[2].remainingDiscs === 0
+        ) {
+            this.status = Status.DRAW;
         }
 
         return createPlayerMovedEvent({

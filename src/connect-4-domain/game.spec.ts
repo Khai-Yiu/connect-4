@@ -701,7 +701,7 @@ describe('game', () => {
             });
         });
         describe('given the game has come to a draw', () => {
-            it.skip('reports the status as a draw', () => {
+            it('reports the status as a draw', () => {
                 const game = new GameFactory({
                     boardDimensions: {
                         rows: 2,
