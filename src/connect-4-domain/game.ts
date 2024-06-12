@@ -107,15 +107,6 @@ class GameFactory implements Game {
             targetCell: { row, column }
         }
     }: MovePlayerCommand): PlayerMovedEvent | PlayerMoveFailedEvent {
-        if (
-            this.status === 'PLAYER_ONE_WIN' ||
-            this.status === 'PLAYER_TWO_WIN'
-        ) {
-            return createPlayerMoveFailedEvent({
-                message: 'You cannot make a move, the game has already finished'
-            });
-        }
-
         const { isWin } = getIsWinningMove(this.getBoard(), {
             player,
             targetCell: { row, column }
@@ -168,6 +159,25 @@ class GameFactory implements Game {
                 targetCell: { row, column }
             }
         } = movePlayerCommand;
+        if (this.status === 'PLAYER_ONE_WIN') {
+            return {
+                isValid: false,
+                message:
+                    'You cannot make a move, player 1 has already won the game'
+            };
+        } else if (this.status === Status.PLAYER_TWO_WIN) {
+            return {
+                isValid: false,
+                message:
+                    'You cannot make a move, player 2 has already won the game'
+            };
+        } else if (this.status === Status.DRAW) {
+            return {
+                isValid: false,
+                message:
+                    'You cannot make a move, the game has already ended in a draw'
+            };
+        }
 
         if (this.getActivePlayer() !== player) {
             return {
