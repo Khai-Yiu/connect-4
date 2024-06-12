@@ -605,7 +605,7 @@ describe('game', () => {
             });
         });
         describe('given the game is over', () => {
-            describe('as a player has won', () => {
+            describe('as player one has won', () => {
                 it('returns a move failed event', () => {
                     const game = new GameFactory({
                         boardDimensions: { rows: 2, columns: 4 }
@@ -655,7 +655,67 @@ describe('game', () => {
                         type: 'PLAYER_MOVE_FAILED',
                         payload: {
                             message:
-                                'You cannot make a move, the game has already finished'
+                                'You cannot make a move, player 1 has already won the game'
+                        }
+                    });
+                });
+            });
+            describe('as player two has won', () => {
+                it('returns a move failed event', () => {
+                    const game = new GameFactory({
+                        boardDimensions: {
+                            rows: 2,
+                            columns: 6
+                        }
+                    });
+
+                    const payloads = [
+                        { player: 1, targetCell: { row: 0, column: 0 } },
+                        { player: 2, targetCell: { row: 1, column: 0 } },
+                        { player: 1, targetCell: { row: 0, column: 1 } },
+                        { player: 2, targetCell: { row: 1, column: 1 } },
+                        { player: 1, targetCell: { row: 0, column: 2 } },
+                        { player: 2, targetCell: { row: 1, column: 2 } },
+                        { player: 1, targetCell: { row: 0, column: 4 } },
+                        { player: 2, targetCell: { row: 0, column: 3 } },
+                        { player: 1, targetCell: { row: 1, column: 4 } },
+                        { player: 2, targetCell: { row: 1, column: 3 } }
+                    ] satisfies MovePlayerCommandPayload[];
+                    payloads.forEach(
+                        pipe<
+                            [MovePlayerCommandPayload],
+                            MovePlayerCommand,
+                            PlayerMovedEvent | PlayerMoveFailedEvent
+                        >(
+                            createMovePlayerCommand,
+                            (playerMoveCommand: MovePlayerCommand) =>
+                                game.move(playerMoveCommand)
+                        )
+                    );
+
+                    const movePlayerCommand = createMovePlayerCommand({
+                        player: 1,
+                        targetCell: {
+                            row: 0,
+                            column: 5
+                        }
+                    });
+                    const playerMovedEvent = game.move(movePlayerCommand);
+                    expect(toAsciiTable(game.getBoard()))
+                        .toMatchInlineSnapshot(`
+                          "
+                          |---|---|---|---|---|--|
+                          | 1 | 1 | 1 | 2 | 1 |  |
+                          |---|---|---|---|---|--|
+                          | 2 | 2 | 2 | 2 | 1 |  |
+                          |---|---|---|---|---|--|"
+                        `);
+
+                    expect(playerMovedEvent).toEqual({
+                        type: 'PLAYER_MOVE_FAILED',
+                        payload: {
+                            message:
+                                'You cannot make a move, player 2 has already won the game'
                         }
                     });
                 });
@@ -709,7 +769,7 @@ describe('game', () => {
                         type: 'PLAYER_MOVE_FAILED',
                         payload: {
                             message:
-                                'You cannot make a move, the game has already finished'
+                                'You cannot make a move, the game has already ended in a draw'
                         }
                     });
                 });
