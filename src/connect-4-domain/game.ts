@@ -50,7 +50,8 @@ type GameParameters = {
 
 enum Status {
     IN_PROGRESS = 'IN_PROGRESS',
-    PLAYER_ONE_WIN = 'PLAYER_ONE_WIN'
+    PLAYER_ONE_WIN = 'PLAYER_ONE_WIN',
+    PLAYER_TWO_WIN = 'PLAYER_TWO_WIN'
 }
 
 interface Game {
@@ -113,7 +114,10 @@ class GameFactory implements Game {
         this.activePlayer = this.activePlayer === 2 ? 1 : 2;
 
         if (isWinningMove) {
-            this.status = Status.PLAYER_ONE_WIN;
+            this.status =
+                this.activePlayer === 1
+                    ? Status.PLAYER_ONE_WIN
+                    : Status.PLAYER_TWO_WIN;
         }
 
         return createPlayerMovedEvent({

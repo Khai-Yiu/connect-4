@@ -1,10 +1,23 @@
-import { createMovePlayerCommand } from '@/connect-4-domain/commands';
+import {
+    MovePlayerCommand,
+    createMovePlayerCommand
+} from '@/connect-4-domain/commands';
 import GameFactory, {
     BoardCell,
     InvalidBoardDimensionsError
 } from '@/connect-4-domain/game';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
+import R from 'ramda';
 import { describe, expect, it } from 'vitest';
+import { PlayerMoveFailedEvent, PlayerMovedEvent } from './events';
+
+type MovePlayerCommandPayload = {
+    player: 1 | 2;
+    targetCell: {
+        row: number;
+        column: number;
+    };
+};
 
 function toAsciiTable(board: Array<Array<BoardCell>>): string {
     const cellResolver = (cell: BoardCell) =>
@@ -581,51 +594,87 @@ describe('game', () => {
                 expect(gameStatus).toBe('IN_PROGRESS');
             });
         });
-        describe('and a player has won', () => {
-            it('reports the status as won', () => {
+        describe('and player one has won', () => {
+            it('reports the status as player one won', () => {
                 const game = new GameFactory({
                     boardDimensions: {
-                        rows: 1,
-                        columns: 8
-                    }
-                });
-                const setupMoves = [
-                    [0, 0],
-                    [0, 7],
-                    [0, 1],
-                    [0, 6],
-                    [0, 2],
-                    [0, 5]
-                ];
-                for (let i = 0; i < 6; i++) {
-                    game.move(
-                        createMovePlayerCommand({
-                            player: i % 2 === 0 ? 1 : 2,
-                            targetCell: {
-                                row: setupMoves[i][0],
-                                column: setupMoves[i][1]
-                            }
-                        })
-                    );
-                }
-
-                const movePlayerCommand = createMovePlayerCommand({
-                    player: 1,
-                    targetCell: {
-                        row: 0,
-                        column: 3
+                        rows: 2,
+                        columns: 4
                     }
                 });
 
-                game.move(movePlayerCommand);
-                const gameStatus = game.getStatus();
+                const payloads = [
+                    { player: 1, targetCell: { row: 0, column: 0 } },
+                    { player: 2, targetCell: { row: 1, column: 0 } },
+                    { player: 1, targetCell: { row: 0, column: 1 } },
+                    { player: 2, targetCell: { row: 1, column: 1 } },
+                    { player: 1, targetCell: { row: 0, column: 2 } },
+                    { player: 2, targetCell: { row: 1, column: 2 } },
+                    { player: 1, targetCell: { row: 0, column: 3 } }
+                ] satisfies MovePlayerCommandPayload[];
+
+                payloads.forEach(
+                    R.pipe<
+                        [MovePlayerCommandPayload],
+                        MovePlayerCommand,
+                        PlayerMovedEvent | PlayerMoveFailedEvent
+                    >(
+                        createMovePlayerCommand,
+                        (playerMoveCommand: MovePlayerCommand) =>
+                            game.move(playerMoveCommand)
+                    )
+                );
+
                 expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
                   "
                   |---|---|---|---|--|---|---|---|
                   | 1 | 1 | 1 | 1 |  | 2 | 2 | 2 |
                   |---|---|---|---|--|---|---|---|"
                 `);
-                expect(gameStatus).toBe('PLAYER_ONE_WIN');
+                expect(game.getStatus()).toBe('PLAYER_ONE_WIN');
+            });
+        });
+        describe('and player two has won', () => {
+            it('reports the status as player two won', () => {
+                const game = new GameFactory({
+                    boardDimensions: {
+                        rows: 2,
+                        columns: 5
+                    }
+                });
+
+                const payloads = [
+                    { player: 1, targetCell: { row: 0, column: 0 } },
+                    { player: 2, targetCell: { row: 1, column: 0 } },
+                    { player: 1, targetCell: { row: 0, column: 1 } },
+                    { player: 2, targetCell: { row: 1, column: 1 } },
+                    { player: 1, targetCell: { row: 0, column: 2 } },
+                    { player: 2, targetCell: { row: 1, column: 2 } },
+                    { player: 1, targetCell: { row: 0, column: 4 } },
+                    { player: 2, targetCell: { row: 0, column: 3 } },
+                    { player: 1, targetCell: { row: 1, column: 4 } },
+                    { player: 2, targetCell: { row: 1, column: 3 } }
+                ] satisfies MovePlayerCommandPayload[];
+
+                payloads.forEach(
+                    R.pipe<
+                        [MovePlayerCommandPayload],
+                        MovePlayerCommand,
+                        PlayerMovedEvent | PlayerMoveFailedEvent
+                    >(
+                        createMovePlayerCommand,
+                        (playerMoveCommand: MovePlayerCommand) =>
+                            game.move(playerMoveCommand)
+                    )
+                );
+
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |---|---|---|---|--|---|---|---|
+                  | 1 | 1 | 1 | 1 |  | 2 | 2 | 2 |
+                  |---|---|---|---|--|---|---|---|"
+                `);
+                expect(game.getStatus()).toBe('PLAYER_TWO_WIN');
             });
         });
     });
