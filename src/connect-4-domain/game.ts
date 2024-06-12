@@ -111,8 +111,8 @@ class GameFactory implements Game {
             targetCell: { row, column }
         });
         this.board[row][column] = { player: player };
+        this.players[this.activePlayer].remainingDiscs--;
         this.activePlayer = this.activePlayer === 2 ? 1 : 2;
-
         if (isWinningMove) {
             this.status =
                 this.activePlayer === 2

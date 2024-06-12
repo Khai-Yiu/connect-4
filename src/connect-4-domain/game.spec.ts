@@ -591,6 +591,7 @@ describe('game', () => {
         describe('given a valid move', () => {
             it("decrements the moving player's tokens by one", () => {
                 const game = new GameFactory();
+                expect(game.getPlayerStats(1).remainingDiscs).toBe(21);
                 game.move(
                     createMovePlayerCommand({
                         player: 1,
@@ -600,7 +601,7 @@ describe('game', () => {
                         }
                     })
                 );
-                expect(game.getStatsForPlayer(1).discsLeft).toBe(20);
+                expect(game.getPlayerStats(1).remainingDiscs).toBe(20);
             });
         });
     });
