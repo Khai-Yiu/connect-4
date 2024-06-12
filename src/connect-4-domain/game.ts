@@ -1,12 +1,11 @@
-import deepClone from '@/connect-4-domain/deep-clone';
 import { MovePlayerCommand } from '@/connect-4-domain/commands';
+import deepClone from '@/connect-4-domain/deep-clone';
 import {
-    createPlayerMoveFailedEvent,
     PlayerMoveFailedEvent,
-    createPlayerMovedEvent,
-    PlayerMovedEvent
+    PlayerMovedEvent,
+    createPlayerMoveFailedEvent,
+    createPlayerMovedEvent
 } from '@/connect-4-domain/events';
-import { BoardCell } from '@/connect-4-ui/BoardCell';
 
 export type BoardCell = {
     player: 1 | 2 | undefined;
@@ -48,8 +47,18 @@ type GameParameters = {
     boardDimensions: { rows: number; columns: number };
 };
 
+enum Status {
+    IN_PROGRESS = 'IN_PROGRESS'
+}
+
 interface Game {
     getBoard: () => Board;
+    getPlayerStats: (playerNumber: PlayerNumber) => PlayerStats;
+    getActivePlayer: () => PlayerNumber;
+    getStatus: () => Status;
+    move: (
+        movePlayerCommand: MovePlayerCommand
+    ) => PlayerMoveFailedEvent | PlayerMovedEvent;
 }
 
 export class InvalidBoardDimensionsError extends RangeError {}
@@ -58,6 +67,7 @@ class GameFactory implements Game {
     private board: Board;
     private players: Record<PlayerNumber, PlayerStats>;
     private activePlayer: PlayerNumber;
+    private status: Status;
 
     constructor(
         { boardDimensions }: GameParameters = {
@@ -68,17 +78,22 @@ class GameFactory implements Game {
         this.board = this.createBoard(boardDimensions);
         this.players = this.createPlayers(boardDimensions);
         this.activePlayer = 1;
+        this.status = Status.IN_PROGRESS;
     }
 
     getBoard = () => {
         return deepClone(this.board);
     };
 
-    getPlayerStats = (playerNumber: 1 | 2): PlayerStats => {
+    getPlayerStats = (playerNumber: PlayerNumber): PlayerStats => {
         return this.players[playerNumber];
     };
 
     getActivePlayer = (): PlayerNumber => this.activePlayer;
+
+    getStatus = (): Status => {
+        return this.status;
+    };
 
     move = this.createValidatedMove(this._move.bind(this));
 
