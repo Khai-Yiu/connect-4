@@ -660,8 +660,59 @@ describe('game', () => {
                     });
                 });
             });
-            describe.todo('as a game is tied', () => {
-                it('returns a move failed event', () => {});
+            describe('as a game is tied', () => {
+                it('returns a move failed event', () => {
+                    const game = new GameFactory({
+                        boardDimensions: { rows: 2, columns: 3 }
+                    });
+
+                    const payloads = [
+                        { player: 1, targetCell: { row: 0, column: 0 } },
+                        { player: 2, targetCell: { row: 1, column: 0 } },
+                        { player: 1, targetCell: { row: 0, column: 1 } },
+                        { player: 2, targetCell: { row: 1, column: 1 } },
+                        { player: 1, targetCell: { row: 0, column: 2 } },
+                        { player: 2, targetCell: { row: 1, column: 2 } }
+                    ] satisfies MovePlayerCommandPayload[];
+
+                    payloads.forEach(
+                        pipe<
+                            [MovePlayerCommandPayload],
+                            MovePlayerCommand,
+                            PlayerMovedEvent | PlayerMoveFailedEvent
+                        >(
+                            createMovePlayerCommand,
+                            (playerMoveCommand: MovePlayerCommand) =>
+                                game.move(playerMoveCommand)
+                        )
+                    );
+
+                    const movePlayerCommand = createMovePlayerCommand({
+                        player: 1,
+                        targetCell: {
+                            row: 0,
+                            column: 0
+                        }
+                    });
+                    const playerMovedEvent = game.move(movePlayerCommand);
+                    expect(toAsciiTable(game.getBoard()))
+                        .toMatchInlineSnapshot(`
+                          "
+                          |---|---|---|
+                          | 1 | 1 | 1 |
+                          |---|---|---|
+                          | 2 | 2 | 2 |
+                          |---|---|---|"
+                        `);
+
+                    expect(playerMovedEvent).toEqual({
+                        type: 'PLAYER_MOVE_FAILED',
+                        payload: {
+                            message:
+                                'You cannot make a move, the game has already finished'
+                        }
+                    });
+                });
             });
         });
     });
