@@ -613,12 +613,18 @@ describe('game', () => {
                     player: 1,
                     targetCell: {
                         row: 0,
-                        column: 4
+                        column: 3
                     }
                 });
 
                 game.move(movePlayerCommand);
                 const gameStatus = game.getStatus();
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |---|---|---|---|--|---|---|---|
+                  | 1 | 1 | 1 | 1 |  | 2 | 2 | 2 |
+                  |---|---|---|---|--|---|---|---|"
+                `);
                 expect(gameStatus).toBe('PLAYER_ONE_WIN');
             });
         });
