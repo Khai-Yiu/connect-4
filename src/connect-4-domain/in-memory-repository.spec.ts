@@ -1,4 +1,4 @@
-import { BoardCell } from '@/connect-4-domain/game';
+import { Board, BoardCell } from '@/connect-4-domain/game';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
 import { describe, expect, it } from 'vitest';
@@ -21,6 +21,18 @@ describe('in-memory-repository', () => {
         it('creates an in-memory repository', () => {
             const repository = new InMemoryRepository();
             expect(repository).toBeInstanceOf(InMemoryRepository);
+        });
+        it('loads a saved board', () => {
+            const repository = new InMemoryRepository();
+            const asciiTable = `
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|`;
+            const board: Board = parseAsciiTable(asciiTable);
+            const boardId = repository.save(board);
+            expect(repository.load(boardId)).toBe(board);
         });
     });
     describe('given a store', () => {
