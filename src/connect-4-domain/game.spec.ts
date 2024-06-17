@@ -7,9 +7,9 @@ import {
     PlayerMovedEvent
 } from '@/connect-4-domain/events';
 import GameFactory, {
-    BoardCell,
     InvalidBoardDimensionsError
 } from '@/connect-4-domain/game';
+import { BoardCell } from '@/connect-4-domain/game-types';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import { pipe } from 'ramda';
@@ -252,11 +252,19 @@ describe('game', () => {
                 it('saves the game', () => {
                     const repository = new InMemoryRepository();
                     const repositorySpy = vi.spyOn(repository, 'save');
-                    const game = new GameFactory({ repository });
+                    const game = new GameFactory({
+                        repository
+                    });
                     expect(toAsciiTable(game.getBoard())).toBe(
-                        toAsciiTable(repositorySpy.lastCall[0])
+                        toAsciiTable(repositorySpy.mock.calls[0][0])
                     );
-                    expect(toAsciiTable(repository.load())).toBe(
+                    const boardId = repositorySpy.mock.results[0].value;
+                    const savedBoard = repository.load(
+                        boardId
+                    ) as BoardCell[][];
+
+                    expect(savedBoard).not.toBe(undefined);
+                    expect(toAsciiTable(savedBoard)).toBe(
                         toAsciiTable(game.getBoard())
                     );
                 });

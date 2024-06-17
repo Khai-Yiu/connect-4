@@ -6,53 +6,30 @@ import {
     createPlayerMoveFailedEvent,
     createPlayerMovedEvent
 } from '@/connect-4-domain/events';
+import {
+    Board,
+    BoardCell,
+    BoardDimensions,
+    BoardUuid,
+    GameParameters,
+    GameRepository,
+    PlayerNumber,
+    PlayerStats,
+    ValidCellOnBoard,
+    ValidationResult
+} from '@/connect-4-domain/game-types';
 import getIsWinningMove from '@/connect-4-domain/get-is-winning-move';
-
-export type BoardCell = {
-    player: 1 | 2 | undefined;
-};
-
-export type Board = Array<Array<BoardCell>>;
-
-export type PlayerMove = {
-    player: 1 | 2;
-    targetCell: {
-        row: number;
-        column: number;
-    };
-};
-
-type BoardDimensions = {
-    rows: number;
-    columns: number;
-};
-
-type PlayerNumber = 1 | 2;
-
-type PlayerStats = {
-    playerNumber: 1 | 2;
-    remainingDiscs: number;
-};
-
-type ValidationResult = {
-    isValid: boolean;
-    message: string;
-};
-
-type ValidCellOnBoard = {
-    isValidRow: boolean;
-    isValidColumn: boolean;
-};
-
-type GameParameters = {
-    boardDimensions: { rows: number; columns: number };
-};
 
 enum Status {
     IN_PROGRESS = 'IN_PROGRESS',
     PLAYER_ONE_WIN = 'PLAYER_ONE_WIN',
     PLAYER_TWO_WIN = 'PLAYER_TWO_WIN',
     DRAW = 'DRAW'
+}
+
+export interface GameRepositoryInterface {
+    save: (board: Board) => BoardUuid;
+    load: (boardUuid: BoardUuid) => Board | undefined;
 }
 
 interface Game {
@@ -72,10 +49,17 @@ class GameFactory implements Game {
     private players: Record<PlayerNumber, PlayerStats>;
     private activePlayer: PlayerNumber;
     private status: Status;
+    private repository: GameRepository;
 
     constructor(
-        { boardDimensions }: GameParameters = {
-            boardDimensions: { rows: 6, columns: 7 }
+        {
+            boardDimensions = { rows: 6, columns: 7 },
+            repository
+        }: GameParameters = {
+            boardDimensions: {
+                rows: 6,
+                columns: 7
+            }
         }
     ) {
         this.validateBoardDimensions(boardDimensions);
@@ -83,6 +67,9 @@ class GameFactory implements Game {
         this.players = this.createPlayers(boardDimensions);
         this.activePlayer = 1;
         this.status = Status.IN_PROGRESS;
+        this.repository = repository;
+
+        this.repository?.save(this.board);
     }
 
     getBoard = () => {
@@ -135,7 +122,9 @@ class GameFactory implements Game {
     }
 
     private createValidatedMove(
-        moveFunction: (movePlayerCommand: MovePlayerCommand) => PlayerMovedEvent
+        moveFunction: (
+            movePlayerCommand: MovePlayerCommand
+        ) => PlayerMovedEvent | PlayerMoveFailedEvent
     ): (
         movePlayerCommand: MovePlayerCommand
     ) => PlayerMoveFailedEvent | PlayerMovedEvent {
