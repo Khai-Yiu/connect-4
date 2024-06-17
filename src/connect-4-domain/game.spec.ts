@@ -10,6 +10,7 @@ import GameFactory, {
     BoardCell,
     InvalidBoardDimensionsError
 } from '@/connect-4-domain/game';
+import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import { pipe } from 'ramda';
 import { describe, expect, it, vi } from 'vitest';
@@ -248,14 +249,14 @@ describe('game', () => {
         });
         describe('persisting a game', () => {
             describe('given a custom repository', () => {
-                it.todo('saves the game', () => {
+                it('saves the game', () => {
                     const repository = new InMemoryRepository();
-                    const repositorySpy = vi.spyOn(repository, 'saveGame');
+                    const repositorySpy = vi.spyOn(repository, 'save');
                     const game = new GameFactory({ repository });
                     expect(toAsciiTable(game.getBoard())).toBe(
                         toAsciiTable(repositorySpy.lastCall[0])
                     );
-                    expect(toAsciiTable(repository.loadGame())).toBe(
+                    expect(toAsciiTable(repository.load())).toBe(
                         toAsciiTable(game.getBoard())
                     );
                 });
