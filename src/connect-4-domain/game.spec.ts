@@ -12,7 +12,7 @@ import GameFactory, {
 } from '@/connect-4-domain/game';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import { pipe } from 'ramda';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 type MovePlayerCommandPayload = {
     player: 1 | 2;
@@ -245,6 +245,21 @@ describe('game', () => {
             const game = new GameFactory();
             const player = game.getActivePlayer();
             expect(player).toBe(1);
+        });
+        describe('persisting a game', () => {
+            describe('given a custom repository', () => {
+                it.todo('saves the game', () => {
+                    const repository = new InMemoryRepository();
+                    const repositorySpy = vi.spyOn(repository, 'saveGame');
+                    const game = new GameFactory({ repository });
+                    expect(toAsciiTable(game.getBoard())).toBe(
+                        toAsciiTable(repositorySpy.lastCall[0])
+                    );
+                    expect(toAsciiTable(repository.loadGame())).toBe(
+                        toAsciiTable(game.getBoard())
+                    );
+                });
+            });
         });
     });
     describe('making a move', () => {
