@@ -54,6 +54,20 @@ describe('in-memory-repository', () => {
             const boardId = repository.save(board);
             expect(store.get(boardId)).toBe(board);
         });
+        it('saves a board with a provided UUID', () => {
+            const store = new Map();
+            const repository = new InMemoryRepository(store);
+            const asciiTable = `
+    |---|---|---|---|
+    |   |   |   |   |
+    |---|---|---|---|
+    |   |   |   |   |
+    |---|---|---|---|`;
+            const board = parseAsciiTable(asciiTable, customResolver);
+            const boardId = crypto.randomUUID();
+            const retrievedBoardId = repository.save(board, boardId);
+            expect(store.get(retrievedBoardId)).toBe(board);
+        });
         it('loads a saved board', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
