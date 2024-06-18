@@ -15,20 +15,14 @@ import {
     GameUuid,
     PlayerNumber,
     PlayerStats,
+    Status,
     ValidCellOnBoard,
     ValidationResult
 } from '@/connect-4-domain/game-types';
 import getIsWinningMove from '@/connect-4-domain/get-is-winning-move';
 
-enum Status {
-    IN_PROGRESS = 'IN_PROGRESS',
-    PLAYER_ONE_WIN = 'PLAYER_ONE_WIN',
-    PLAYER_TWO_WIN = 'PLAYER_TWO_WIN',
-    DRAW = 'DRAW'
-}
-
 export interface GameRepositoryInterface {
-    save: (board: Board) => GameUuid;
+    save: (board: Board, boardId?: GameUuid) => GameUuid;
     load: (boardUuid: GameUuid) => Board | undefined;
 }
 

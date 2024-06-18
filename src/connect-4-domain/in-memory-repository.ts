@@ -1,22 +1,25 @@
 import { GameRepositoryInterface } from '@/connect-4-domain/game';
-import { Board, GameUuid } from '@/connect-4-domain/game-types';
+import { GameUuid, PersistedGame } from '@/connect-4-domain/game-types';
 
-type Store = Map<GameUuid, Board>;
+type Store = Map<GameUuid, PersistedGame>;
 
 export default class InMemoryRepository implements GameRepositoryInterface {
-    private store: Map<GameUuid, Board>;
+    private store: Map<GameUuid, PersistedGame>;
 
-    constructor(store: Store = new Map<GameUuid, Board>()) {
+    constructor(store: Store = new Map<GameUuid, PersistedGame>()) {
         this.store = store;
     }
 
-    save(board: Board, boardId: GameUuid = crypto.randomUUID()): GameUuid {
-        this.store.set(boardId, board);
+    save(
+        persistedGame: PersistedGame,
+        gameId: GameUuid = crypto.randomUUID()
+    ): GameUuid {
+        this.store.set(gameId, persistedGame);
 
-        return boardId;
+        return gameId;
     }
 
-    load(boardUuid: GameUuid): Board | undefined {
+    load(boardUuid: GameUuid): PersistedGame | undefined {
         return this.store.get(boardUuid);
     }
 }
