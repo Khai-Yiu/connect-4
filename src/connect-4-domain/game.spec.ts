@@ -924,7 +924,22 @@ describe('game', () => {
                 game.save();
                 const { board, activePlayer, players, status } =
                     repositorySpy.mock.calls[0][0];
-                expect(toAsciiTable(board)).toMatchInlineSnapshot();
+                expect(toAsciiTable(board)).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
                 expect(activePlayer).toBe(1);
                 expect(players).toMatchObject({
                     1: { playerNumber: 1, remainingDiscs: 21 },
@@ -948,6 +963,7 @@ describe('game', () => {
                 const repository = new InMemoryRepository();
                 const repositorySpy = vi.spyOn(repository, 'save');
                 const game = new GameFactory({ repository });
+                game.save();
                 const gameId = repositorySpy.mock.results[0].value;
                 game.load(gameId);
                 expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
