@@ -1,4 +1,4 @@
-import { Board, BoardCell } from '@/connect-4-domain/game';
+import { BoardCell } from '@/connect-4-domain/game';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
 import { describe, expect, it } from 'vitest';
@@ -30,9 +30,17 @@ describe('in-memory-repository', () => {
 |---|---|---|---|
 |   |   |   |   |
 |---|---|---|---|`;
-            const board: Board = parseAsciiTable(asciiTable);
-            const boardId = repository.save(board);
-            expect(repository.load(boardId)).toBe(board);
+            const persistedGame = {
+                board: asciiTable,
+                activePlayer: 1,
+                players: {
+                    1: { playerNumber: 1, remainingDisks: 4 },
+                    2: { playerNumber: 2, remainingDisks: 4 }
+                },
+                status: 'IN_PROGRESS'
+            };
+            const boardId = repository.save3(persistedGame);
+            expect(repository.load(boardId)).toMatchObject(persistedGame);
         });
         it('returns undefined when loading a non-existent board', () => {
             const repository = new InMemoryRepository();
