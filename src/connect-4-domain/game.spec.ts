@@ -9,7 +9,7 @@ import {
 import GameFactory, {
     InvalidBoardDimensionsError
 } from '@/connect-4-domain/game';
-import { BoardCell } from '@/connect-4-domain/game-types';
+import { BoardCell, PersistedGame } from '@/connect-4-domain/game-types';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import { pipe } from 'ramda';
@@ -256,18 +256,30 @@ describe('game', () => {
                     const game = new GameFactory({
                         repository
                     });
+                    const { board, activePlayer, players, status } =
+                        repositorySpy.mock.calls[0][0];
                     expect(toAsciiTable(game.getBoard())).toBe(
-                        toAsciiTable(repositorySpy.mock.calls[0][0])
+                        toAsciiTable(board)
                     );
-                    const boardId = repositorySpy.mock.results[0].value;
-                    const savedBoard = repository.load(
-                        boardId
-                    ) as BoardCell[][];
+                    expect(activePlayer).toBe(1);
+                    expect(players).toMatchObject({
+                        1: { playerNumber: 1, remainingDiscs: 21 },
+                        2: { playerNumber: 2, remainingDiscs: 21 }
+                    });
+                    expect(status).toBe('IN_PROGRESS');
 
-                    expect(savedBoard).not.toBe(undefined);
-                    expect(toAsciiTable(savedBoard)).toBe(
-                        toAsciiTable(game.getBoard())
-                    );
+                    const gameId = repositorySpy.mock.results[0].value;
+                    const retrievedPersistedGame = repository.load(
+                        gameId
+                    ) as PersistedGame;
+
+                    expect(retrievedPersistedGame).not.toBe(undefined);
+                    expect(retrievedPersistedGame).toMatchObject({
+                        board,
+                        activePlayer,
+                        players,
+                        status
+                    });
                 });
                 it('loads a game', () => {});
             });
