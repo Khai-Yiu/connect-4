@@ -144,6 +144,7 @@ describe('game', () => {
                   |--|--|--|--|--|--|--|"
                 `);
             });
+            it.todo('saves the game', () => {});
         });
         describe('given custom board dimensions', () => {
             describe('with 0 rows', () => {
@@ -268,6 +269,7 @@ describe('game', () => {
                         toAsciiTable(game.getBoard())
                     );
                 });
+                it('loads a game', () => {});
             });
         });
     });

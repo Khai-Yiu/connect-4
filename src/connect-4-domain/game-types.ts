@@ -36,7 +36,7 @@ export type ValidCellOnBoard = {
     isValidColumn: boolean;
 };
 
-export type BoardUuid = `${string}-${string}-${string}-${string}-${string}`;
+export type GameUuid = `${string}-${string}-${string}-${string}-${string}`;
 
 export type GameRepository = InMemoryRepository | undefined;
 

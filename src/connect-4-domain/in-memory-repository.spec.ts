@@ -66,6 +66,7 @@ describe('in-memory-repository', () => {
             const board = parseAsciiTable(asciiTable, customResolver);
             const boardId = crypto.randomUUID();
             const retrievedBoardId = repository.save(board, boardId);
+            expect(retrievedBoardId).toBe(boardId);
             expect(store.get(retrievedBoardId)).toBe(board);
         });
         it('loads a saved board', () => {

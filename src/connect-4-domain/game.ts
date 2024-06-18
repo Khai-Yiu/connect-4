@@ -10,9 +10,9 @@ import {
     Board,
     BoardCell,
     BoardDimensions,
-    BoardUuid,
     GameParameters,
     GameRepository,
+    GameUuid,
     PlayerNumber,
     PlayerStats,
     ValidCellOnBoard,
@@ -28,8 +28,8 @@ enum Status {
 }
 
 export interface GameRepositoryInterface {
-    save: (board: Board) => BoardUuid;
-    load: (boardUuid: BoardUuid) => Board | undefined;
+    save: (board: Board) => GameUuid;
+    load: (boardUuid: GameUuid) => Board | undefined;
 }
 
 interface Game {
