@@ -287,9 +287,8 @@ describe('game', () => {
                     const game = new GameFactory({ repository });
                     const gameId = repositorySpy.mock.results[0].value;
                     game.load(gameId);
-                    expect(
-                        toAsciiTable(game.getBoard())
-                    ).toMatchInlineSnapshot(`
+                    expect(toAsciiTable(game.getBoard()))
+                        .toMatchInlineSnapshot(`
                       "
                       |--|--|--|--|--|--|--|
                       |  |  |  |  |  |  |  |
@@ -315,6 +314,16 @@ describe('game', () => {
                         remainingDiscs: 21
                     });
                     expect(game.getStatus()).toBe('IN_PROGRESS');
+                });
+                describe('and an invalid game UUID', () => {
+                    it('throws an error', () => {
+                        const repository = new InMemoryRepository();
+                        const game = new GameFactory({ repository });
+                        const invalidGameId = crypto.randomUUID();
+                        expect(() => {
+                            game.load(invalidGameId);
+                        }).toThrow('The provided game UUID is invalid.');
+                    });
                 });
             });
         });
