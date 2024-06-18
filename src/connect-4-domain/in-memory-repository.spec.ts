@@ -1,4 +1,4 @@
-import { BoardCell } from '@/connect-4-domain/game';
+import { BoardCell } from '@/connect-4-domain/game-types';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
 import { describe, expect, it } from 'vitest';
@@ -71,7 +71,7 @@ describe('in-memory-repository', () => {
             const gameId = repository.save(persistedGame);
             expect(store.get(gameId)).toMatchObject(persistedGame);
         });
-        it('saves a board with a provided UUID', () => {
+        it('saves a game with a provided UUID', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
             const gameId = crypto.randomUUID();
@@ -88,14 +88,22 @@ describe('in-memory-repository', () => {
             expect(retrievedGameId).toBe(gameId);
             expect(store.get(retrievedGameId)).toMatchObject(persistedGame);
         });
-        it('loads a saved board', () => {
+        it('loads a saved game', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
-            const board = parseAsciiTable(asciiTable, customResolver);
-            const boardId = repository.save(board);
-            expect(repository.load(boardId)).toBe(board);
+            const persistedGame: PersistedGame = {
+                board: parseAsciiTable(asciiTable, customResolver),
+                activePlayer: 1,
+                players: {
+                    1: { playerNumber: 1, remainingDiscs: 4 },
+                    2: { playerNumber: 2, remainingDiscs: 4 }
+                },
+                status: 'IN_PROGRESS' as Status
+            };
+            const gameId = repository.save(persistedGame);
+            expect(repository.load(gameId)).toBe(persistedGame);
         });
-        it('returns undefined when loading a non-existent board', () => {
+        it('returns undefined when loading a non-existent game', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
             const gameId = crypto.randomUUID();
