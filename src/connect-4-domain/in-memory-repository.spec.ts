@@ -23,7 +23,7 @@ describe('in-memory-repository', () => {
             const repository = new InMemoryRepository();
             expect(repository).toBeInstanceOf(InMemoryRepository);
         });
-        it('loads a saved board', () => {
+        it('loads a saved game', () => {
             const repository = new InMemoryRepository();
             const asciiTable = `
 |---|---|---|---|
@@ -32,7 +32,7 @@ describe('in-memory-repository', () => {
 |   |   |   |   |
 |---|---|---|---|`;
             const persistedGame: PersistedGame = {
-                board: parseAsciiTable(asciiTable),
+                board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
                 players: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
@@ -43,35 +43,37 @@ describe('in-memory-repository', () => {
             const gameId = repository.save(persistedGame);
             expect(repository.load(gameId)).toMatchObject(persistedGame);
         });
-        it('returns undefined when loading a non-existent board', () => {
+        it('returns undefined when loading a non-existent game', () => {
             const repository = new InMemoryRepository();
             const gameId = crypto.randomUUID();
             expect(repository.load(gameId)).toBe(undefined);
         });
     });
     describe('given a store', () => {
-        it('saves a board', () => {
+        const asciiTable = `
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|`;
+        it('saves a game', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
-            const asciiTable = `
-    |---|---|---|---|
-    |   |   |   |   |
-    |---|---|---|---|
-    |   |   |   |   |
-    |---|---|---|---|`;
-            const board = parseAsciiTable(asciiTable, customResolver);
-            const boardId = repository.save(board);
-            expect(store.get(boardId)).toBe(board);
+            const persistedGame: PersistedGame = {
+                board: parseAsciiTable(asciiTable, customResolver),
+                activePlayer: 1,
+                players: {
+                    1: { playerNumber: 1, remainingDiscs: 4 },
+                    2: { playerNumber: 2, remainingDiscs: 4 }
+                },
+                status: 'IN_PROGRESS' as Status
+            };
+            const gameId = repository.save(persistedGame);
+            expect(store.get(gameId)).toMatchObject(persistedGame);
         });
         it('saves a board with a provided UUID', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
-            const asciiTable = `
-    |---|---|---|---|
-    |   |   |   |   |
-    |---|---|---|---|
-    |   |   |   |   |
-    |---|---|---|---|`;
             const board = parseAsciiTable(asciiTable, customResolver);
             const boardId = crypto.randomUUID();
             const retrievedBoardId = repository.save(board, boardId);
@@ -81,12 +83,6 @@ describe('in-memory-repository', () => {
         it('loads a saved board', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
-            const asciiTable = `
-    |---|---|---|---|
-    |   |   |   |   |
-    |---|---|---|---|
-    |   |   |   |   |
-    |---|---|---|---|`;
             const board = parseAsciiTable(asciiTable, customResolver);
             const boardId = repository.save(board);
             expect(repository.load(boardId)).toBe(board);
