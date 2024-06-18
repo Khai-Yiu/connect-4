@@ -32,6 +32,7 @@ interface Game {
     getPlayerStats: (playerNumber: PlayerNumber) => PlayerStats;
     getActivePlayer: () => PlayerNumber;
     getStatus: () => Status;
+    load: (gameId: GameUuid) => void;
     move: (
         movePlayerCommand: MovePlayerCommand
     ) => PlayerMoveFailedEvent | PlayerMovedEvent;
@@ -85,6 +86,18 @@ class GameFactory implements Game {
     getStatus = (): Status => {
         return this.status;
     };
+
+    load(gameId: GameUuid) {
+        const gameStateToLoad = this.repository?.load(gameId);
+
+        if (gameStateToLoad !== undefined) {
+            const { board, activePlayer, players, status } = gameStateToLoad;
+            this.board = board;
+            this.activePlayer = activePlayer;
+            this.players = players;
+            this.status = status;
+        }
+    }
 
     move = this.createValidatedMove(this._move.bind(this));
 

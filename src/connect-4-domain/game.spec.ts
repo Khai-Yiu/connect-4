@@ -289,7 +289,22 @@ describe('game', () => {
                     game.load(gameId);
                     expect(
                         toAsciiTable(game.getBoard())
-                    ).toMatchInlineSnapshot();
+                    ).toMatchInlineSnapshot(`
+                      "
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|"
+                    `);
                     expect(game.getActivePlayer()).toBe(1);
                     expect(game.getPlayerStats(1)).toMatchObject({
                         playerNumber: 1,

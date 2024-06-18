@@ -19,7 +19,7 @@ export default class InMemoryRepository implements GameRepositoryInterface {
         return gameId;
     }
 
-    load(boardUuid: GameUuid): PersistedGame | undefined {
-        return this.store.get(boardUuid);
+    load(gameUuid: GameUuid): PersistedGame | undefined {
+        return this.store.get(gameUuid);
     }
 }
