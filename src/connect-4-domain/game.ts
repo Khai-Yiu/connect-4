@@ -32,7 +32,7 @@ interface Game {
     getPlayerStats: (playerNumber: PlayerNumber) => PlayerStats;
     getActivePlayer: () => PlayerNumber;
     getStatus: () => Status;
-    save: () => void;
+    save: (gameId?: GameUuid) => void;
     load: (gameId: GameUuid) => void;
     move: (
         movePlayerCommand: MovePlayerCommand
@@ -81,13 +81,16 @@ class GameFactory implements Game {
         return this.status;
     };
 
-    save() {
-        this.repository?.save({
-            board: this.getBoard(),
-            activePlayer: this.activePlayer,
-            players: this.players,
-            status: this.status
-        });
+    save(gameUuid?: GameUuid) {
+        this.repository?.save(
+            {
+                board: this.getBoard(),
+                activePlayer: this.activePlayer,
+                players: this.players,
+                status: this.status
+            },
+            gameUuid
+        );
     }
 
     load(gameId: GameUuid) {
