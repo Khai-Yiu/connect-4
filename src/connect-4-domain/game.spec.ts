@@ -248,85 +248,6 @@ describe('game', () => {
             const player = game.getActivePlayer();
             expect(player).toBe(1);
         });
-        describe('persisting a game', () => {
-            describe('given a custom repository', () => {
-                it('saves the game', () => {
-                    const repository = new InMemoryRepository();
-                    const repositorySpy = vi.spyOn(repository, 'save');
-                    const game = new GameFactory({
-                        repository
-                    });
-                    const { board, activePlayer, players, status } =
-                        repositorySpy.mock.calls[0][0];
-                    expect(toAsciiTable(game.getBoard())).toBe(
-                        toAsciiTable(board)
-                    );
-                    expect(activePlayer).toBe(1);
-                    expect(players).toMatchObject({
-                        1: { playerNumber: 1, remainingDiscs: 21 },
-                        2: { playerNumber: 2, remainingDiscs: 21 }
-                    });
-                    expect(status).toBe('IN_PROGRESS');
-
-                    const gameId = repositorySpy.mock.results[0].value;
-                    const retrievedPersistedGame = repository.load(
-                        gameId
-                    ) as PersistedGame;
-
-                    expect(retrievedPersistedGame).not.toBe(undefined);
-                    expect(retrievedPersistedGame).toMatchObject({
-                        board,
-                        activePlayer,
-                        players,
-                        status
-                    });
-                });
-                it('loads a game', () => {
-                    const repository = new InMemoryRepository();
-                    const repositorySpy = vi.spyOn(repository, 'save');
-                    const game = new GameFactory({ repository });
-                    const gameId = repositorySpy.mock.results[0].value;
-                    game.load(gameId);
-                    expect(toAsciiTable(game.getBoard()))
-                        .toMatchInlineSnapshot(`
-                      "
-                      |--|--|--|--|--|--|--|
-                      |  |  |  |  |  |  |  |
-                      |--|--|--|--|--|--|--|
-                      |  |  |  |  |  |  |  |
-                      |--|--|--|--|--|--|--|
-                      |  |  |  |  |  |  |  |
-                      |--|--|--|--|--|--|--|
-                      |  |  |  |  |  |  |  |
-                      |--|--|--|--|--|--|--|
-                      |  |  |  |  |  |  |  |
-                      |--|--|--|--|--|--|--|
-                      |  |  |  |  |  |  |  |
-                      |--|--|--|--|--|--|--|"
-                    `);
-                    expect(game.getActivePlayer()).toBe(1);
-                    expect(game.getPlayerStats(1)).toMatchObject({
-                        playerNumber: 1,
-                        remainingDiscs: 21
-                    });
-                    expect(game.getPlayerStats(2)).toMatchObject({
-                        playerNumber: 2,
-                        remainingDiscs: 21
-                    });
-                    expect(game.getStatus()).toBe('IN_PROGRESS');
-                });
-                describe('and an invalid game UUID', () => {
-                    it('throws an error', () => {
-                        const repository = new InMemoryRepository();
-                        const game = new GameFactory({ repository });
-                        const invalidGameId = crypto.randomUUID();
-                        expect(() => {
-                            game.load(invalidGameId);
-                        }).toThrow('The provided game UUID is invalid.');
-                    });
-                });
-            });
-        });
     });
     describe('making a move', () => {
         describe('given a player is currently active', () => {
@@ -989,6 +910,82 @@ describe('game', () => {
                   |---|---|"
                 `);
                 expect(game.getStatus()).toBe('DRAW');
+            });
+        });
+    });
+    describe('persisting a game', () => {
+        describe('given a custom repository', () => {
+            it('saves the game', () => {
+                const repository = new InMemoryRepository();
+                const repositorySpy = vi.spyOn(repository, 'save');
+                const game = new GameFactory({
+                    repository
+                });
+                game.save();
+                const { board, activePlayer, players, status } =
+                    repositorySpy.mock.calls[0][0];
+                expect(toAsciiTable(board)).toMatchInlineSnapshot();
+                expect(activePlayer).toBe(1);
+                expect(players).toMatchObject({
+                    1: { playerNumber: 1, remainingDiscs: 21 },
+                    2: { playerNumber: 2, remainingDiscs: 21 }
+                });
+                expect(status).toBe('IN_PROGRESS');
+
+                const gameId = repositorySpy.mock.results[0].value;
+                const retrievedPersistedGame = repository.load(
+                    gameId
+                ) as PersistedGame;
+
+                expect(retrievedPersistedGame).toMatchObject({
+                    board,
+                    activePlayer,
+                    players,
+                    status
+                });
+            });
+            it('loads a game', () => {
+                const repository = new InMemoryRepository();
+                const repositorySpy = vi.spyOn(repository, 'save');
+                const game = new GameFactory({ repository });
+                const gameId = repositorySpy.mock.results[0].value;
+                game.load(gameId);
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
+                expect(game.getActivePlayer()).toBe(1);
+                expect(game.getPlayerStats(1)).toMatchObject({
+                    playerNumber: 1,
+                    remainingDiscs: 21
+                });
+                expect(game.getPlayerStats(2)).toMatchObject({
+                    playerNumber: 2,
+                    remainingDiscs: 21
+                });
+                expect(game.getStatus()).toBe('IN_PROGRESS');
+            });
+            describe('and an invalid game UUID', () => {
+                it('throws an error', () => {
+                    const repository = new InMemoryRepository();
+                    const game = new GameFactory({ repository });
+                    const invalidGameId = crypto.randomUUID();
+                    expect(() => {
+                        game.load(invalidGameId);
+                    }).toThrow('The provided game UUID is invalid.');
+                });
             });
         });
     });
