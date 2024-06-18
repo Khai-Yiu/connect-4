@@ -281,7 +281,26 @@ describe('game', () => {
                         status
                     });
                 });
-                it('loads a game', () => {});
+                it('loads a game', () => {
+                    const repository = new InMemoryRepository();
+                    const repositorySpy = vi.spyOn(repository, 'save');
+                    const game = new GameFactory({ repository });
+                    const gameId = repositorySpy.mock.results[0].value;
+                    game.load(gameId);
+                    expect(
+                        toAsciiTable(game.getBoard())
+                    ).toMatchInlineSnapshot();
+                    expect(game.getActivePlayer()).toBe(1);
+                    expect(game.getPlayerStats(1)).toMatchObject({
+                        playerNumber: 1,
+                        remainingDiscs: 21
+                    });
+                    expect(game.getPlayerStats(2)).toMatchObject({
+                        playerNumber: 2,
+                        remainingDiscs: 21
+                    });
+                    expect(game.getStatus()).toBe('IN_PROGRESS');
+                });
             });
         });
     });
