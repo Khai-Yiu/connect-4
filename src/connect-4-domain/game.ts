@@ -96,6 +96,8 @@ class GameFactory implements Game {
             this.activePlayer = activePlayer;
             this.players = players;
             this.status = status;
+        } else {
+            throw new Error('The provided game UUID is invalid.');
         }
     }
 
