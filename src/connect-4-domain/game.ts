@@ -32,6 +32,7 @@ interface Game {
     getPlayerStats: (playerNumber: PlayerNumber) => PlayerStats;
     getActivePlayer: () => PlayerNumber;
     getStatus: () => Status;
+    save: () => void;
     load: (gameId: GameUuid) => void;
     move: (
         movePlayerCommand: MovePlayerCommand
@@ -64,13 +65,6 @@ class GameFactory implements Game {
         this.activePlayer = 1;
         this.status = Status.IN_PROGRESS;
         this.repository = repository;
-
-        this.repository?.save({
-            board: this.getBoard(),
-            activePlayer: this.activePlayer,
-            players: this.players,
-            status: this.status
-        });
     }
 
     getBoard = () => {
@@ -86,6 +80,15 @@ class GameFactory implements Game {
     getStatus = (): Status => {
         return this.status;
     };
+
+    save() {
+        this.repository?.save({
+            board: this.getBoard(),
+            activePlayer: this.activePlayer,
+            players: this.players,
+            status: this.status
+        });
+    }
 
     load(gameId: GameUuid) {
         const gameStateToLoad = this.repository?.load(gameId);
