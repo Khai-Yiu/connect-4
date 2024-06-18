@@ -13,6 +13,7 @@ import {
     GameParameters,
     GameRepository,
     GameUuid,
+    PersistedGame,
     PlayerNumber,
     PlayerStats,
     Status,
@@ -22,8 +23,8 @@ import {
 import getIsWinningMove from '@/connect-4-domain/get-is-winning-move';
 
 export interface GameRepositoryInterface {
-    save: (board: Board, boardId?: GameUuid) => GameUuid;
-    load: (boardUuid: GameUuid) => Board | undefined;
+    save: (persistedGame: PersistedGame, gameId?: GameUuid) => GameUuid;
+    load: (gameUuid: GameUuid) => PersistedGame | undefined;
 }
 
 interface Game {
@@ -63,7 +64,12 @@ class GameFactory implements Game {
         this.status = Status.IN_PROGRESS;
         this.repository = repository;
 
-        this.repository?.save(this.board);
+        this.repository?.save({
+            board: this.getBoard(),
+            activePlayer: this.activePlayer,
+            players: this.players,
+            status: this.status
+        });
     }
 
     getBoard = () => {
