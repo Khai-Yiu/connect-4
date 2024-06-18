@@ -959,6 +959,52 @@ describe('game', () => {
                     status
                 });
             });
+            it('saves the game with a provided UUID', () => {
+                const repository = new InMemoryRepository();
+                const repositorySpy = vi.spyOn(repository, 'save');
+                const game = new GameFactory({
+                    repository
+                });
+                const providedGameId = crypto.randomUUID();
+                game.save(providedGameId);
+                const { board, activePlayer, players, status } =
+                    repositorySpy.mock.calls[0][0];
+                expect(toAsciiTable(board)).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
+                expect(activePlayer).toBe(1);
+                expect(players).toMatchObject({
+                    1: { playerNumber: 1, remainingDiscs: 21 },
+                    2: { playerNumber: 2, remainingDiscs: 21 }
+                });
+                expect(status).toBe('IN_PROGRESS');
+
+                const gameId = repositorySpy.mock.results[0].value;
+                expect(gameId).toBe(providedGameId);
+                const retrievedPersistedGame = repository.load(
+                    providedGameId
+                ) as PersistedGame;
+
+                expect(retrievedPersistedGame).toMatchObject({
+                    board,
+                    activePlayer,
+                    players,
+                    status
+                });
+            });
             it('loads a game', () => {
                 const repository = new InMemoryRepository();
                 const repositorySpy = vi.spyOn(repository, 'save');
@@ -993,7 +1039,7 @@ describe('game', () => {
                 });
                 expect(game.getStatus()).toBe('IN_PROGRESS');
             });
-            describe('and an invalid game UUID', () => {
+            describe('and an invalid UUID', () => {
                 it('throws an error', () => {
                     const repository = new InMemoryRepository();
                     const game = new GameFactory({ repository });
