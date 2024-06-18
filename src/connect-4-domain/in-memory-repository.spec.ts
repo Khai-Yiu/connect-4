@@ -74,11 +74,19 @@ describe('in-memory-repository', () => {
         it('saves a board with a provided UUID', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
-            const board = parseAsciiTable(asciiTable, customResolver);
-            const boardId = crypto.randomUUID();
-            const retrievedBoardId = repository.save(board, boardId);
-            expect(retrievedBoardId).toBe(boardId);
-            expect(store.get(retrievedBoardId)).toBe(board);
+            const gameId = crypto.randomUUID();
+            const persistedGame: PersistedGame = {
+                board: parseAsciiTable(asciiTable, customResolver),
+                activePlayer: 1,
+                players: {
+                    1: { playerNumber: 1, remainingDiscs: 4 },
+                    2: { playerNumber: 2, remainingDiscs: 4 }
+                },
+                status: 'IN_PROGRESS' as Status
+            };
+            const retrievedGameId = repository.save(persistedGame, gameId);
+            expect(retrievedGameId).toBe(gameId);
+            expect(store.get(retrievedGameId)).toMatchObject(persistedGame);
         });
         it('loads a saved board', () => {
             const store = new Map();
