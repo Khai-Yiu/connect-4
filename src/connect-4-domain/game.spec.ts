@@ -13,7 +13,7 @@ import { BoardCell, PersistedGame } from '@/connect-4-domain/game-types';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import { pipe } from 'ramda';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 type MovePlayerCommandPayload = {
     player: 1 | 2;
@@ -919,6 +919,13 @@ describe('game', () => {
                 const game = new GameFactory();
                 expect(() => game.save()).toThrow('No repository initialised.');
             });
+            it('throws an error when loading a game', () => {
+                const game = new GameFactory();
+                const gameUuid = crypto.randomUUID();
+                expect(() => game.load(gameUuid)).toThrow(
+                    'No repository initialised.'
+                );
+            });
         });
         describe('given a custom repository', () => {
             it('saves the game', () => {
@@ -956,10 +963,8 @@ describe('game', () => {
             });
             it('loads a game', () => {
                 const repository = new InMemoryRepository();
-                const repositorySpy = vi.spyOn(repository, 'save');
                 const game = new GameFactory({ repository });
-                game.save();
-                const gameId = repositorySpy.mock.results[0].value;
+                const gameId = game.save();
                 game.load(gameId);
                 expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
                   "
