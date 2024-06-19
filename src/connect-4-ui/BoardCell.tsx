@@ -7,25 +7,27 @@ export type StyledPlayerToken = {
 export type BoardCellProps = {
     className?: string;
     player?: 1 | 2;
-    uuid: string;
+    uuid?: string;
+    onClick?: React.MouseEventHandler<HTMLElement>;
 };
 
-export const BoardCell = ({ className, player }: BoardCellProps) => (
-    <StyledBoardCell className={className}>
+export const BoardCell = ({
+    className,
+    player,
+    uuid = crypto.randomUUID(),
+    onClick
+}: BoardCellProps) => (
+    <StyledBoardCell className={className} onClick={onClick}>
         <StyledPlayerToken $player={player} />
     </StyledBoardCell>
 );
-
-BoardCell.defaultProps = {
-    player: undefined,
-    uuid: crypto.randomUUID()
-};
 
 export const StyledBoardCell = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     background: blue;
+    height: 100%;
 `;
 
 const StyledPlayerToken = styled.div<{ $player?: 1 | 2 }>`
