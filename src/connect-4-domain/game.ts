@@ -101,8 +101,12 @@ class GameFactory implements Game {
         }
     }
 
-    load(gameId: GameUuid) {
-        const gameToLoad = this.repository?.load(gameId);
+    load(gameId: GameUuid): void {
+        if (this.repository === undefined) {
+            throw new Error('No repository initialised.');
+        }
+
+        const gameToLoad = this.repository.load(gameId);
 
         if (gameToLoad !== undefined) {
             const { board, activePlayer, players, status } = gameToLoad;
