@@ -81,16 +81,24 @@ class GameFactory implements Game {
         return this.status;
     };
 
-    save(gameUuid?: GameUuid) {
-        this.repository?.save(
-            {
-                board: this.getBoard(),
-                activePlayer: this.activePlayer,
-                players: this.players,
-                status: this.status
-            },
-            gameUuid
-        );
+    save(): GameUuid {
+        if (this.repository !== undefined) {
+            const gameUuid = crypto.randomUUID();
+
+            this.repository?.save(
+                {
+                    board: this.getBoard(),
+                    activePlayer: this.activePlayer,
+                    players: this.players,
+                    status: this.status
+                },
+                gameUuid
+            );
+
+            return gameUuid;
+        } else {
+            throw new Error('No repository initialised.');
+        }
     }
 
     load(gameId: GameUuid) {
