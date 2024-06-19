@@ -914,6 +914,12 @@ describe('game', () => {
         });
     });
     describe('persisting a game', () => {
+        describe('given defaults', () => {
+            it('throws an error when saving the game', () => {
+                const game = new GameFactory();
+                expect(() => game.save()).toThrow('No repository initialised.');
+            });
+        });
         describe('given a custom repository', () => {
             it('saves the game', () => {
                 const repository = new InMemoryRepository();
