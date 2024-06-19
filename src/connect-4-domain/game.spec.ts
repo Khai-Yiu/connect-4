@@ -915,16 +915,36 @@ describe('game', () => {
     });
     describe('persisting a game', () => {
         describe('given defaults', () => {
-            it('throws an error when saving a game', () => {
+            it('saves and loads a game using an in-memory repository', () => {
                 const game = new GameFactory();
-                expect(() => game.save()).toThrow('No repository initialised.');
-            });
-            it('throws an error when loading a game', () => {
-                const game = new GameFactory();
-                const gameUuid = crypto.randomUUID();
-                expect(() => game.load(gameUuid)).toThrow(
-                    'No repository initialised.'
-                );
+                const gameId = game.save();
+                game.load(gameId);
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
+                expect(game.getActivePlayer()).toBe(1);
+                expect(game.getPlayerStats(1)).toMatchObject({
+                    playerNumber: 1,
+                    remainingDiscs: 21
+                });
+                expect(game.getPlayerStats(2)).toMatchObject({
+                    playerNumber: 2,
+                    remainingDiscs: 21
+                });
+                expect(game.getStatus()).toBe('IN_PROGRESS');
             });
         });
         describe('given a custom repository', () => {
