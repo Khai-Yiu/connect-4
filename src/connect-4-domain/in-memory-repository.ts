@@ -1,9 +1,9 @@
-import { GameRepositoryInterface } from '@/connect-4-domain/game';
+import { GameRepository } from '@/connect-4-domain/game';
 import { GameUuid, PersistedGame } from '@/connect-4-domain/game-types';
 
 type Store = Map<GameUuid, PersistedGame>;
 
-export default class InMemoryRepository implements GameRepositoryInterface {
+export default class InMemoryRepository implements GameRepository {
     private store: Map<GameUuid, PersistedGame>;
 
     constructor(store: Store = new Map<GameUuid, PersistedGame>()) {

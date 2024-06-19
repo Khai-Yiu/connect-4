@@ -1,4 +1,4 @@
-import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
+import { GameRepository } from './game';
 
 export enum Status {
     IN_PROGRESS = 'IN_PROGRESS',
@@ -51,8 +51,6 @@ export type PersistedGame = {
 };
 
 export type GameUuid = `${string}-${string}-${string}-${string}-${string}`;
-
-export type GameRepository = InMemoryRepository | undefined;
 
 export type GameParameters = {
     boardDimensions?: { rows: number; columns: number };

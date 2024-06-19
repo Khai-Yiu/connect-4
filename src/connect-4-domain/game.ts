@@ -11,7 +11,6 @@ import {
     BoardCell,
     BoardDimensions,
     GameParameters,
-    GameRepository,
     GameUuid,
     PersistedGame,
     PlayerNumber,
@@ -21,8 +20,9 @@ import {
     ValidationResult
 } from '@/connect-4-domain/game-types';
 import getIsWinningMove from '@/connect-4-domain/get-is-winning-move';
+import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 
-export interface GameRepositoryInterface {
+export interface GameRepository {
     save: (persistedGame: PersistedGame, gameId?: GameUuid) => GameUuid;
     load: (gameUuid: GameUuid) => PersistedGame | undefined;
 }
@@ -51,12 +51,13 @@ class GameFactory implements Game {
     constructor(
         {
             boardDimensions = { rows: 6, columns: 7 },
-            repository
+            repository = new InMemoryRepository()
         }: GameParameters = {
             boardDimensions: {
                 rows: 6,
                 columns: 7
-            }
+            },
+            repository: new InMemoryRepository()
         }
     ) {
         this.validateBoardDimensions(boardDimensions);
@@ -82,30 +83,22 @@ class GameFactory implements Game {
     };
 
     save(): GameUuid {
-        if (this.repository !== undefined) {
-            const gameUuid = crypto.randomUUID();
+        const gameUuid = crypto.randomUUID();
 
-            this.repository?.save(
-                {
-                    board: this.getBoard(),
-                    activePlayer: this.activePlayer,
-                    players: this.players,
-                    status: this.status
-                },
-                gameUuid
-            );
+        this.repository.save(
+            {
+                board: this.getBoard(),
+                activePlayer: this.activePlayer,
+                players: this.players,
+                status: this.status
+            },
+            gameUuid
+        );
 
-            return gameUuid;
-        } else {
-            throw new Error('No repository initialised.');
-        }
+        return gameUuid;
     }
 
     load(gameId: GameUuid): void {
-        if (this.repository === undefined) {
-            throw new Error('No repository initialised.');
-        }
-
         const gameToLoad = this.repository.load(gameId);
 
         if (gameToLoad !== undefined) {
