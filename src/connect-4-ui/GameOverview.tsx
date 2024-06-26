@@ -5,11 +5,12 @@ import {
 } from '@/connect-4-ui/PlayerRoundOverviews';
 import { Round, RoundProps } from '@/connect-4-ui/Round';
 import { Status } from '@/connect-4-ui/Status';
+import { GameStatus } from '@/connect-4-domain/game-types';
 
 export type GameOverviewProps = {
     round: RoundProps;
-    playerOverview: PlayerRoundOverviewsProps;
-    status?: 1 | 2;
+    playerRoundOverviews: PlayerRoundOverviewsProps;
+    status: GameStatus;
 };
 
 const StyledWrapper = styled.div`
@@ -21,12 +22,12 @@ const StyledWrapper = styled.div`
 
 export const GameOverview = ({
     round,
-    playerOverview,
+    playerRoundOverviews,
     status
 }: GameOverviewProps) => (
     <StyledWrapper>
         <Round {...round} />
-        <PlayerRoundOverviews {...playerOverview} />
+        <PlayerRoundOverviews {...playerRoundOverviews} />
         <Status status={status} />
     </StyledWrapper>
 );

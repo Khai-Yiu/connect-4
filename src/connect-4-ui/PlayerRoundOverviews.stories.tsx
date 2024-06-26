@@ -13,15 +13,15 @@ type Story = StoryObj<typeof PlayerRoundOverviews>;
 const playerOne: PlayerRoundOverviewProps = {
     player: 1,
     isActiveTurn: true,
-    remainingTokens: 10,
-    tokenColour: 'red'
+    remainingDiscs: 10,
+    discColour: 'red'
 };
 
 const playerTwo: PlayerRoundOverviewProps = {
     player: 2,
     isActiveTurn: false,
-    remainingTokens: 10,
-    tokenColour: 'red'
+    remainingDiscs: 10,
+    discColour: 'red'
 };
 
 export const TheOneWherePlayerOneIsActive: Story = {

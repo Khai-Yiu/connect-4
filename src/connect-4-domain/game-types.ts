@@ -1,6 +1,6 @@
 import { GameRepository } from './game';
 
-export enum Status {
+export enum GameStatus {
     IN_PROGRESS = 'IN_PROGRESS',
     PLAYER_ONE_WIN = 'PLAYER_ONE_WIN',
     PLAYER_TWO_WIN = 'PLAYER_TWO_WIN',
@@ -47,7 +47,7 @@ export type PersistedGame = {
     board: Board;
     activePlayer: PlayerNumber;
     players: Record<PlayerNumber, PlayerStats>;
-    status: Status;
+    status: GameStatus;
 };
 
 export type GameUuid = `${string}-${string}-${string}-${string}-${string}`;

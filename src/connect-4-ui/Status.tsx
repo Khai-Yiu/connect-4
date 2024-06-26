@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { GameStatus } from '@/connect-4-domain/game-types';
 
 export type StatusProps = {
-    status?: 1 | 2 | 3;
+    status: GameStatus;
 };
 
 const StyledStatus = styled.div`
@@ -19,17 +20,17 @@ const StyledStatus = styled.div`
 export const Status = ({ status }: StatusProps) => {
     let outcome;
     switch (status) {
-        case 1:
+        case GameStatus.PLAYER_ONE_WIN:
             outcome = 'Player 1 has won!';
             break;
-        case 2:
+        case GameStatus.PLAYER_TWO_WIN:
             outcome = 'Player 2 has won!';
             break;
-        case 3:
+        case GameStatus.DRAW:
             outcome = 'Game ended in a tie!';
             break;
         default:
-            outcome = 'No game in progress...';
+            outcome = 'Game in progress...';
     }
 
     return <StyledStatus>{outcome}</StyledStatus>;

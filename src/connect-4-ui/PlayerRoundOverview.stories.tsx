@@ -13,9 +13,9 @@ export const TheOneWithAPlayerNumber: Story = {
     render: () => (
         <PlayerRoundOverview
             player={2}
-            remainingTokens={10}
+            remainingDiscs={10}
             isActiveTurn={true}
-            tokenColour="red"
+            discColour="red"
         />
     )
 };
@@ -24,9 +24,9 @@ export const TheOneWithAnInactivePlayer: Story = {
     render: () => (
         <PlayerRoundOverview
             player={1}
-            remainingTokens={10}
+            remainingDiscs={10}
             isActiveTurn={false}
-            tokenColour="red"
+            discColour="red"
         />
     )
 };
@@ -35,9 +35,9 @@ export const TheOneWith5RemainingTokens: Story = {
     render: () => (
         <PlayerRoundOverview
             player={1}
-            remainingTokens={5}
+            remainingDiscs={5}
             isActiveTurn={true}
-            tokenColour="red"
+            discColour="red"
         />
     )
 };
@@ -46,9 +46,9 @@ export const TheOneWithAPinkTokenColour: Story = {
     render: () => (
         <PlayerRoundOverview
             player={1}
-            remainingTokens={10}
+            remainingDiscs={10}
             isActiveTurn={true}
-            tokenColour="pink"
+            discColour="pink"
         />
     )
 };

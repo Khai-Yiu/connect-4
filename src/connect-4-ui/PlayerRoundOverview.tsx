@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 export type PlayerRoundOverviewProps = {
     player?: 1 | 2;
-    remainingTokens: number;
+    remainingDiscs: number;
     isActiveTurn: boolean;
-    tokenColour: string;
+    discColour: string;
 };
 
 const StyledWrapper = styled.div`
@@ -28,9 +28,9 @@ const StyledBottomContainer = styled.div`
     padding: 0 10px;
 `;
 
-const StyledToken = styled.div<{ isActiveTurn: boolean; tokenColour: string }>`
-    background-color: ${({ isActiveTurn, tokenColour }) =>
-        isActiveTurn ? tokenColour : 'initial'};
+const StyledToken = styled.div<{ isActiveTurn: boolean; discColour: string }>`
+    background-color: ${({ isActiveTurn, discColour }) =>
+        isActiveTurn ? discColour : 'initial'};
     border: ${({ isActiveTurn }) =>
         isActiveTurn ? '3px white dotted' : 'none'};
     border-radius: 50%;
@@ -42,20 +42,17 @@ const StyledToken = styled.div<{ isActiveTurn: boolean; tokenColour: string }>`
 
 export const PlayerRoundOverview = ({
     player,
-    remainingTokens,
+    remainingDiscs,
     isActiveTurn,
-    tokenColour
+    discColour
 }: PlayerRoundOverviewProps) => (
     <StyledWrapper>
         <StyledTopContainer>
             <p>{`Player number: ${player}`}</p>
-            <StyledToken
-                isActiveTurn={isActiveTurn}
-                tokenColour={tokenColour}
-            />
+            <StyledToken isActiveTurn={isActiveTurn} discColour={discColour} />
         </StyledTopContainer>
         <StyledBottomContainer>
-            <p>{`Remaining tokens: ${remainingTokens}`}</p>
+            <p>{`Remaining discs: ${remainingDiscs}`}</p>
         </StyledBottomContainer>
     </StyledWrapper>
 );

@@ -3,6 +3,8 @@ import { GameplayArea } from '@/connect-4-ui/GameplayArea';
 import createCells from '@/connect-4-ui/create-cells';
 import { GameOverviewProps } from '@/connect-4-ui/GameOverview';
 import { BoardProps } from '@/connect-4-ui/Board';
+import { action } from '@storybook/addon-actions';
+import { GameStatus } from '@/connect-4-domain/game-types';
 
 const meta: Meta<typeof GameplayArea> = {
     component: GameplayArea
@@ -16,21 +18,21 @@ const gameOverview: GameOverviewProps = {
     round: {
         roundNumber: 1
     },
-    playerOverview: {
+    playerRoundOverviews: {
         playerOne: {
             player: 1,
             isActiveTurn: true,
-            remainingTokens: 10,
-            tokenColour: 'red'
+            remainingDiscs: 10,
+            discColour: 'red'
         },
         playerTwo: {
             player: 2,
             isActiveTurn: false,
-            remainingTokens: 10,
-            tokenColour: 'red'
+            remainingDiscs: 10,
+            discColour: 'red'
         }
     },
-    status: 1
+    status: GameStatus.IN_PROGRESS
 };
 const board: BoardProps = {
     cells: createCells(6, 7)
@@ -47,4 +49,8 @@ export const TheOneWithDefaults: Story = {
 
 export const TheOneWithAGameInProgress: Story = {
     render: () => <GameplayArea activeGame={activeGame} />
+};
+
+export const TheOneWithAStartGameClickHandler: Story = {
+    render: () => <GameplayArea onStartGameClick={action('Start game.')} />
 };

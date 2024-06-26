@@ -8,7 +8,7 @@ export type BoardCellProps = {
     className?: string;
     player?: 1 | 2;
     uuid?: string;
-    onClick?: React.MouseEventHandler<HTMLElement>;
+    onClick?: () => void;
 };
 
 export const BoardCell = ({

@@ -2,7 +2,7 @@ import { BoardCell } from '@/connect-4-domain/game-types';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
 import { describe, expect, it } from 'vitest';
-import { PersistedGame, Status } from './game-types';
+import { PersistedGame, GameStatus } from './game-types';
 
 describe('in-memory-repository', () => {
     const customResolver = (value: string): BoardCell => {
@@ -38,7 +38,7 @@ describe('in-memory-repository', () => {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as Status
+                status: 'IN_PROGRESS' as GameStatus
             };
             const gameId = repository.save(persistedGame);
             expect(repository.load(gameId)).toMatchObject(persistedGame);
@@ -66,7 +66,7 @@ describe('in-memory-repository', () => {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as Status
+                status: 'IN_PROGRESS' as GameStatus
             };
             const gameId = repository.save(persistedGame);
             expect(store.get(gameId)).toMatchObject(persistedGame);
@@ -82,7 +82,7 @@ describe('in-memory-repository', () => {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as Status
+                status: 'IN_PROGRESS' as GameStatus
             };
             const retrievedGameId = repository.save(persistedGame, gameId);
             expect(retrievedGameId).toBe(gameId);
@@ -98,7 +98,7 @@ describe('in-memory-repository', () => {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as Status
+                status: 'IN_PROGRESS' as GameStatus
             };
             const gameId = repository.save(persistedGame);
             expect(repository.load(gameId)).toBe(persistedGame);

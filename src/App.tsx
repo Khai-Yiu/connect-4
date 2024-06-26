@@ -1,39 +1,125 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { GameplayArea } from '@/connect-4-ui/GameplayArea';
 import './App.css';
+import '@/connect-4-ui/GameplayArea';
+import GameFactory from './connect-4-domain/game';
+import { useState } from 'react';
+import { GameOverviewProps } from './connect-4-ui/GameOverview';
+import { BoardProps, GridBoardCellProps } from './connect-4-ui/Board';
+import { createMovePlayerCommand } from './connect-4-domain/commands';
 
-function App() {
-    const [count, setCount] = useState(0);
+function createHandleStartGameClick(
+    setGame: (game: GameFactory) => void,
+    setActiveGame: (activeGame: {
+        gameOverview: GameOverviewProps;
+        board: BoardProps;
+    }) => void
+): () => void {
+    return function handleStartGameClick(): void {
+        const game = new GameFactory();
+        setGame(game);
+        const player1Stats = game.getPlayerStats(1);
+        const player2Stats = game.getPlayerStats(2);
+        setActiveGame({
+            gameOverview: {
+                round: {
+                    roundNumber: 1
+                },
+                playerRoundOverviews: {
+                    playerOne: {
+                        player: 1,
+                        remainingDiscs: player1Stats.remainingDiscs,
+                        isActiveTurn: game.getActivePlayer() === 1,
+                        discColour: 'yellow'
+                    },
+                    playerTwo: {
+                        player: 2,
+                        remainingDiscs: player2Stats.remainingDiscs,
+                        isActiveTurn: game.getActivePlayer() === 2,
+                        discColour: 'red'
+                    }
+                },
+                status: game.getStatus()
+            },
+            board: {
+                cells: game.getBoard()
+            } satisfies BoardProps
+        });
+    };
+}
+
+function createHandleBoardCellClick(
+    game: GameFactory,
+    activeGame: {
+        gameOverview: GameOverviewProps;
+        board: BoardProps;
+    },
+    setActiveGame: (activeGame: {
+        gameOverview: GameOverviewProps;
+        board: BoardProps;
+    }) => void
+) {
+    return function handleBoardCellClick({
+        row,
+        column
+    }: GridBoardCellProps): void {
+        const movePlayerCommand = createMovePlayerCommand({
+            player: game.getActivePlayer(),
+            targetCell: {
+                row,
+                column
+            }
+        });
+
+        game.move(movePlayerCommand);
+        const player1Stats = game.getPlayerStats(1);
+        const player2Stats = game.getPlayerStats(2);
+        setActiveGame({
+            gameOverview: {
+                round: activeGame.gameOverview.round,
+                playerRoundOverviews: {
+                    playerOne: {
+                        player: 1,
+                        remainingDiscs: player1Stats.remainingDiscs,
+                        isActiveTurn: game.getActivePlayer() === 1,
+                        discColour: 'yellow'
+                    },
+                    playerTwo: {
+                        player: 2,
+                        remainingDiscs: player2Stats.remainingDiscs,
+                        isActiveTurn: game.getActivePlayer() === 2,
+                        discColour: 'red'
+                    }
+                },
+                status: game.getStatus()
+            },
+            board: {
+                cells: game.getBoard()
+            } satisfies BoardProps
+        });
+    };
+}
+
+const App = () => {
+    const [game, setGame] = useState<GameFactory>();
+    const [activeGame, setActiveGame] = useState<{
+        gameOverview: GameOverviewProps;
+        board: BoardProps;
+    }>();
 
     return (
-        <>
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img
-                        src={reactLogo}
-                        className="logo react"
-                        alt="React logo"
-                    />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
+        <GameplayArea
+            activeGame={activeGame}
+            onStartGameClick={createHandleStartGameClick(
+                setGame,
+                setActiveGame
+            )}
+            onBoardCellClick={createHandleBoardCellClick(
+                game,
+                activeGame,
+                setActiveGame
+            )}
+        />
     );
-}
+};
 
 export default App;

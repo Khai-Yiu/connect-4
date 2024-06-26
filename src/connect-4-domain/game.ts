@@ -15,7 +15,7 @@ import {
     PersistedGame,
     PlayerNumber,
     PlayerStats,
-    Status,
+    GameStatus,
     ValidCellOnBoard,
     ValidationResult
 } from '@/connect-4-domain/game-types';
@@ -31,7 +31,7 @@ interface Game {
     getBoard: () => Board;
     getPlayerStats: (playerNumber: PlayerNumber) => PlayerStats;
     getActivePlayer: () => PlayerNumber;
-    getStatus: () => Status;
+    getStatus: () => GameStatus;
     save: () => GameUuid;
     load: (gameId: GameUuid) => void;
     move: (
@@ -45,7 +45,7 @@ class GameFactory implements Game {
     private board: Board;
     private players: Record<PlayerNumber, PlayerStats>;
     private activePlayer: PlayerNumber;
-    private status: Status;
+    private status: GameStatus;
     private repository: GameRepository;
 
     constructor(
@@ -64,7 +64,7 @@ class GameFactory implements Game {
         this.board = this.createBoard(boardDimensions);
         this.players = this.createPlayers(boardDimensions);
         this.activePlayer = 1;
-        this.status = Status.IN_PROGRESS;
+        this.status = GameStatus.IN_PROGRESS;
         this.repository = repository;
     }
 
@@ -78,7 +78,7 @@ class GameFactory implements Game {
 
     getActivePlayer = (): PlayerNumber => this.activePlayer;
 
-    getStatus = (): Status => {
+    getStatus = (): GameStatus => {
         return this.status;
     };
 
@@ -132,13 +132,13 @@ class GameFactory implements Game {
         if (isWin) {
             this.status =
                 this.activePlayer === 2
-                    ? Status.PLAYER_ONE_WIN
-                    : Status.PLAYER_TWO_WIN;
+                    ? GameStatus.PLAYER_ONE_WIN
+                    : GameStatus.PLAYER_TWO_WIN;
         } else if (
             this.players[1].remainingDiscs === 0 &&
             this.players[2].remainingDiscs === 0
         ) {
-            this.status = Status.DRAW;
+            this.status = GameStatus.DRAW;
         }
 
         return createPlayerMovedEvent({
@@ -180,13 +180,13 @@ class GameFactory implements Game {
                 message:
                     'You cannot make a move, player 1 has already won the game'
             };
-        } else if (this.status === Status.PLAYER_TWO_WIN) {
+        } else if (this.status === GameStatus.PLAYER_TWO_WIN) {
             return {
                 isValid: false,
                 message:
                     'You cannot make a move, player 2 has already won the game'
             };
-        } else if (this.status === Status.DRAW) {
+        } else if (this.status === GameStatus.DRAW) {
             return {
                 isValid: false,
                 message:
