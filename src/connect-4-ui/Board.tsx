@@ -51,15 +51,18 @@ export const Board = (
 const StyledBoard = styled.div<BoardProps>`
     --row: ${({ cells }) => cells!.length};
     --column: ${({ cells }) => cells![0].length};
-    --size: min(80vh, 80vw);
+    --min-size: min(70vh, 70vw);
+    --cell-size: calc(var(--min-size) / max(var(--row), var(--column)));
 
     display: grid;
-    grid-template-columns: repeat(var(--column), 1fr);
-    grid-template-rows: repeat(var(--row), 1fr);
-    width: var(--size);
-    height: calc(var(--row) * var(--size) / var(--column));
-    border: 3px solid black;
+    grid-template-columns: repeat(var(--column), var(--cell-size));
+    grid-template-rows: repeat(var(--row), var(--cell-size));
+    border: 3px solid blue;
     border-top: none;
+
+    @media (max-width: 1110px) {
+        --min-size: 70vw;
+    }
 `;
 
 const GridBoardCell = styled(BoardCell)<GridBoardCellProps>`

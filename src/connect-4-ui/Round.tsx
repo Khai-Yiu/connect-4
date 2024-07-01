@@ -6,11 +6,12 @@ export type RoundProps = {
 
 const StyledRoundNumber = styled.div`
     text-align: center;
-    font-size: 2rem;
-    background-color: blue;
+    font-family: monospace;
+    font-size: 1.5rem;
+    background-color: #2685d9;
     color: white;
     border-radius: 16px 16px 0 0;
-    border: 3px solid black;
+    border: 3px solid cyan;
     border-bottom: none;
     width: 100%;
     padding: 12px 0;

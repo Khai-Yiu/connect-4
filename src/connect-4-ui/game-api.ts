@@ -17,7 +17,7 @@ type BoardCell = {
 
 type Player = 1 | 2;
 
-interface GameApi {
+export interface GameApi {
     getActivePlayer: () => Player;
     getRemainingDiscs: (player: Player) => number;
     getStatus: () => GameStatus;

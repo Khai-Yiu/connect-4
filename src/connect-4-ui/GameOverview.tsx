@@ -17,7 +17,7 @@ const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 100%;
+    width: 80%;
 `;
 
 export const GameOverview = ({

@@ -6,12 +6,13 @@ export type StatusProps = {
 };
 
 const StyledStatus = styled.div`
+    font-family: monospace;
     text-align: center;
-    font-size: 2rem;
-    background-color: blue;
+    font-size: 1.5rem;
+    background-color: #2685d9;
     color: white;
     border-radius: 0 0 16px 16px;
-    border: 3px solid black;
+    border: 3px solid cyan;
     border-top: none;
     width: 100%;
     padding: 12px 0;
