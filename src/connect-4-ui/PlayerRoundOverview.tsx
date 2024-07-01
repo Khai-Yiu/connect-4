@@ -10,23 +10,25 @@ export type PlayerRoundOverviewProps = {
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: blue;
+    background-color: #2685d9;
     color: white;
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding: 10px 0;
     width: 100%;
+    font-family: monospace;
 `;
 
 const StyledTopContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
+    padding: 5px 10px;
+    flex-wrap: wrap;
 `;
 
 const StyledBottomContainer = styled.div`
-    display: flex;
-    padding: 0 10px;
+    text-align: left;
+    padding: 5px 10px;
 `;
 
 const StyledToken = styled.div<{ isActiveTurn: boolean; discColour: string }>`
@@ -49,7 +51,7 @@ export const PlayerRoundOverview = ({
 }: PlayerRoundOverviewProps) => (
     <StyledWrapper>
         <StyledTopContainer>
-            <p>{`Player number: ${player}`}</p>
+            <p>{`Player: ${player}`}</p>
             <StyledToken isActiveTurn={isActiveTurn} discColour={discColour} />
         </StyledTopContainer>
         <StyledBottomContainer>
