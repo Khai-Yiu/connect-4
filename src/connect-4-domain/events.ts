@@ -10,7 +10,7 @@ type PlayerMovedEventPayload = {
     };
 };
 
-enum EventTypes {
+export enum EventTypes {
     PLAYER_MOVE_FAILED = 'PLAYER_MOVE_FAILED',
     PLAYER_MOVED = 'PLAYER_MOVED'
 }

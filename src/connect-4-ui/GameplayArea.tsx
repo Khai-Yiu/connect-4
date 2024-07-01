@@ -23,6 +23,7 @@ const StyledButton = styled.button`
     background-color: blue;
     color: white;
     padding: 10px 10px;
+    border: 5px cyan solid;
 `;
 
 const StyledGameplayWrapper = styled.div`

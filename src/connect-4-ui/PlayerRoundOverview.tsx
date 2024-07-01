@@ -25,6 +25,7 @@ const StyledTopContainer = styled.div`
 `;
 
 const StyledBottomContainer = styled.div`
+    display: flex;
     padding: 0 10px;
 `;
 
