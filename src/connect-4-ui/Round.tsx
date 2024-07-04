@@ -8,7 +8,7 @@ const StyledRoundNumber = styled.div`
     text-align: center;
     font-family: monospace;
     font-size: 1.5rem;
-    background-color: #2685d9;
+    background-color: #38598b;
     color: white;
     border-radius: 16px 16px 0 0;
     border: 3px solid cyan;

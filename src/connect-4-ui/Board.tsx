@@ -32,7 +32,7 @@ export const Board = (
     const mapOfBoardCells = cells.flatMap((row, rowIndex) =>
         row.map((currentCellProps, columnIndex) => (
             <GridBoardCell
-                key={currentCellProps.uuid}
+                key={`${currentCellProps.uuid}-${columnIndex}-${rowIndex}`}
                 player={currentCellProps.player}
                 uuid={currentCellProps.uuid}
                 row={cells.length - rowIndex}
@@ -45,19 +45,19 @@ export const Board = (
         ))
     );
 
-    return <StyledBoard cells={cells}>{mapOfBoardCells}</StyledBoard>;
+    return <StyledBoard $cells={cells}>{mapOfBoardCells}</StyledBoard>;
 };
 
-const StyledBoard = styled.div<BoardProps>`
-    --row: ${({ cells }) => cells!.length};
-    --column: ${({ cells }) => cells![0].length};
+const StyledBoard = styled.div<{ $cells: Array<Array<BoardCellProps>> }>`
+    --row: ${({ $cells }) => $cells!.length};
+    --column: ${({ $cells }) => $cells![0].length};
     --min-size: min(70vh, 70vw);
     --cell-size: calc(var(--min-size) / max(var(--row), var(--column)));
 
     display: grid;
     grid-template-columns: repeat(var(--column), var(--cell-size));
     grid-template-rows: repeat(var(--row), var(--cell-size));
-    border: 3px solid blue;
+    border: 3px solid cyan;
     border-top: none;
 
     @media (max-width: 1110px) {

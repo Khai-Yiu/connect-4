@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { Status } from '@/connect-4-ui/Status';
-import { GameStatus } from '@/connect-4-ui/GameOverview';
+import { GameStatus } from '@/connect-4-domain/game-types';
 
 const meta: Meta<typeof Status> = {
     component: Status

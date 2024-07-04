@@ -9,7 +9,7 @@ const StyledStatus = styled.div`
     font-family: monospace;
     text-align: center;
     font-size: 1.5rem;
-    background-color: #2685d9;
+    background-color: #38598b;
     color: white;
     border-radius: 0 0 16px 16px;
     border: 3px solid cyan;

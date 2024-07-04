@@ -17,7 +17,7 @@ export const BoardCell = ({
     uuid = crypto.randomUUID(),
     onClick
 }: BoardCellProps) => (
-    <StyledBoardCell className={className} onClick={onClick}>
+    <StyledBoardCell key={uuid} className={className} onClick={onClick}>
         <StyledPlayerToken $player={player} />
     </StyledBoardCell>
 );
@@ -26,8 +26,9 @@ export const StyledBoardCell = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: blue;
+    background: #a2a8d3;
     height: 100%;
+    cursor: pointer;
 `;
 
 const StyledPlayerToken = styled.div<{ $player?: 1 | 2 }>`
@@ -44,4 +45,8 @@ const StyledPlayerToken = styled.div<{ $player?: 1 | 2 }>`
                 return 'white';
         }
     }};
+
+    :hover {
+        background-color: 'green';
+    }
 `;

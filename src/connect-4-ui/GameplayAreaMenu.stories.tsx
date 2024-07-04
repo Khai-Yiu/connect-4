@@ -1,6 +1,6 @@
 import GameplayAreaMenu from '@/connect-4-ui/GameplayAreaMenu';
 import { Meta, StoryObj } from '@storybook/react';
-import MenuButton from './MenuButton';
+import MenuButton from '@/connect-4-ui/MenuButton';
 
 const meta: Meta<typeof GameplayAreaMenu> = {
     component: GameplayAreaMenu

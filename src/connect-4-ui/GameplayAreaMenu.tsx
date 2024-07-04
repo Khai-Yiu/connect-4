@@ -4,14 +4,26 @@ import MenuButton from '@/connect-4-ui/MenuButton';
 const StyledMenu = styled.menu`
     position: sticky;
     top: 0;
-    margin: 0 auto;
-    padding: 0;
     width: 100%;
-    background-color: #2685d9;
-    min-height: 50px;
+    background-color: #38598b;
+    min-height: 80px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
+    border-bottom: 4px solid cyan;
+`;
+
+const StyledTitle = styled.h1`
+    text-align: center;
+    color: #e7eaf6;
+    font-size: 50px;
+    font-family: monospace;
+    font-weight: bold;
+`;
+
+const StyledChildWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
 `;
 
 const GameplayAreaMenu = ({
@@ -21,6 +33,11 @@ const GameplayAreaMenu = ({
         | Array<React.ReactElement<typeof MenuButton>>
         | React.ReactElement<typeof MenuButton>;
 }) => {
-    return <StyledMenu>{children}</StyledMenu>;
+    return (
+        <StyledMenu>
+            <StyledTitle>Connect4</StyledTitle>
+            <StyledChildWrapper>{children}</StyledChildWrapper>
+        </StyledMenu>
+    );
 };
 export default GameplayAreaMenu;

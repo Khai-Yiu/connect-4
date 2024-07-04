@@ -7,20 +7,16 @@ export type MenuButtonProps = {
 
 const StyledMenuButton = styled.button`
     font-size: 1.6rem;
-    background-color: blue;
+    width: 200px;
+    background-color: inherit;
     color: white;
-    border: 3px cyan solid;
     font-family: monospace;
     cursor: pointer;
-    border-radius: 8px;
+    outline: none;
+    border: none;
 
     &:hover {
-        border-color: #646cff;
-    }
-
-    &:focus,
-    &:focus-visible {
-        outline: 4px auto -webkit-focus-ring-color;
+        background-color: #a2a8d3;
     }
 `;
 

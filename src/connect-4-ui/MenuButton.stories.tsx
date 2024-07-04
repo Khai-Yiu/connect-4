@@ -3,7 +3,14 @@ import { action } from '@storybook/addon-actions';
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof MenuButton> = {
-    component: MenuButton
+    component: MenuButton,
+    decorators: [
+        (Story) => (
+            <div style={{ background: 'cyan' }}>
+                <Story />
+            </div>
+        )
+    ]
 };
 
 export default meta;

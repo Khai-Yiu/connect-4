@@ -10,7 +10,7 @@ export type PlayerRoundOverviewProps = {
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #2685d9;
+    background-color: #a2a8d3;
     color: white;
     font-size: 1rem;
     padding: 10px 0;
@@ -31,11 +31,11 @@ const StyledBottomContainer = styled.div`
     padding: 5px 10px;
 `;
 
-const StyledToken = styled.div<{ isActiveTurn: boolean; discColour: string }>`
-    background-color: ${({ isActiveTurn, discColour }) =>
-        isActiveTurn ? discColour : 'initial'};
-    border: ${({ isActiveTurn }) =>
-        isActiveTurn ? '3px white dotted' : 'none'};
+const StyledToken = styled.div<{ $isActiveTurn: boolean; $discColour: string }>`
+    background-color: ${({ $isActiveTurn, $discColour }) =>
+        $isActiveTurn ? $discColour : 'initial'};
+    border: ${({ $isActiveTurn }) =>
+        $isActiveTurn ? '3px white dotted' : 'none'};
     border-radius: 50%;
     height: 40px;
     min-width: 40px;
@@ -52,7 +52,10 @@ export const PlayerRoundOverview = ({
     <StyledWrapper>
         <StyledTopContainer>
             <p>{`Player: ${player}`}</p>
-            <StyledToken isActiveTurn={isActiveTurn} discColour={discColour} />
+            <StyledToken
+                $isActiveTurn={isActiveTurn}
+                $discColour={discColour}
+            />
         </StyledTopContainer>
         <StyledBottomContainer>
             <p>{`Remaining discs: ${remainingDiscs}`}</p>

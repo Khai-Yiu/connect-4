@@ -1,7 +1,10 @@
 import { createMovePlayerCommand } from '@/connect-4-domain/commands';
 import { EventTypes, PlayerMoveFailedEvent } from '@/connect-4-domain/events';
 import GameFactory from '@/connect-4-domain/game';
-import { BoardCell as DomainBoardCell } from '@/connect-4-domain/game-types';
+import {
+    BoardCell as DomainBoardCell,
+    GameUuid
+} from '@/connect-4-domain/game-types';
 import { BoardCell } from '@/connect-4-ui/BoardCell';
 import { GameStatus } from '@/connect-4-domain/game-types';
 
@@ -22,6 +25,8 @@ export interface GameApi {
     getRemainingDiscs: (player: Player) => number;
     getStatus: () => GameStatus;
     getBoard: () => Array<Array<BoardCell>>;
+    saveGame: () => GameUuid;
+    loadGame: (id: GameUuid) => void;
 }
 
 const createRowMapper =
@@ -68,7 +73,9 @@ export default function createGameApi(game: GameFactory): GameApi {
         getRemainingDiscs: (player: Player) =>
             game.getPlayerStats(player).remainingDiscs,
         getStatus: game.getStatus,
-        getBoard: () => game.getBoard().map(rowMapper)
+        getBoard: () => game.getBoard().map(rowMapper),
+        saveGame: () => game.save(),
+        loadGame: (id: GameUuid) => game.load(id)
     };
 
     return gameApi;
