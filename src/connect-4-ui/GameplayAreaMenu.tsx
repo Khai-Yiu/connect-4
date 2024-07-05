@@ -24,6 +24,7 @@ const StyledTitle = styled.h1`
 const StyledChildWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 `;
 
 const GameplayAreaMenu = ({

@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 type OverlayProps<T extends React.ComponentType<any>> = {
@@ -22,9 +23,12 @@ const StyledOverlay = styled.div`
     align-items: center;
 `;
 
-const Overlay = ({
-    componentSpec: { Component, props } = { Component: () => <></>, props: {} }
-}: OverlayProps) => {
+const Overlay = <T extends React.ComponentType<any>>({
+    componentSpec: { Component, props } = {
+        Component: (() => <></>) as unknown as T,
+        props: {} as React.ComponentProps<T>
+    }
+}: OverlayProps<T>) => {
     return (
         <StyledOverlay>
             <Component {...props} />

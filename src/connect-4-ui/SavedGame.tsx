@@ -21,6 +21,7 @@ const StyledLoadButton = styled.button`
     background-color: cyan;
     font-weight: bold;
     border: 2px solid white;
+    cursor: pointer;
 `;
 
 const StyledWrapper = styled.div`

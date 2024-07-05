@@ -149,6 +149,53 @@ function createHandleLoadGameClick(
     };
 }
 
+function createLoadGameDialog(
+    savedGames: GameUuid[],
+    gameApi: GameApi,
+    setActiveGame: (activeGame: {
+        gameOverview: GameOverviewProps;
+        board: BoardProps;
+    }) => void,
+    setShowOverlay: (value: boolean) => void
+) {
+    return createPortal(
+        <Overlay
+            componentSpec={{
+                Component: ({
+                    handleClose
+                }: {
+                    handleClose: () => void;
+                }): React.ReactElement<typeof LoadGameDialog> => (
+                    <LoadGameDialog handleClose={handleClose}>
+                        {savedGames.map(
+                            (
+                                gameId: GameUuid
+                            ): React.ReactElement<typeof SavedGame> => (
+                                <SavedGame
+                                    key={gameId}
+                                    gameId={gameId}
+                                    savedDate={new Date()}
+                                    handleLoadGame={createHandleLoadGameClick(
+                                        setActiveGame,
+                                        setShowOverlay,
+                                        gameApi
+                                    )}
+                                />
+                            )
+                        )}
+                    </LoadGameDialog>
+                ),
+                props: {
+                    handleClose: () => {
+                        setShowOverlay(false);
+                    }
+                }
+            }}
+        ></Overlay>,
+        document.body
+    );
+}
+
 const App = () => {
     const [activeGame, setActiveGame] = useState<{
         gameOverview: GameOverviewProps;
@@ -161,42 +208,11 @@ const App = () => {
     return (
         <>
             {showOverlay &&
-                createPortal(
-                    <Overlay
-                        componentSpec={{
-                            Component: ({
-                                handleClose
-                            }: {
-                                handleClose: () => void;
-                            }): React.ReactElement<typeof LoadGameDialog> => (
-                                <LoadGameDialog handleClose={handleClose}>
-                                    {savedGamesRef.current.map(
-                                        (
-                                            gameId: GameUuid
-                                        ): React.ReactElement<
-                                            typeof SavedGame
-                                        > => (
-                                            <SavedGame
-                                                gameId={gameId}
-                                                savedDate={new Date()}
-                                                handleLoadGame={createHandleLoadGameClick(
-                                                    setActiveGame,
-                                                    setShowOverlay,
-                                                    gameApiRef.current!
-                                                )}
-                                            />
-                                        )
-                                    )}
-                                </LoadGameDialog>
-                            ),
-                            props: {
-                                handleClose: () => {
-                                    setShowOverlay(false);
-                                }
-                            }
-                        }}
-                    ></Overlay>,
-                    document.body
+                createLoadGameDialog(
+                    savedGamesRef.current,
+                    gameApiRef.current!,
+                    setActiveGame,
+                    setShowOverlay
                 )}
             <GameplayArea
                 activeGame={activeGame}

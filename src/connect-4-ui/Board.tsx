@@ -57,7 +57,7 @@ const StyledBoard = styled.div<{ $cells: Array<Array<BoardCellProps>> }>`
     display: grid;
     grid-template-columns: repeat(var(--column), var(--cell-size));
     grid-template-rows: repeat(var(--row), var(--cell-size));
-    border: 3px solid cyan;
+    border: 8px solid cyan;
     border-top: none;
 
     @media (max-width: 1110px) {
