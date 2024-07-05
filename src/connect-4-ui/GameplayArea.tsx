@@ -10,6 +10,7 @@ export type GameplayAreaProps = {
         board: BoardProps;
     };
     onStartGameClick: () => void;
+    onResetGameClick: () => void;
     onSaveGameClick: () => void;
     onLoadGameClick: () => void;
 };
@@ -70,12 +71,13 @@ const StyledGameplayAreaWrapper = styled.div`
 export const GameplayArea = ({
     activeGame,
     onStartGameClick = () => {},
+    onResetGameClick = () => {},
     onSaveGameClick = () => {},
     onLoadGameClick = () => {}
 }: GameplayAreaProps) => (
     <StyledGameplayAreaWrapper>
         <GameplayAreaMenu>
-            <MenuButton text={'New Game'} onClick={onStartGameClick} />
+            <MenuButton text={'New Game'} onClick={onResetGameClick} />
             <MenuButton text={'Save Game'} onClick={onSaveGameClick} />
             <MenuButton text={'Load Game'} onClick={onLoadGameClick} />
         </GameplayAreaMenu>

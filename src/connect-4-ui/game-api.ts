@@ -27,6 +27,7 @@ export interface GameApi {
     getBoard: () => Array<Array<BoardCell>>;
     saveGame: () => GameUuid;
     loadGame: (id: GameUuid) => void;
+    resetGame: () => void;
 }
 
 const createRowMapper =
@@ -75,7 +76,8 @@ export default function createGameApi(game: GameFactory): GameApi {
         getStatus: game.getStatus,
         getBoard: () => game.getBoard().map(rowMapper),
         saveGame: () => game.save(),
-        loadGame: (id: GameUuid) => game.load(id)
+        loadGame: (id: GameUuid) => game.load(id),
+        resetGame: () => game.reset()
     };
 
     return gameApi;

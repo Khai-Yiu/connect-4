@@ -118,6 +118,7 @@ class GameFactory implements Game {
             rows: this.board.length,
             columns: this.board[0].length
         };
+
         this.board = this.createBoard(boardDimensions);
         this.players = this.createPlayers(boardDimensions);
         this.activePlayer = 1;

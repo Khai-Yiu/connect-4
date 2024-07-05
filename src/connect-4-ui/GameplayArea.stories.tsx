@@ -37,6 +37,7 @@ const gameOverview: GameOverviewProps = {
 
 const gameplayAreaProps = {
     onStartGameClick: () => {},
+    onResetGameClick: () => {},
     onSaveGameClick: () => {},
     onLoadGameClick: () => {}
 };

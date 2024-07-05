@@ -55,6 +55,51 @@ function createHandleStartGameClick(
     };
 }
 
+function createResetGameClick(
+    setActiveGame: (activeGame: {
+        gameOverview: GameOverviewProps;
+        board: BoardProps;
+    }) => void,
+    gameApiRef: MutableRefObject<GameApi | null>
+): () => void {
+    return function handleResetGameClick(): void {
+        gameApiRef.current!.resetGame();
+        setActiveGame({
+            gameOverview: {
+                round: {
+                    roundNumber: 1
+                },
+                playerRoundOverviews: {
+                    playerOne: {
+                        player: 1,
+                        remainingDiscs:
+                            gameApiRef.current!.getRemainingDiscs(1),
+                        isActiveTurn:
+                            gameApiRef.current!.getActivePlayer() === 1,
+                        discColour: 'yellow'
+                    },
+                    playerTwo: {
+                        player: 2,
+                        remainingDiscs:
+                            gameApiRef.current!.getRemainingDiscs(2),
+                        isActiveTurn:
+                            gameApiRef.current!.getActivePlayer() === 2,
+                        discColour: 'red'
+                    }
+                },
+                status: gameApiRef.current!.getStatus()
+            },
+            board: {
+                onClick: createHandleBoardCellClick(
+                    gameApiRef.current!,
+                    setActiveGame
+                ),
+                cells: gameApiRef.current!.getBoard()
+            } satisfies BoardProps
+        });
+    };
+}
+
 function createHandleBoardCellClick(
     gameApi: GameApi,
     setActiveGame: (activeGame: {
@@ -217,6 +262,10 @@ const App = () => {
             <GameplayArea
                 activeGame={activeGame}
                 onStartGameClick={createHandleStartGameClick(
+                    setActiveGame,
+                    gameApiRef
+                )}
+                onResetGameClick={createResetGameClick(
                     setActiveGame,
                     gameApiRef
                 )}
