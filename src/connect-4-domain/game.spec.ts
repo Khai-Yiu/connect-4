@@ -1031,7 +1031,22 @@ describe('game', () => {
             it('resets game', () => {
                 const game = new GameFactory();
                 game.reset();
-                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot('');
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
                 expect(game.getActivePlayer()).toBe(1);
                 expect(game.getPlayerStats(1)).toMatchObject({
                     playerNumber: 1,

@@ -88,7 +88,7 @@ class GameFactory implements Game {
 
         this.repository.save(
             {
-                board: this.getBoard(),
+                board: deepClone(this.board),
                 activePlayer: this.activePlayer,
                 players: this.players,
                 status: this.status
@@ -111,6 +111,17 @@ class GameFactory implements Game {
         } else {
             throw new Error('The provided game UUID is invalid.');
         }
+    }
+
+    reset(): void {
+        const boardDimensions = {
+            rows: this.board.length,
+            columns: this.board[0].length
+        };
+        this.board = this.createBoard(boardDimensions);
+        this.players = this.createPlayers(boardDimensions);
+        this.activePlayer = 1;
+        this.status = GameStatus.IN_PROGRESS;
     }
 
     move = this.createValidatedMove(this._move.bind(this));
