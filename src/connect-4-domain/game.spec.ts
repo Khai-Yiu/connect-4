@@ -949,6 +949,58 @@ describe('game', () => {
             });
         });
         describe('given a custom repository', () => {
+            describe('containing a previously saved game', () => {
+                it('loads the saved game after the game is reset', () => {
+                    const game = new GameFactory();
+                    game.move(
+                        createMovePlayerCommand({
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 0
+                            }
+                        })
+                    );
+                    game.move(
+                        createMovePlayerCommand({
+                            player: 2,
+                            targetCell: {
+                                row: 0,
+                                column: 1
+                            }
+                        })
+                    );
+                    const gameId = game.save();
+                    game.reset();
+                    game.load(gameId);
+                    expect(toAsciiTable(game.getBoard()))
+                        .toMatchInlineSnapshot(`
+                      "
+                      |---|---|--|--|--|--|--|
+                      | 1 | 2 |  |  |  |  |  |
+                      |---|---|--|--|--|--|--|
+                      |   |   |  |  |  |  |  |
+                      |---|---|--|--|--|--|--|
+                      |   |   |  |  |  |  |  |
+                      |---|---|--|--|--|--|--|
+                      |   |   |  |  |  |  |  |
+                      |---|---|--|--|--|--|--|
+                      |   |   |  |  |  |  |  |
+                      |---|---|--|--|--|--|--|
+                      |   |   |  |  |  |  |  |
+                      |---|---|--|--|--|--|--|"
+                    `);
+                    expect(game.getPlayerStats(1)).toMatchObject({
+                        playerNumber: 1,
+                        remainingDiscs: 20
+                    });
+                    expect(game.getPlayerStats(2)).toMatchObject({
+                        playerNumber: 2,
+                        remainingDiscs: 20
+                    });
+                    expect(game.getStatus()).toBe('IN_PROGRESS');
+                });
+            });
             it('saves the game', () => {
                 const repository = new InMemoryRepository();
                 const game = new GameFactory({
