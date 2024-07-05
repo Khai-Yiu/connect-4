@@ -1,4 +1,5 @@
 import { BoardCellProps } from '@/connect-4-ui/BoardCell';
+import { v4 as uuidv4 } from 'uuid';
 
 const createCells = (
     rows: number = 0,
@@ -12,7 +13,7 @@ const createCells = (
         for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
             cells[rowIndex][columnIndex] = {
                 player: selectionStrategy(),
-                uuid: crypto.randomUUID()
+                uuid: uuidv4()
             };
         }
     }

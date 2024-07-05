@@ -1,5 +1,6 @@
 import { GameRepository } from '@/connect-4-domain/game';
 import { GameUuid, PersistedGame } from '@/connect-4-domain/game-types';
+import { v4 as uuidv4 } from 'uuid';
 
 type Store = Map<GameUuid, PersistedGame>;
 
@@ -10,10 +11,7 @@ export default class InMemoryRepository implements GameRepository {
         this.store = store;
     }
 
-    save(
-        persistedGame: PersistedGame,
-        gameId: GameUuid = crypto.randomUUID()
-    ): GameUuid {
+    save(persistedGame: PersistedGame, gameId: GameUuid = uuidv4()): GameUuid {
         this.store.set(gameId, persistedGame);
 
         return gameId;

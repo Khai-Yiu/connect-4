@@ -3,6 +3,7 @@ import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
 import { describe, expect, it } from 'vitest';
 import { PersistedGame, GameStatus } from './game-types';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('in-memory-repository', () => {
     const customResolver = (value: string): BoardCell => {
@@ -45,7 +46,7 @@ describe('in-memory-repository', () => {
         });
         it('returns undefined when loading a non-existent game', () => {
             const repository = new InMemoryRepository();
-            const gameId = crypto.randomUUID();
+            const gameId = uuidv4();
             expect(repository.load(gameId)).toBe(undefined);
         });
     });
@@ -74,7 +75,7 @@ describe('in-memory-repository', () => {
         it('saves a game with a provided UUID', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
-            const gameId = crypto.randomUUID();
+            const gameId = uuidv4();
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
@@ -106,7 +107,7 @@ describe('in-memory-repository', () => {
         it('returns undefined when loading a non-existent game', () => {
             const store = new Map();
             const repository = new InMemoryRepository(store);
-            const gameId = crypto.randomUUID();
+            const gameId = uuidv4();
             expect(repository.load(gameId)).toBe(undefined);
         });
     });

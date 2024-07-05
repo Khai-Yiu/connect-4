@@ -21,6 +21,7 @@ import {
 } from '@/connect-4-domain/game-types';
 import getIsWinningMove from '@/connect-4-domain/get-is-winning-move';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface GameRepository {
     save: (persistedGame: PersistedGame, gameId?: GameUuid) => GameUuid;
@@ -83,7 +84,7 @@ class GameFactory implements Game {
     };
 
     save(): GameUuid {
-        const gameUuid = crypto.randomUUID();
+        const gameUuid = uuidv4();
 
         this.repository.save(
             {

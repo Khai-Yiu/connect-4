@@ -14,6 +14,7 @@ import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import { pipe } from 'ramda';
 import { describe, expect, it } from 'vitest';
+import { v4 as uuidv4 } from 'uuid';
 
 type MovePlayerCommandPayload = {
     player: 1 | 2;
@@ -1017,7 +1018,7 @@ describe('game', () => {
                 it('throws an error', () => {
                     const repository = new InMemoryRepository();
                     const game = new GameFactory({ repository });
-                    const invalidGameId = crypto.randomUUID();
+                    const invalidGameId = uuidv4();
                     expect(() => {
                         game.load(invalidGameId);
                     }).toThrow('The provided game UUID is invalid.');

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 
 export type StyledPlayerToken = {
     $player?: 1 | 2;
@@ -14,7 +15,7 @@ export type BoardCellProps = {
 export const BoardCell = ({
     className,
     player,
-    uuid = crypto.randomUUID(),
+    uuid = uuidv4(),
     onClick
 }: BoardCellProps) => (
     <StyledBoardCell key={uuid} className={className} onClick={onClick}>

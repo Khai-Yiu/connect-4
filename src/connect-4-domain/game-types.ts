@@ -50,7 +50,7 @@ export type PersistedGame = {
     status: GameStatus;
 };
 
-export type GameUuid = `${string}-${string}-${string}-${string}-${string}`;
+export type GameUuid = string;
 
 export type GameParameters = {
     boardDimensions?: { rows: number; columns: number };
