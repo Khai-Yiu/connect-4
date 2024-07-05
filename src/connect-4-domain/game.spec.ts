@@ -1059,5 +1059,62 @@ describe('game', () => {
                 expect(game.getStatus()).toBe('IN_PROGRESS');
             });
         });
+        describe('while game in progress', () => {
+            it('resets game', () => {
+                const game = new GameFactory();
+                game.move(
+                    createMovePlayerCommand({
+                        player: 1,
+                        targetCell: {
+                            row: 0,
+                            column: 0
+                        }
+                    })
+                );
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |---|--|--|--|--|--|--|
+                  | 1 |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|
+                  |   |  |  |  |  |  |  |
+                  |---|--|--|--|--|--|--|"
+                `);
+                game.reset();
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
+                  "
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|
+                  |  |  |  |  |  |  |  |
+                  |--|--|--|--|--|--|--|"
+                `);
+                expect(game.getActivePlayer()).toBe(1);
+                expect(game.getPlayerStats(1)).toMatchObject({
+                    playerNumber: 1,
+                    remainingDiscs: 21
+                });
+                expect(game.getPlayerStats(2)).toMatchObject({
+                    playerNumber: 2,
+                    remainingDiscs: 21
+                });
+                expect(game.getStatus()).toBe('IN_PROGRESS');
+            });
+        });
     });
 });
