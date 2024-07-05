@@ -1026,4 +1026,23 @@ describe('game', () => {
             });
         });
     });
+    describe('resetting a game', () => {
+        describe('given defaults', () => {
+            it('resets game', () => {
+                const game = new GameFactory();
+                game.reset();
+                expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot('');
+                expect(game.getActivePlayer()).toBe(1);
+                expect(game.getPlayerStats(1)).toMatchObject({
+                    playerNumber: 1,
+                    remainingDiscs: 21
+                });
+                expect(game.getPlayerStats(2)).toMatchObject({
+                    playerNumber: 2,
+                    remainingDiscs: 21
+                });
+                expect(game.getStatus()).toBe('IN_PROGRESS');
+            });
+        });
+    });
 });
