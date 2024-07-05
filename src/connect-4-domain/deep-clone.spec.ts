@@ -16,7 +16,6 @@ describe('deepClone', () => {
         expect(cloned[0]).not.toBe(original[0]);
         expect(cloned[0]).toBeInstanceOf(Object);
         expect(Object.keys(cloned[0])).toHaveLength(1);
-        expect(Object.hasOwn(cloned[0], 'a')).toBeTruthy();
         expect(cloned[0].a).toStrictEqual(original[0].a);
         expect(cloned[1]).toBe(original[1]);
         expect(cloned[2]).not.toBe(original[2]);

@@ -1,4 +1,4 @@
-import { Board, BoardCell, PlayerMove } from '@/connect-4-domain/game';
+import { Board, BoardCell, PlayerMove } from '@/connect-4-domain/game-types';
 
 type WinState = {
     consecutiveDiscs: number;

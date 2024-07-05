@@ -1,7 +1,7 @@
-import { BoardCell, PlayerMove } from '@/connect-4-domain/game';
 import getIsWinningMove from '@/connect-4-domain/get-is-winning-move';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
 import { describe, expect, it } from 'vitest';
+import { BoardCell, PlayerMove } from '@/connect-4-domain/game-types';
 
 describe('get-is-winning-move', () => {
     const customResolver = (value: string): BoardCell => {

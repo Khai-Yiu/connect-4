@@ -1,11 +1,3 @@
-function checkIsObject(value: any): boolean {
-    return (
-        value !== null &&
-        typeof value === 'object' &&
-        Object.getPrototypeOf(value) === Object.prototype
-    );
-}
-
 function deepClone<T>(
     value: T,
     visited: WeakMap<any, any> = new WeakMap<any, any>()

@@ -34,6 +34,13 @@ const gameOverview: GameOverviewProps = {
     },
     status: GameStatus.IN_PROGRESS
 };
+
+const gameplayAreaProps = {
+    onStartGameClick: () => {},
+    onSaveGameClick: () => {},
+    onLoadGameClick: () => {}
+};
+
 const board: BoardProps = {
     cells: createCells(6, 7)
 };
@@ -44,13 +51,20 @@ const activeGame = {
 };
 
 export const TheOneWithDefaults: Story = {
-    render: () => <GameplayArea />
+    render: () => <GameplayArea {...gameplayAreaProps} />
 };
 
 export const TheOneWithAGameInProgress: Story = {
-    render: () => <GameplayArea activeGame={activeGame} />
+    render: () => (
+        <GameplayArea activeGame={activeGame} {...gameplayAreaProps} />
+    )
 };
 
 export const TheOneWithAStartGameClickHandler: Story = {
-    render: () => <GameplayArea onStartGameClick={action('Start game.')} />
+    render: () => (
+        <GameplayArea
+            {...gameplayAreaProps}
+            onStartGameClick={action('Start game.')}
+        />
+    )
 };

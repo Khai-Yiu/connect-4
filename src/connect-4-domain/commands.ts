@@ -1,4 +1,4 @@
-import { PlayerMove } from '@/connect-4-domain/game';
+import { PlayerMove } from '@/connect-4-domain/game-types';
 
 type Payload = PlayerMove;
 

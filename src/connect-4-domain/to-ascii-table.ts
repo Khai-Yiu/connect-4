@@ -31,7 +31,7 @@ function getPaddedContent(
     return ` ${value.padEnd(widthOfLargestCellContentInColumn, ' ')} `;
 }
 
-function validateGridDimensions(grid: Array<Array<T>>) {
+function validateGridDimensions<T>(grid: Array<Array<T>>) {
     const knownRowLength = grid[0].length;
 
     grid.forEach((row) => {

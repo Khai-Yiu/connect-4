@@ -155,14 +155,14 @@ describe('to-ascii-table', () => {
         describe('and a custom cell resolver', () => {
             describe('where the content of each cell are different data types', () => {
                 it('returns an ascii table with multiple rows and columns of resolved values', () => {
-                    const customResolver = (value: any) =>
+                    const customResolver = (value: any): string =>
                         value === null || value === undefined
                             ? '💩'
                             : `${value}`;
                     const asciiTable = toAsciiTable(
                         [
                             [undefined, 1],
-                            ['Hi', null]
+                            [2, null]
                         ],
                         customResolver
                     );
@@ -170,7 +170,7 @@ describe('to-ascii-table', () => {
 |----|----|
 | 💩 | 1  |
 |----|----|
-| Hi | 💩 |
+| 2  | 💩 |
 |----|----|`);
                 });
             });
@@ -179,14 +179,14 @@ describe('to-ascii-table', () => {
             it('returns an ascii table with multiple rows and columns', () => {
                 const asciiTable = toAsciiTable([
                     [undefined, 1],
-                    ['Hi', null]
+                    [2, null]
                 ]);
                 expect(asciiTable).toEqual(`
-|----|---|
-|    | 1 |
-|----|---|
-| Hi |   |
-|----|---|`);
+|---|---|
+|   | 1 |
+|---|---|
+| 2 |   |
+|---|---|`);
             });
         });
     });

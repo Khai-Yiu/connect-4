@@ -3,7 +3,6 @@ import { GameOverview, GameOverviewProps } from '@/connect-4-ui/GameOverview';
 import { Board, BoardProps } from '@/connect-4-ui/Board';
 import GameplayAreaMenu from '@/connect-4-ui/GameplayAreaMenu';
 import MenuButton from '@/connect-4-ui/MenuButton';
-import { GameUuid } from '@/connect-4-domain/game-types';
 
 export type GameplayAreaProps = {
     activeGame?: {
@@ -12,7 +11,7 @@ export type GameplayAreaProps = {
     };
     onStartGameClick: () => void;
     onSaveGameClick: () => void;
-    onLoadGameClick: (gameId: GameUuid) => void;
+    onLoadGameClick: () => void;
 };
 
 const StyledGameplayArea = styled.div`
