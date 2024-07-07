@@ -11,6 +11,11 @@ const StyledMenu = styled.menu`
     flex-wrap: wrap;
     justify-content: space-between;
     border-bottom: 4px solid cyan;
+
+    @media (max-width: 880px) {
+        flex-direction: column;
+        padding: 0;
+    }
 `;
 
 const StyledTitle = styled.h1`

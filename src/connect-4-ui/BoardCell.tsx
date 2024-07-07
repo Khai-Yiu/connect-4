@@ -36,6 +36,7 @@ const StyledPlayerToken = styled.div<{ $player?: 1 | 2 }>`
     width: calc(100% * 5 / 6);
     height: calc(100% * 5 / 6);
     border-radius: 50%;
+    border: 3px solid cyan;
     background: ${({ $player }) => {
         switch ($player) {
             case 1:
@@ -48,6 +49,15 @@ const StyledPlayerToken = styled.div<{ $player?: 1 | 2 }>`
     }};
 
     :hover {
-        background-color: 'green';
+        background: ${({ $player }) => {
+            switch ($player) {
+                case 1:
+                    return 'yellow';
+                case 2:
+                    return 'red';
+                default:
+                    return '#b1fefe';
+            }
+        }};
     }
 `;

@@ -57,7 +57,7 @@ const StyledGameplayWrapper = styled.div`
     max-width: 100%;
     gap: 40px;
 
-    @media (min-width: 1100px) {
+    @media (min-width: 880px) {
         flex-direction: row;
         justify-content: space-between;
         align-items: flex-start;

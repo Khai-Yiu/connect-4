@@ -103,7 +103,8 @@ class GameFactory implements Game {
         const gameToLoad = this.repository.load(gameId);
 
         if (gameToLoad !== undefined) {
-            const { board, activePlayer, players, status } = gameToLoad;
+            const { board, activePlayer, players, status } =
+                deepClone(gameToLoad);
             this.board = board;
             this.activePlayer = activePlayer;
             this.players = players;
