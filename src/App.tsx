@@ -146,8 +146,12 @@ function createHandleBoardCellClick(
 
 function createHandleSaveGameClick(
     savedGamesRef: MutableRefObject<GameUuid[]>,
-    gameApi: GameApi
+    gameApi: GameApi | null
 ): () => void {
+    if (gameApi === null) {
+        return () => {};
+    }
+
     return function handleSaveGameClick() {
         const newGameId = gameApi.saveGame();
         savedGamesRef.current.push(newGameId);
@@ -271,7 +275,7 @@ const App = () => {
                 )}
                 onSaveGameClick={createHandleSaveGameClick(
                     savedGamesRef,
-                    gameApiRef.current!
+                    gameApiRef.current
                 )}
                 onLoadGameClick={() => setShowOverlay(true)}
             />

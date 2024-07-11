@@ -48,7 +48,7 @@ const StyledPlayerToken = styled.div<{ $player?: 1 | 2 }>`
         }
     }};
 
-    :hover {
+    &:hover {
         background: ${({ $player }) => {
             switch ($player) {
                 case 1:

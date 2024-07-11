@@ -23,6 +23,7 @@ const StyledLoadGameDialog = styled.div`
     min-width: 50vw;
     font-family: monospace;
     max-height: 60%;
+    min-height: 15vh;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: cyan;
