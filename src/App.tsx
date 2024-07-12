@@ -8,9 +8,10 @@ import { BoardProps, GridBoardCellProps } from '@/connect-4-ui/Board';
 import createGameApi, { GameApi } from '@/connect-4-ui/game-api';
 import Overlay from './connect-4-ui/Overlay';
 import { createPortal } from 'react-dom';
-import { GameUuid } from './connect-4-domain/game-types';
-import LoadGameDialog from './connect-4-ui/LoadGameDialog';
-import SavedGame from './connect-4-ui/SavedGame';
+import { GameUuid } from '@/connect-4-domain/game-types';
+import LoadGameDialog from '@/connect-4-ui/LoadGameDialog';
+import SavedGame from '@/connect-4-ui/SavedGame';
+import MongoGameRepository from '@/connect-4-domain/mongo-game-repository';
 
 function createHandleStartGameClick(
     setActiveGame: (activeGame: {
@@ -20,7 +21,9 @@ function createHandleStartGameClick(
     gameApiRef: MutableRefObject<GameApi | null>
 ): () => void {
     return function handleStartGameClick(): void {
-        gameApiRef.current = createGameApi(new GameFactory());
+        gameApiRef.current = createGameApi(
+            new GameFactory({ repository: new MongoGameRepository() })
+        );
         setActiveGame({
             gameOverview: {
                 round: {
@@ -152,8 +155,8 @@ function createHandleSaveGameClick(
         return () => {};
     }
 
-    return function handleSaveGameClick() {
-        const newGameId = gameApi.saveGame();
+    return async function handleSaveGameClick() {
+        const newGameId = await gameApi.saveGame();
         savedGamesRef.current.push(newGameId);
     };
 }

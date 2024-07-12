@@ -12,13 +12,17 @@
         "build-storybook": "storybook build",
         "format": "prettier --write .",
         "test": "vitest",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "build:image": "pnpm run build && docker build ."
     },
     "dependencies": {
         "@storybook/addon-actions": "^8.1.10",
+        "dotenv": "^16.4.5",
+        "mongoose": "^8.5.0",
         "ramda": "^0.30.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "reflect-metadata": "^0.2.2",
         "styled-components": "^6.1.8",
         "uuid": "^10.0.0"
     },

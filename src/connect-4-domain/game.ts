@@ -24,8 +24,11 @@ import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface GameRepository {
-    save: (persistedGame: PersistedGame, gameId?: GameUuid) => GameUuid;
-    load: (gameUuid: GameUuid) => PersistedGame | undefined;
+    save: (
+        persistedGame: PersistedGame,
+        gameUuid?: GameUuid
+    ) => Promise<GameUuid>;
+    load: (gameUuid: GameUuid) => Promise<PersistedGame | undefined>;
 }
 
 interface Game {
@@ -33,8 +36,8 @@ interface Game {
     getPlayerStats: (playerNumber: PlayerNumber) => PlayerStats;
     getActivePlayer: () => PlayerNumber;
     getStatus: () => GameStatus;
-    save: () => GameUuid;
-    load: (gameId: GameUuid) => void;
+    save: () => Promise<GameUuid>;
+    load: (gameId: GameUuid) => Promise<void>;
     move: (
         movePlayerCommand: MovePlayerCommand
     ) => PlayerMoveFailedEvent | PlayerMovedEvent;
@@ -83,10 +86,10 @@ class GameFactory implements Game {
         return this.status;
     };
 
-    save(): GameUuid {
+    async save(): Promise<GameUuid> {
         const gameUuid = uuidv4();
 
-        this.repository.save(
+        return await this.repository.save(
             {
                 board: deepClone(this.board),
                 activePlayer: this.activePlayer,
@@ -95,17 +98,14 @@ class GameFactory implements Game {
             },
             gameUuid
         );
-
-        return gameUuid;
     }
 
-    load(gameId: GameUuid): void {
-        const gameToLoad = this.repository.load(gameId);
+    async load(gameId: GameUuid): Promise<void> {
+        const gameToLoad = await this.repository.load(gameId);
 
         if (gameToLoad !== undefined) {
-            const { board, activePlayer, players, status } =
-                deepClone(gameToLoad);
-            this.board = board;
+            const { board, activePlayer, players, status } = gameToLoad;
+            this.board = deepClone(board);
             this.activePlayer = activePlayer;
             this.players = players;
             this.status = status;

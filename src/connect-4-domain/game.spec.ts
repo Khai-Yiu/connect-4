@@ -145,7 +145,6 @@ describe('game', () => {
                   |--|--|--|--|--|--|--|"
                 `);
             });
-            it.todo('saves the game', () => {});
         });
         describe('given custom board dimensions', () => {
             describe('with 0 rows', () => {
@@ -916,10 +915,10 @@ describe('game', () => {
     });
     describe('persisting a game', () => {
         describe('given defaults', () => {
-            it('saves and loads a game using an in-memory repository', () => {
+            it('saves and loads a game using an in-memory repository', async () => {
                 const game = new GameFactory();
-                const gameId = game.save();
-                game.load(gameId);
+                const gameId = await game.save();
+                await game.load(gameId);
                 expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
                   "
                   |--|--|--|--|--|--|--|
@@ -950,7 +949,7 @@ describe('game', () => {
         });
         describe('given a custom repository', () => {
             describe('containing a previously saved game', () => {
-                it('loads the saved game after the game is reset', () => {
+                it('loads the saved game after the game is reset', async () => {
                     const game = new GameFactory();
                     game.move(
                         createMovePlayerCommand({
@@ -970,9 +969,9 @@ describe('game', () => {
                             }
                         })
                     );
-                    const gameId = game.save();
+                    const gameId = await game.save();
                     game.reset();
-                    game.load(gameId);
+                    await game.load(gameId);
                     expect(toAsciiTable(game.getBoard()))
                         .toMatchInlineSnapshot(`
                       "
@@ -1001,15 +1000,15 @@ describe('game', () => {
                     expect(game.getStatus()).toBe('IN_PROGRESS');
                 });
             });
-            it('saves the game', () => {
+            it('saves the game', async () => {
                 const repository = new InMemoryRepository();
                 const game = new GameFactory({
                     repository
                 });
-                const gameId = game.save();
+                const gameId = await game.save();
 
                 const { board, activePlayer, players, status } =
-                    repository.load(gameId) as PersistedGame;
+                    (await repository.load(gameId)) as PersistedGame;
 
                 expect(toAsciiTable(board)).toMatchInlineSnapshot(`
                   "
@@ -1034,11 +1033,11 @@ describe('game', () => {
                 });
                 expect(status).toBe('IN_PROGRESS');
             });
-            it('loads a game', () => {
+            it('loads a game', async () => {
                 const repository = new InMemoryRepository();
                 const game = new GameFactory({ repository });
-                const gameId = game.save();
-                game.load(gameId);
+                const gameId = await game.save();
+                await game.load(gameId);
                 expect(toAsciiTable(game.getBoard())).toMatchInlineSnapshot(`
                   "
                   |--|--|--|--|--|--|--|
@@ -1067,13 +1066,13 @@ describe('game', () => {
                 expect(game.getStatus()).toBe('IN_PROGRESS');
             });
             describe('and an invalid UUID', () => {
-                it('throws an error', () => {
+                it('throws an error', async () => {
                     const repository = new InMemoryRepository();
                     const game = new GameFactory({ repository });
                     const invalidGameId = uuidv4();
-                    expect(() => {
-                        game.load(invalidGameId);
-                    }).toThrow('The provided game UUID is invalid.');
+                    await expect(game.load(invalidGameId)).rejects.toThrow(
+                        'The provided game UUID is invalid.'
+                    );
                 });
             });
         });

@@ -1,11 +1,15 @@
+import mongoose, { Model } from 'mongoose';
 import { BoardCell } from '@/connect-4-domain/game-types';
-import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { PersistedGame, GameStatus } from './game-types';
 import { v4 as uuidv4 } from 'uuid';
+import MongoGameRepository, {
+    GameDocument,
+    gameSchema
+} from '@/connect-4-domain/mongo-game-repository';
 
-describe('in-memory-repository', () => {
+describe('type-orm-game-repository', () => {
     const customResolver = (value: string): BoardCell => {
         const parsedValue = Number.parseInt(value);
 
@@ -20,12 +24,12 @@ describe('in-memory-repository', () => {
         };
     };
     describe('given defaults', () => {
-        it('creates an in-memory repository', () => {
-            const repository = new InMemoryRepository();
-            expect(repository).toBeInstanceOf(InMemoryRepository);
+        it('creates a typeORM repository', () => {
+            const repository = new MongoGameRepository();
+            expect(repository).toBeInstanceOf(MongoGameRepository);
         });
         it('loads a saved game', async () => {
-            const repository = new InMemoryRepository();
+            const repository = new MongoGameRepository();
             const asciiTable = `
 |---|---|---|---|
 |   |   |   |   |
@@ -45,21 +49,34 @@ describe('in-memory-repository', () => {
             expect(await repository.load(gameId)).toMatchObject(persistedGame);
         });
         it('returns undefined when loading a non-existent game', async () => {
-            const repository = new InMemoryRepository();
+            const repository = new MongoGameRepository();
             const gameId = uuidv4();
             expect(await repository.load(gameId)).toBe(undefined);
         });
     });
-    describe('given a store', () => {
+    describe.skip('given a store', () => {
         const asciiTable = `
 |---|---|---|---|
 |   |   |   |   |
 |---|---|---|---|
 |   |   |   |   |
 |---|---|---|---|`;
+
+        let gameModel: Model<GameDocument>;
+        let repository: MongoGameRepository;
+
+        beforeEach(async () => {
+            await mongoose.connect('mongodb://localhost:27017/test');
+
+            gameModel = mongoose.model<GameDocument>('Game', gameSchema);
+            repository = new MongoGameRepository(gameModel);
+        });
+
+        afterEach(async () => {
+            await mongoose.disconnect();
+        });
+
         it('saves a game', async () => {
-            const store = new Map();
-            const repository = new InMemoryRepository(store);
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
@@ -70,11 +87,11 @@ describe('in-memory-repository', () => {
                 status: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
-            expect(await store.get(gameId)).toMatchObject(persistedGame);
+            expect(
+                await gameModel.findOneBy({ gameUuid: gameId })
+            ).toMatchObject(persistedGame);
         });
         it('saves a game with a provided UUID', async () => {
-            const store = new Map();
-            const repository = new InMemoryRepository(store);
             const gameId = uuidv4();
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
@@ -90,13 +107,11 @@ describe('in-memory-repository', () => {
                 gameId
             );
             expect(retrievedGameId).toBe(gameId);
-            expect(await store.get(retrievedGameId)).toMatchObject(
-                persistedGame
-            );
+            expect(
+                gameModel.findOne({ gameUuid: retrievedGameId }).exec()
+            ).toMatchObject(persistedGame);
         });
         it('loads a saved game', async () => {
-            const store = new Map();
-            const repository = new InMemoryRepository(store);
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
@@ -110,8 +125,6 @@ describe('in-memory-repository', () => {
             expect(await repository.load(gameId)).toBe(persistedGame);
         });
         it('returns undefined when loading a non-existent game', async () => {
-            const store = new Map();
-            const repository = new InMemoryRepository(store);
             const gameId = uuidv4();
             expect(await repository.load(gameId)).toBe(undefined);
         });
