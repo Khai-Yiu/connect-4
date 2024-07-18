@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import mongoose from 'mongoose';
 
 interface MongoDBClientInterface {
@@ -7,6 +6,8 @@ interface MongoDBClientInterface {
 
 export default class MongoDBClient implements MongoDBClientInterface {
     connect() {
-        mongoose.connect(process.env.MONGODB_URI);
+        if (mongoose.connection.readyState === 0) {
+            mongoose.connect(process.env.MONGODB_URI!);
+        }
     }
 }
