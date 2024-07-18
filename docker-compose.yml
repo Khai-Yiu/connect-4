@@ -1,7 +1,0 @@
-services:
-    app:
-        build:
-            dockerfile: Dockerfile
-
-        ports:
-            - 5432:80
