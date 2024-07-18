@@ -1209,6 +1209,15 @@ describe('game', () => {
                     });
                     expect(game.getStatus()).toBe('IN_PROGRESS');
                 });
+                it('deletes a game', async () => {
+                    const repository = new MongoGameRepository();
+                    const game = new GameFactory({ repository });
+                    const gameId = await game.save();
+                    await game.delete(gameId);
+                    await expect(game.load(gameId)).rejects.toThrow(
+                        'The provided game UUID is invalid.'
+                    );
+                });
                 it('throws an error when deleting a non-existent game', async () => {
                     const repository = new MongoGameRepository();
                     const game = new GameFactory({ repository });
