@@ -954,6 +954,13 @@ describe('game', () => {
                 const game = new GameFactory();
                 const gameId = await game.save();
                 await game.delete(gameId);
+                await expect(game.load(gameId)).rejects.toThrow(
+                    'The provided game UUID is invalid.'
+                );
+            });
+            it('throws an error when deleting a non-existent game', async () => {
+                const game = new GameFactory();
+                const gameId = uuidv4();
                 await expect(game.delete(gameId)).rejects.toThrow(
                     'Game does not exist in the repository.'
                 );
