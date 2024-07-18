@@ -1209,6 +1209,14 @@ describe('game', () => {
                     });
                     expect(game.getStatus()).toBe('IN_PROGRESS');
                 });
+                it('throws an error when deleting a non-existent game', async () => {
+                    const repository = new MongoGameRepository();
+                    const game = new GameFactory({ repository });
+                    const gameId = uuidv4();
+                    await expect(game.delete(gameId)).rejects.toThrow(
+                        'Game does not exist in the repository.'
+                    );
+                });
             });
         });
     });
