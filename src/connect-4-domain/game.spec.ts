@@ -1094,6 +1094,14 @@ describe('game', () => {
                     'The provided game UUID is invalid.'
                 );
             });
+            it('throws an error when deleting a non-existent game', async () => {
+                const repository = new InMemoryRepository();
+                const game = new GameFactory({ repository });
+                const gameId = uuidv4();
+                await expect(game.delete(gameId)).rejects.toThrow(
+                    'Game does not exist in the repository.'
+                );
+            });
             describe('and an invalid UUID', () => {
                 it('throws an error', async () => {
                     const repository = new InMemoryRepository();
