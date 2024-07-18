@@ -11,7 +11,6 @@ import { createPortal } from 'react-dom';
 import { GameUuid } from '@/connect-4-domain/game-types';
 import LoadGameDialog from '@/connect-4-ui/LoadGameDialog';
 import SavedGame from '@/connect-4-ui/SavedGame';
-import MongoGameRepository from '@/connect-4-domain/mongo-game-repository';
 
 function createHandleStartGameClick(
     setActiveGame: (activeGame: {
@@ -21,9 +20,7 @@ function createHandleStartGameClick(
     gameApiRef: MutableRefObject<GameApi | null>
 ): () => void {
     return function handleStartGameClick(): void {
-        gameApiRef.current = createGameApi(
-            new GameFactory({ repository: new MongoGameRepository() })
-        );
+        gameApiRef.current = createGameApi(new GameFactory());
         setActiveGame({
             gameOverview: {
                 round: {
@@ -148,7 +145,7 @@ function createHandleBoardCellClick(
 }
 
 function createHandleSaveGameClick(
-    savedGamesRef: MutableRefObject<GameUuid[]>,
+    setSavedGames: React.Dispatch<React.SetStateAction<GameUuid[]>>,
     gameApi: GameApi | null
 ): () => void {
     if (gameApi === null) {
@@ -157,7 +154,10 @@ function createHandleSaveGameClick(
 
     return async function handleSaveGameClick() {
         const newGameId = await gameApi.saveGame();
-        savedGamesRef.current.push(newGameId);
+        setSavedGames((prevSavedGames: GameUuid[]): GameUuid[] => [
+            ...prevSavedGames,
+            newGameId
+        ]);
     };
 }
 
@@ -201,8 +201,21 @@ function createHandleLoadGameClick(
     };
 }
 
+function createHandleDeleteGameClick(
+    setSavedGames: React.Dispatch<React.SetStateAction<GameUuid[]>>,
+    gameApi: GameApi | null
+): (gameId: GameUuid) => void {
+    return function handleDeleteGameClick(gameId: GameUuid): void {
+        gameApi.deleteGame(gameId);
+        setSavedGames((prevSavedGames) => [
+            ...prevSavedGames.filter((savedGameId) => savedGameId !== gameId)
+        ]);
+    };
+}
+
 function createLoadGameDialog(
     savedGames: GameUuid[],
+    setSavedGames: React.Dispatch<React.SetStateAction<GameUuid[]>>,
     gameApi: GameApi,
     setActiveGame: (activeGame: {
         gameOverview: GameOverviewProps;
@@ -232,6 +245,10 @@ function createLoadGameDialog(
                                         setShowOverlay,
                                         gameApi
                                     )}
+                                    handleDeleteGame={createHandleDeleteGameClick(
+                                        setSavedGames,
+                                        gameApi
+                                    )}
                                 />
                             )
                         )}
@@ -253,15 +270,16 @@ const App = () => {
         gameOverview: GameOverviewProps;
         board: BoardProps;
     }>();
+    const [savedGames, setSavedGames] = useState<GameUuid[]>([]);
     const [showOverlay, setShowOverlay] = useState<Boolean>(false);
-    const savedGamesRef = useRef([]);
     const gameApiRef = useRef(null);
 
     return (
         <>
             {showOverlay &&
                 createLoadGameDialog(
-                    savedGamesRef.current,
+                    savedGames,
+                    setSavedGames,
                     gameApiRef.current!,
                     setActiveGame,
                     setShowOverlay
@@ -277,7 +295,7 @@ const App = () => {
                     gameApiRef
                 )}
                 onSaveGameClick={createHandleSaveGameClick(
-                    savedGamesRef,
+                    setSavedGames,
                     gameApiRef.current
                 )}
                 onLoadGameClick={() => setShowOverlay(true)}

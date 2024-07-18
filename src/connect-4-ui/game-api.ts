@@ -77,6 +77,7 @@ export default function createGameApi(game: GameFactory): GameApi {
         getBoard: () => game.getBoard().map(rowMapper),
         saveGame: async () => await game.save(),
         loadGame: async (id: GameUuid) => await game.load(id),
+        deleteGame: async (id: GameUuid) => await game.delete(id),
         resetGame: () => game.reset()
     };
 

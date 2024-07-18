@@ -5,6 +5,7 @@ type SavedGameProps = {
     gameId: GameUuid;
     savedDate: Date;
     handleLoadGame?: (gameId: GameUuid) => void;
+    handleDeleteGame?: (gameId: GameUuid) => void;
 };
 
 const StyledSavedGame = styled.div`
@@ -24,6 +25,19 @@ const StyledLoadButton = styled.button`
     cursor: pointer;
 `;
 
+const StyledDeleteButton = styled.button`
+    background-color: red;
+    font-weight: bold;
+    border: 2px solid white;
+    cursor: pointer;
+`;
+
+const StyledButtonWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+`;
+
 const StyledWrapper = styled.div`
     display: flex;
     justify-content: space-between;
@@ -32,15 +46,23 @@ const StyledWrapper = styled.div`
 const SavedGame = ({
     gameId,
     savedDate,
-    handleLoadGame = () => {}
+    handleLoadGame = () => {},
+    handleDeleteGame = () => {}
 }: SavedGameProps) => {
     return (
         <StyledSavedGame>
             <StyledWrapper>
                 <p>{`Game ID: ${gameId}`}</p>
-                <StyledLoadButton onClick={() => handleLoadGame(gameId)}>
-                    Load
-                </StyledLoadButton>
+                <StyledButtonWrapper>
+                    <StyledLoadButton onClick={() => handleLoadGame(gameId)}>
+                        Load
+                    </StyledLoadButton>
+                    <StyledDeleteButton
+                        onClick={() => handleDeleteGame(gameId)}
+                    >
+                        Delete
+                    </StyledDeleteButton>
+                </StyledButtonWrapper>
             </StyledWrapper>
             <p>{`Date saved: ${savedDate.toString()}`}</p>
         </StyledSavedGame>
