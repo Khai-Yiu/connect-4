@@ -97,6 +97,13 @@ describe('mongo-game-repository', () => {
             await repository.delete(gameId);
             expect(await repository.load(gameId)).toBe(undefined);
         });
+        it('throws an error when deleting a non-existent game', async () => {
+            const repository = new MongoGameRepository();
+            const gameId = uuidv4();
+            await expect(repository.delete(gameId)).rejects.toThrow(
+                'Game does not exist in the repository.'
+            );
+        });
     });
     describe('given a store', () => {
         const asciiTable = `

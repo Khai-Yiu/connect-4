@@ -95,8 +95,10 @@ export default class MongoGameRepository implements GameRepository {
     }
 
     async delete(gameUuid: GameUuid): Promise<void> {
-        await this.gameModel.deleteOne({ gameUuid }).catch(() => {
+        const { deletedCount } = await this.gameModel.deleteOne({ gameUuid });
+
+        if (deletedCount === 0) {
             throw new Error('Game does not exist in the repository.');
-        });
+        }
     }
 }
