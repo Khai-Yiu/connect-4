@@ -49,6 +49,27 @@ describe('in-memory-repository', () => {
             const gameId = uuidv4();
             expect(await repository.load(gameId)).toBe(undefined);
         });
+        it('deletes a saved game', async () => {
+            const repository = new InMemoryRepository();
+            const asciiTable = `
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   |   |
+|---|---|---|---|`;
+            const persistedGame: PersistedGame = {
+                board: parseAsciiTable(asciiTable, customResolver),
+                activePlayer: 1,
+                players: {
+                    1: { playerNumber: 1, remainingDiscs: 4 },
+                    2: { playerNumber: 2, remainingDiscs: 4 }
+                },
+                status: 'IN_PROGRESS' as GameStatus
+            };
+            const gameId = await repository.save(persistedGame);
+            await repository.delete(gameId);
+            expect(await repository.load(gameId)).toBe(undefined);
+        });
         it('throws an error when deleting a non-existent game', async () => {
             const repository = new InMemoryRepository();
             const gameId = uuidv4();
