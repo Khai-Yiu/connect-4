@@ -96,7 +96,7 @@ class GameFactory implements Game {
                 {
                     board: deepClone(this.board),
                     activePlayer: this.activePlayer,
-                    players: this.players,
+                    players: deepClone(this.players),
                     status: this.status
                 },
                 gameUuid
@@ -113,7 +113,7 @@ class GameFactory implements Game {
             const { board, activePlayer, players, status } = gameToLoad;
             this.board = deepClone(board);
             this.activePlayer = activePlayer;
-            this.players = players;
+            this.players = deepClone(players);
             this.status = status;
         } else {
             throw new Error('The provided game UUID is invalid.');

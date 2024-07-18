@@ -44,8 +44,6 @@ describe('mongo-game-repository', () => {
     });
 
     describe('given defaults', () => {
-        afterAll(async () => {});
-
         it('creates a mongo game repository', async () => {
             const repository = new MongoGameRepository();
             expect(repository).toBeInstanceOf(MongoGameRepository);

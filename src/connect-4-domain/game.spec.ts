@@ -1139,7 +1139,6 @@ describe('game', () => {
                     );
 
                     const gameId = await game.save();
-                    console.log(gameId);
                     const { board, activePlayer, players, status } =
                         (await repository.load(gameId)) as PersistedGame;
 

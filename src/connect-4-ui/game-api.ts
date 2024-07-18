@@ -27,6 +27,7 @@ export interface GameApi {
     getBoard: () => Array<Array<BoardCell>>;
     saveGame: () => Promise<GameUuid>;
     loadGame: (id: GameUuid) => Promise<void>;
+    deleteGame: (id: GameUuid) => Promise<void>;
     resetGame: () => void;
 }
 

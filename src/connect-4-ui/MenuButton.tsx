@@ -14,9 +14,16 @@ const StyledMenuButton = styled.button`
     cursor: pointer;
     outline: none;
     border: none;
+    transition: background 0.8s;
 
     &:hover {
-        background-color: #a2a8d3;
+        background: #a2a8d3;
+    }
+
+    &:active {
+        background-color: #408ed0;
+        background-size: 100%;
+        transition: background 0s;
     }
 `;
 

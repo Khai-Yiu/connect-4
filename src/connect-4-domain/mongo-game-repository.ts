@@ -39,7 +39,7 @@ export const gameSchema = new mongoose.Schema({
 export interface GameDocument extends Document, PersistedGame {}
 
 export default class MongoGameRepository implements GameRepository {
-    private gameModel!: Model<GameDocument>;
+    private gameModel: Model<GameDocument>;
 
     constructor(gameModel?: Model<GameDocument>) {
         if (gameModel !== undefined) {
