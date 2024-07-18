@@ -23,4 +23,12 @@ export default class InMemoryRepository implements GameRepository {
     async load(gameUuid: GameUuid): Promise<PersistedGame | undefined> {
         return this.store.get(gameUuid);
     }
+
+    async delete(gameUuid: GameUuid): Promise<void> {
+        const isDeleted = this.store.delete(gameUuid);
+
+        if (!isDeleted) {
+            throw new Error('Game does not exist in the repository.');
+        }
+    }
 }
