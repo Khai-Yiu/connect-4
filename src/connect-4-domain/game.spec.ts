@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {
     MovePlayerCommand,
     createMovePlayerCommand
@@ -13,8 +14,11 @@ import { BoardCell, PersistedGame } from '@/connect-4-domain/game-types';
 import InMemoryRepository from '@/connect-4-domain/in-memory-repository';
 import _toAsciiTable from '@/connect-4-domain/to-ascii-table';
 import { pipe } from 'ramda';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
+import MongoGameRepository from './mongo-game-repository';
+import { afterAll } from 'vitest';
+import mongoose from 'mongoose';
 
 type MovePlayerCommandPayload = {
     player: 1 | 2;
@@ -946,6 +950,14 @@ describe('game', () => {
                 });
                 expect(game.getStatus()).toBe('IN_PROGRESS');
             });
+            it('deletes a game', async () => {
+                const game = new GameFactory();
+                const gameId = await game.save();
+                await game.delete(gameId);
+                await expect(game.delete(gameId)).rejects.toThrow(
+                    'Game does not exist in the repository.'
+                );
+            });
         });
         describe('given a custom repository', () => {
             describe('containing a previously saved game', () => {
@@ -1000,6 +1012,7 @@ describe('game', () => {
                     expect(game.getStatus()).toBe('IN_PROGRESS');
                 });
             });
+
             it('saves the game', async () => {
                 const repository = new InMemoryRepository();
                 const game = new GameFactory({
@@ -1073,6 +1086,104 @@ describe('game', () => {
                     await expect(game.load(invalidGameId)).rejects.toThrow(
                         'The provided game UUID is invalid.'
                     );
+                });
+            });
+            describe("and it's a mongo repository", () => {
+                beforeAll(async () => {
+                    if (mongoose.connection.readyState === 0) {
+                        await mongoose.connect(process.env.MONGODB_URI!);
+                    }
+                });
+
+                afterAll(async () => {
+                    await mongoose.connection.close();
+                });
+
+                it('saves the game', async () => {
+                    const repository = new MongoGameRepository();
+                    const game = new GameFactory({
+                        repository: repository
+                    });
+                    game.move(
+                        createMovePlayerCommand({
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 0
+                            }
+                        })
+                    );
+
+                    const gameId = await game.save();
+                    console.log(gameId);
+                    const { board, activePlayer, players, status } =
+                        (await repository.load(gameId)) as PersistedGame;
+
+                    expect(toAsciiTable(board)).toMatchInlineSnapshot(`
+                      "
+                      |---|--|--|--|--|--|--|
+                      | 1 |  |  |  |  |  |  |
+                      |---|--|--|--|--|--|--|
+                      |   |  |  |  |  |  |  |
+                      |---|--|--|--|--|--|--|
+                      |   |  |  |  |  |  |  |
+                      |---|--|--|--|--|--|--|
+                      |   |  |  |  |  |  |  |
+                      |---|--|--|--|--|--|--|
+                      |   |  |  |  |  |  |  |
+                      |---|--|--|--|--|--|--|
+                      |   |  |  |  |  |  |  |
+                      |---|--|--|--|--|--|--|"
+                    `);
+                    expect(activePlayer).toBe(2);
+                    expect(players).toMatchObject({
+                        1: { playerNumber: 1, remainingDiscs: 20 },
+                        2: { playerNumber: 2, remainingDiscs: 21 }
+                    });
+                    expect(status).toBe('IN_PROGRESS');
+                });
+                it('loads a game', async () => {
+                    const repository = new MongoGameRepository();
+                    const game = new GameFactory({ repository });
+                    game.move(
+                        createMovePlayerCommand({
+                            player: 1,
+                            targetCell: {
+                                row: 0,
+                                column: 0
+                            }
+                        })
+                    );
+
+                    const gameId = await game.save();
+                    await game.load(gameId);
+                    expect(toAsciiTable(game.getBoard()))
+                        .toMatchInlineSnapshot(`
+                      "
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|
+                      |  |  |  |  |  |  |  |
+                      |--|--|--|--|--|--|--|"
+                    `);
+                    expect(game.getActivePlayer()).toBe(2);
+                    expect(game.getPlayerStats(1)).toMatchObject({
+                        playerNumber: 1,
+                        remainingDiscs: 20
+                    });
+                    expect(game.getPlayerStats(2)).toMatchObject({
+                        playerNumber: 2,
+                        remainingDiscs: 21
+                    });
+                    expect(game.getStatus()).toBe('IN_PROGRESS');
                 });
             });
         });

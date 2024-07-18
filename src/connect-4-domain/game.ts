@@ -29,6 +29,7 @@ export interface GameRepository {
         gameUuid?: GameUuid
     ) => Promise<GameUuid>;
     load: (gameUuid: GameUuid) => Promise<PersistedGame | undefined>;
+    delete: (gameUuid: GameUuid) => Promise<void>;
 }
 
 interface Game {
@@ -38,6 +39,7 @@ interface Game {
     getStatus: () => GameStatus;
     save: () => Promise<GameUuid>;
     load: (gameId: GameUuid) => Promise<void>;
+    delete: (gameId: GameUuid) => Promise<void>;
     move: (
         movePlayerCommand: MovePlayerCommand
     ) => PlayerMoveFailedEvent | PlayerMovedEvent;
@@ -89,15 +91,19 @@ class GameFactory implements Game {
     async save(): Promise<GameUuid> {
         const gameUuid = uuidv4();
 
-        return await this.repository.save(
-            {
-                board: deepClone(this.board),
-                activePlayer: this.activePlayer,
-                players: this.players,
-                status: this.status
-            },
-            gameUuid
-        );
+        try {
+            return await this.repository.save(
+                {
+                    board: deepClone(this.board),
+                    activePlayer: this.activePlayer,
+                    players: this.players,
+                    status: this.status
+                },
+                gameUuid
+            );
+        } catch (error) {
+            throw new Error('Failed to save game.');
+        }
     }
 
     async load(gameId: GameUuid): Promise<void> {
@@ -111,6 +117,14 @@ class GameFactory implements Game {
             this.status = status;
         } else {
             throw new Error('The provided game UUID is invalid.');
+        }
+    }
+
+    async delete(gameId: GameUuid): Promise<void> {
+        try {
+            await this.repository.delete(gameId);
+        } catch (error) {
+            throw error;
         }
     }
 
