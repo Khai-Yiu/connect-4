@@ -1085,6 +1085,15 @@ describe('game', () => {
                 });
                 expect(game.getStatus()).toBe('IN_PROGRESS');
             });
+            it('deletes a game', async () => {
+                const repository = new InMemoryRepository();
+                const game = new GameFactory({ repository });
+                const gameId = await game.save();
+                await game.delete(gameId);
+                await expect(game.load(gameId)).rejects.toThrow(
+                    'The provided game UUID is invalid.'
+                );
+            });
             describe('and an invalid UUID', () => {
                 it('throws an error', async () => {
                     const repository = new InMemoryRepository();
