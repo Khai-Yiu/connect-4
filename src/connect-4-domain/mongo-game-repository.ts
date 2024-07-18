@@ -39,21 +39,13 @@ export const gameSchema = new mongoose.Schema({
 export interface GameDocument extends Document, PersistedGame {}
 
 export default class MongoGameRepository implements GameRepository {
-    private gameModel: Model<GameDocument>;
+    private gameModel!: Model<GameDocument>;
 
     constructor(gameModel?: Model<GameDocument>) {
-        console.log(gameModel);
         if (gameModel !== undefined) {
             this.gameModel = gameModel;
         } else {
-            (async () => {
-                await mongoose.connect('mongodb://localhost:27017/test');
-
-                this.gameModel = mongoose.model<GameDocument>(
-                    'Game',
-                    gameSchema
-                );
-            })();
+            this.gameModel = mongoose.model<GameDocument>('Game', gameSchema);
         }
     }
 
@@ -72,8 +64,7 @@ export default class MongoGameRepository implements GameRepository {
 
             return gameUuid;
         } catch (error) {
-            console.log(error);
-            return gameUuid;
+            throw new Error('Failed to save game.');
         }
     }
 
@@ -87,7 +78,10 @@ export default class MongoGameRepository implements GameRepository {
                 return {
                     board: gameToLoad.board,
                     activePlayer: gameToLoad.activePlayer,
-                    players: gameToLoad.players,
+                    players: {
+                        1: gameToLoad.players['1'],
+                        2: gameToLoad.players['2']
+                    },
                     status: gameToLoad.status
                 };
             } else {
@@ -98,5 +92,11 @@ export default class MongoGameRepository implements GameRepository {
 
             return undefined;
         }
+    }
+
+    async delete(gameUuid: GameUuid): Promise<void> {
+        await this.gameModel.deleteOne({ gameUuid }).catch(() => {
+            throw new Error('Game does not exist in the repository.');
+        });
     }
 }
