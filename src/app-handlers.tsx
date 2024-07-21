@@ -8,6 +8,23 @@ import LoadGameDialog from '@/connect-4-ui/LoadGameDialog';
 import SavedGame from '@/connect-4-ui/SavedGame';
 import { GameOverviewProps } from './connect-4-ui/GameOverview';
 import { GameUuid } from './connect-4-domain/game-types';
+import MongoGameRepository from './connect-4-domain/mongo-game-repository';
+import InMemoryRepository from './connect-4-domain/in-memory-repository';
+
+function resolveGameFactoryConfiguration() {
+    const repository =
+        import.meta.env.VITE_REPOSITORY === 'mongo'
+            ? new MongoGameRepository()
+            : new InMemoryRepository();
+
+    return {
+        boardDimensions: {
+            rows: 6,
+            columns: 7
+        },
+        repository
+    };
+}
 
 export function createHandleStartGameClick(
     setActiveGame: (activeGame: {
@@ -17,7 +34,9 @@ export function createHandleStartGameClick(
     gameApiRef: MutableRefObject<GameApi | null>
 ): () => void {
     return function handleStartGameClick(): void {
-        gameApiRef.current = createGameApi(new GameFactory());
+        gameApiRef.current = createGameApi(
+            new GameFactory(resolveGameFactoryConfiguration())
+        );
         setActiveGame({
             gameOverview: {
                 round: {

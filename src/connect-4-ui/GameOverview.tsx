@@ -16,8 +16,6 @@ export type GameOverviewProps = {
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    width: 80%;
 `;
 
 export const GameOverview = ({

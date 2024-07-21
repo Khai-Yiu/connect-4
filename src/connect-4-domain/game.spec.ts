@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import {
     MovePlayerCommand,
     createMovePlayerCommand
@@ -1115,7 +1114,9 @@ describe('game', () => {
             describe("and it's a mongo repository", () => {
                 beforeAll(async () => {
                     if (mongoose.connection.readyState === 0) {
-                        await mongoose.connect(process.env.MONGODB_URI!);
+                        await mongoose.connect(
+                            import.meta.env.VITE_MONGODB_URI!
+                        );
                     }
                 });
 

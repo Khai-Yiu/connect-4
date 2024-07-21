@@ -10,25 +10,29 @@ export type PlayerRoundOverviewProps = {
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: end;
+    flex: 1;
     background-color: #a2a8d3;
     color: white;
-    font-size: 1rem;
-    padding: 10px 0;
-    width: 100%;
+    font-size: 0.8rem;
+    padding: 10px 20px 10px 20px;
     font-family: monospace;
+    gap: 20px;
 `;
 
-const StyledTopContainer = styled.div`
+const StyledContainer = styled.div`
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 5px 10px;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    height: 2rem;
 `;
 
-const StyledBottomContainer = styled.div`
+const StyledText = styled.p`
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
     text-align: left;
-    padding: 5px 10px;
 `;
 
 const StyledToken = styled.div<{ $isActiveTurn: boolean; $discColour: string }>`
@@ -37,10 +41,10 @@ const StyledToken = styled.div<{ $isActiveTurn: boolean; $discColour: string }>`
     border: ${({ $isActiveTurn }) =>
         $isActiveTurn ? '3px white dotted' : 'none'};
     border-radius: 50%;
-    height: 40px;
-    min-width: 40px;
-    margin-left: 20px;
+    min-height: 30px;
+    min-width: 30px;
     box-sizing: border-box;
+    right: 100%;
 `;
 
 export const PlayerRoundOverview = ({
@@ -50,15 +54,13 @@ export const PlayerRoundOverview = ({
     discColour
 }: PlayerRoundOverviewProps) => (
     <StyledWrapper>
-        <StyledTopContainer>
-            <p>{`Player: ${player}`}</p>
+        <StyledContainer>
+            <StyledText>{`Player: ${player}`}</StyledText>
             <StyledToken
                 $isActiveTurn={isActiveTurn}
                 $discColour={discColour}
             />
-        </StyledTopContainer>
-        <StyledBottomContainer>
-            <p>{`Remaining discs: ${remainingDiscs}`}</p>
-        </StyledBottomContainer>
+        </StyledContainer>
+        <StyledText>{`Remaining discs: ${remainingDiscs}`}</StyledText>
     </StyledWrapper>
 );

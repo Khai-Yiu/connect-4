@@ -7,7 +7,7 @@ interface MongoDBClientInterface {
 export default class MongoDBClient implements MongoDBClientInterface {
     connect() {
         if (mongoose.connection.readyState === 0) {
-            mongoose.connect(process.env.MONGODB_URI!);
+            mongoose.connect(import.meta.env.VITE_MONGODB_URI!);
         }
     }
 }

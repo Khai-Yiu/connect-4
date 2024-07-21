@@ -27,6 +27,9 @@ const StyledLoadGameDialog = styled.div`
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: cyan;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
 `;
 
 const StyledHeading = styled.h1`
@@ -41,11 +44,15 @@ const StyledCloseButton = styled.button`
     height: 40px;
     margin-right: 10px;
     font-size: 1.5rem;
-    color: black;
+    color: #38598b;
     font-weight: bold;
-    background-color: cyan;
-    border: 2px solid white;
+    background-color: inherit;
+    border: none;
     cursor: pointer;
+
+    &:hover {
+        background-color: cyan;
+    }
 `;
 const StyledSavedGames = styled.div`
     display: flex;

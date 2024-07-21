@@ -51,7 +51,7 @@ export const Board = (
 const StyledBoard = styled.div<{ $cells: Array<Array<BoardCellProps>> }>`
     --row: ${({ $cells }) => $cells!.length};
     --column: ${({ $cells }) => $cells![0].length};
-    --min-size: min(70vh, 70vw);
+    --min-size: min(80vh, 80vw);
     --cell-size: calc(var(--min-size) / max(var(--row), var(--column)));
 
     display: grid;
@@ -59,10 +59,6 @@ const StyledBoard = styled.div<{ $cells: Array<Array<BoardCellProps>> }>`
     grid-template-rows: repeat(var(--row), var(--cell-size));
     border: 8px solid cyan;
     border-top: none;
-
-    @media (max-width: 1110px) {
-        --min-size: 70vw;
-    }
 `;
 
 const GridBoardCell = styled(BoardCell)<GridBoardCellProps>`

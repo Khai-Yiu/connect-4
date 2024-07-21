@@ -15,6 +15,7 @@ const StyledSavedGame = styled.div`
     font-family: monospace;
     width: 90%;
     margin: 10px;
+    border-radius: 5px;
 `;
 
 const StyledLoadButton = styled.button`
@@ -22,6 +23,7 @@ const StyledLoadButton = styled.button`
     background-color: cyan;
     font-weight: bold;
     border: 2px solid white;
+    border-radius: 5px;
     cursor: pointer;
 `;
 
@@ -29,6 +31,7 @@ const StyledDeleteButton = styled.button`
     background-color: red;
     font-weight: bold;
     border: 2px solid white;
+    border-radius: 5px;
     cursor: pointer;
 `;
 
@@ -41,6 +44,13 @@ const StyledButtonWrapper = styled.div`
 const StyledWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    padding: 0 0 20px 0;
+`;
+
+const StyledText = styled.p`
+    flex-wrap: wrap;
+    font-weight: bold;
+    font-size: 1rem;
 `;
 
 const SavedGame = ({
@@ -52,7 +62,7 @@ const SavedGame = ({
     return (
         <StyledSavedGame>
             <StyledWrapper>
-                <p>{`Game ID: ${gameId}`}</p>
+                <StyledText>{`Game ID: ${gameId}`}</StyledText>
                 <StyledButtonWrapper>
                     <StyledLoadButton onClick={() => handleLoadGame(gameId)}>
                         Load
@@ -64,7 +74,7 @@ const SavedGame = ({
                     </StyledDeleteButton>
                 </StyledButtonWrapper>
             </StyledWrapper>
-            <p>{`Date saved: ${savedDate.toString()}`}</p>
+            <StyledText>{`Date saved: ${savedDate.toString()}`}</StyledText>
         </StyledSavedGame>
     );
 };

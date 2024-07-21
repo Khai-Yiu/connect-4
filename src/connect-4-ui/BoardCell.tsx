@@ -29,6 +29,7 @@ export const StyledBoardCell = styled.div`
     align-items: center;
     background: #a2a8d3;
     height: 100%;
+    width: 100%;
     cursor: pointer;
 `;
 

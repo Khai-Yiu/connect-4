@@ -7,13 +7,14 @@ export type MenuButtonProps = {
 
 const StyledMenuButton = styled.button`
     font-size: 1.6rem;
-    width: 200px;
+    width: fit-content;
     background-color: inherit;
     color: white;
     font-family: monospace;
     cursor: pointer;
     outline: none;
     border: none;
+    padding: 0 20px;
     transition: background 0.8s;
 
     &:hover {

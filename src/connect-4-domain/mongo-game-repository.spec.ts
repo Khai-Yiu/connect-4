@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import mongoose, { Model } from 'mongoose';
 import { BoardCell } from '@/connect-4-domain/game-types';
 import parseAsciiTable from '@/connect-4-domain/parse-ascii-table';
@@ -35,7 +34,7 @@ describe('mongo-game-repository', () => {
 
     beforeAll(async () => {
         if (mongoose.connection.readyState === 0) {
-            await mongoose.connect(process.env.MONGODB_URI!);
+            await mongoose.connect(import.meta.env.VITE_MONGODB_URI!);
         }
     });
 

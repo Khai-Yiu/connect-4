@@ -15,12 +15,12 @@ export type GameplayAreaProps = {
     onLoadGameClick: () => void;
 };
 
-const StyledGameplayArea = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+const StyledGameplayArea = styled.div<{
+    $activeGame: GameplayAreaProps['activeGame'];
+}>`
+    align-items: ${({ $activeGame }) =>
+        $activeGame === undefined ? 'center' : 'start'};
+    height: fit-content;
 `;
 
 const StyledButton = styled.button`
@@ -43,29 +43,39 @@ const StyledButton = styled.button`
     }
 `;
 
+const StyledBoardWrapper = styled.div`
+    margin-top: 1rem;
+`;
+
 const StyledTitle = styled.h1`
-    font-size: 80px;
+    font-size: 4rem;
     font-family: monospace;
     color: cyan;
 `;
 
 const StyledGameplayWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: center;
-    max-width: 100%;
-    gap: 40px;
-
-    @media (min-width: 880px) {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
+    gap: 1rem;
 `;
 
-const StyledGameplayAreaWrapper = styled.div`
-    height: 90vh;
+const StyledStartGameWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+`;
+
+const StyledGameplayInformation = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-left: 30px;
+    margin-right: 30px;
+    justify-content: center;
 `;
 
 export const GameplayArea = ({
@@ -75,26 +85,30 @@ export const GameplayArea = ({
     onSaveGameClick = () => {},
     onLoadGameClick = () => {}
 }: GameplayAreaProps) => (
-    <StyledGameplayAreaWrapper>
+    <>
         <GameplayAreaMenu>
-            <MenuButton text={'New Game'} onClick={onResetGameClick} />
-            <MenuButton text={'Save Game'} onClick={onSaveGameClick} />
-            <MenuButton text={'Load Game'} onClick={onLoadGameClick} />
+            <MenuButton text={'Reset'} onClick={onResetGameClick} />
+            <MenuButton text={'Save'} onClick={onSaveGameClick} />
+            <MenuButton text={'Load'} onClick={onLoadGameClick} />
         </GameplayAreaMenu>
-        <StyledGameplayArea>
+        <StyledGameplayArea $activeGame={activeGame}>
             {activeGame ? (
                 <StyledGameplayWrapper>
-                    <GameOverview {...activeGame.gameOverview} />
-                    <Board {...activeGame.board} />
+                    <StyledGameplayInformation>
+                        <GameOverview {...activeGame.gameOverview} />
+                    </StyledGameplayInformation>
+                    <StyledBoardWrapper>
+                        <Board {...activeGame.board} />
+                    </StyledBoardWrapper>
                 </StyledGameplayWrapper>
             ) : (
-                <>
+                <StyledStartGameWrapper>
                     <StyledTitle>Connect4</StyledTitle>
                     <StyledButton onClick={onStartGameClick}>
                         Start Game!
                     </StyledButton>
-                </>
+                </StyledStartGameWrapper>
             )}
         </StyledGameplayArea>
-    </StyledGameplayAreaWrapper>
+    </>
 );
