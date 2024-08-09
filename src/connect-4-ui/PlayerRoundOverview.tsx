@@ -10,7 +10,6 @@ export type PlayerRoundOverviewProps = {
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: end;
     flex: 1;
     background-color: #a2a8d3;
     color: white;
@@ -29,10 +28,10 @@ const StyledContainer = styled.div`
 `;
 
 const StyledText = styled.p`
-    margin: 0;
     font-size: 1rem;
     font-weight: bold;
     text-align: left;
+    white-space: normal;
 `;
 
 const StyledToken = styled.div<{ $isActiveTurn: boolean; $discColour: string }>`
