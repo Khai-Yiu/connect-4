@@ -58,8 +58,8 @@ export default class MongoGameRepository implements GameRepository {
                 gameUuid,
                 board: persistedGame.board,
                 activePlayer: persistedGame.activePlayer,
-                players: persistedGame.players,
-                status: persistedGame.status
+                playerStats: persistedGame.playerStats,
+                gameStatus: persistedGame.gameStatus
             });
 
             return gameUuid;
@@ -78,11 +78,11 @@ export default class MongoGameRepository implements GameRepository {
                 return {
                     board: gameToLoad.board,
                     activePlayer: gameToLoad.activePlayer,
-                    players: {
-                        1: gameToLoad.players['1'],
-                        2: gameToLoad.players['2']
+                    playerStats: {
+                        1: gameToLoad.playerStats['1'],
+                        2: gameToLoad.playerStats['2']
                     },
-                    status: gameToLoad.status
+                    gameStatus: gameToLoad.gameStatus
                 };
             } else {
                 return undefined;

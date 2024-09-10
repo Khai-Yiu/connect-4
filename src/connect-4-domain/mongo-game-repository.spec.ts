@@ -58,11 +58,11 @@ describe('mongo-game-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             expect(await repository.load(gameId)).toMatchObject(persistedGame);
@@ -84,11 +84,11 @@ describe('mongo-game-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             await repository.delete(gameId);
@@ -126,11 +126,11 @@ describe('mongo-game-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             const gameToLoad = await gameModel.findOne({ gameUuid: gameId });
@@ -139,8 +139,8 @@ describe('mongo-game-repository', () => {
                     ? {
                           board: gameToLoad.board,
                           activePlayer: gameToLoad.activePlayer,
-                          players: gameToLoad.players,
-                          status: gameToLoad.status
+                          players: gameToLoad.playerStats,
+                          status: gameToLoad.gameStatus
                       }
                     : undefined;
 
@@ -151,11 +151,11 @@ describe('mongo-game-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const retrievedGameId = await repository.save(
                 persistedGame,
@@ -170,11 +170,11 @@ describe('mongo-game-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             expect(await repository.load(gameId)).toMatchObject(persistedGame);

@@ -15,7 +15,8 @@
         "test:watch": "vitest --mode development",
         "devcontainer": "pnpm run build:dev && devcontainer up --workspace-folder . --remove-existing-container",
         "docker-compose-up:prod": "pnpm run build:prod && docker compose -f .devcontainer/docker-compose.yml up --build",
-        "deploy-stacks": "bash aws/setup.sh"
+        "setup": "bash aws/setup.sh",
+        "cleanup": "bash aws/cleanup.sh"
     },
     "dependencies": {
         "@storybook/addon-actions": "^8.1.10",

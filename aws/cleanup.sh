@@ -2,6 +2,7 @@
 
 ECS_STACK=ECSWorkshopStack
 VPC_STACK=VPCWorkshopStack
+ELB_STACK=ELBWorkshopStack
 ECR_STACK=ECRWorkshopStack
 LOG_GROUP=connect-4-logs
 REPOSITORY=workshop-repository
@@ -11,6 +12,9 @@ aws logs delete-log-group --log-group-name "${LOG_GROUP}"
 
 echo "Deleting ECS stack"
 aws cloudformation delete-stack --stack-name "${ECS_STACK}"
+
+echo "Deleting ELB stack"
+aws cloudformation delete-stack --stack-name "${ELB_STACK}"
 
 echo "Deleting VPC stack"
 aws cloudformation delete-stack --stack-name "${VPC_STACK}"

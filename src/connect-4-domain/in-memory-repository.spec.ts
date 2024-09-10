@@ -35,11 +35,11 @@ describe('in-memory-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             expect(await repository.load(gameId)).toMatchObject(persistedGame);
@@ -60,11 +60,11 @@ describe('in-memory-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             await repository.delete(gameId);
@@ -91,11 +91,11 @@ describe('in-memory-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             expect(await store.get(gameId)).toMatchObject(persistedGame);
@@ -107,11 +107,11 @@ describe('in-memory-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const retrievedGameId = await repository.save(
                 persistedGame,
@@ -128,11 +128,11 @@ describe('in-memory-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             expect(await repository.load(gameId)).toBe(persistedGame);
@@ -155,11 +155,11 @@ describe('in-memory-repository', () => {
             const persistedGame: PersistedGame = {
                 board: parseAsciiTable(asciiTable, customResolver),
                 activePlayer: 1,
-                players: {
+                playerStats: {
                     1: { playerNumber: 1, remainingDiscs: 4 },
                     2: { playerNumber: 2, remainingDiscs: 4 }
                 },
-                status: 'IN_PROGRESS' as GameStatus
+                gameStatus: 'IN_PROGRESS' as GameStatus
             };
             const gameId = await repository.save(persistedGame);
             await repository.delete(gameId);

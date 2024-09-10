@@ -1026,8 +1026,12 @@ describe('game', () => {
                 });
                 const gameId = await game.save();
 
-                const { board, activePlayer, players, status } =
-                    (await repository.load(gameId)) as PersistedGame;
+                const {
+                    board,
+                    activePlayer,
+                    playerStats: players,
+                    gameStatus: status
+                } = (await repository.load(gameId)) as PersistedGame;
 
                 expect(toAsciiTable(board)).toMatchInlineSnapshot(`
                   "
@@ -1140,8 +1144,12 @@ describe('game', () => {
                     );
 
                     const gameId = await game.save();
-                    const { board, activePlayer, players, status } =
-                        (await repository.load(gameId)) as PersistedGame;
+                    const {
+                        board,
+                        activePlayer,
+                        playerStats: players,
+                        gameStatus: status
+                    } = (await repository.load(gameId)) as PersistedGame;
 
                     expect(toAsciiTable(board)).toMatchInlineSnapshot(`
                       "

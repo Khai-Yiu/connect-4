@@ -46,8 +46,8 @@ export type ValidCellOnBoard = {
 export type PersistedGame = {
     board: Board;
     activePlayer: PlayerNumber;
-    players: Record<PlayerNumber, PlayerStats>;
-    status: GameStatus;
+    playerStats: Record<PlayerNumber, PlayerStats>;
+    gameStatus: GameStatus;
 };
 
 export type GameUuid = string;

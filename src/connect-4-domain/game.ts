@@ -96,8 +96,8 @@ class GameFactory implements Game {
                 {
                     board: deepClone(this.board),
                     activePlayer: this.activePlayer,
-                    players: deepClone(this.players),
-                    status: this.status
+                    playerStats: deepClone(this.players),
+                    gameStatus: this.status
                 },
                 gameUuid
             );
@@ -110,7 +110,12 @@ class GameFactory implements Game {
         const gameToLoad = await this.repository.load(gameId);
 
         if (gameToLoad !== undefined) {
-            const { board, activePlayer, players, status } = gameToLoad;
+            const {
+                board,
+                activePlayer,
+                playerStats: players,
+                gameStatus: status
+            } = gameToLoad;
             this.board = deepClone(board);
             this.activePlayer = activePlayer;
             this.players = deepClone(players);
